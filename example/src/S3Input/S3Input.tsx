@@ -5,9 +5,9 @@ import {
   TextInput,
   useNotify,
   usePermissions,
-} from 'react-admin';
+} from './node_modules/react-admin';
 import { Storage } from 'aws-amplify';
-import { S3ImageField } from '../S3ImageField';
+import { S3ImageField } from '../../../src/S3ImageField';
 import { uuid } from 'uuidv4';
 
 interface S3InputProps {

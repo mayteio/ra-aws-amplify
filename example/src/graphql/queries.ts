@@ -1,37 +1,92 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const listBlogs = /* GraphQL */ `
-  query ListBlogs(
-    $filter: ModelBlogFilterInput
+export const getMedia = /* GraphQL */ `
+  query GetMedia($id: ID!) {
+    getMedia(id: $id) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
+export const listMedias = /* GraphQL */ `
+  query ListMedias(
+    $filter: ModelMediaFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listBlogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listMedias(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
-        posts {
-          nextToken
+        title
+        attachment {
+          key
+          identityId
+          level
         }
       }
       nextToken
     }
   }
 `;
-export const getBlog = /* GraphQL */ `
-  query GetBlog($id: ID!) {
-    getBlog(id: $id) {
+export const getPostEditor = /* GraphQL */ `
+  query GetPostEditor($id: ID!) {
+    getPostEditor(id: $id) {
       id
-      name
-      posts {
-        items {
+      post {
+        id
+        title
+        content
+        image {
           id
           title
+        }
+        editors {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
+export const listPostEditors = /* GraphQL */ `
+  query ListPostEditors(
+    $filter: ModelPostEditorFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostEditors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        post {
+          id
+          title
+          content
           owner
         }
-        nextToken
+        editor {
+          id
+          username
+          owner
+        }
       }
+      nextToken
     }
   }
 `;
@@ -45,22 +100,18 @@ export const listPosts = /* GraphQL */ `
       items {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
-        }
-        # editors {
-        #   nextToken
-        # }
-        blog {
           id
-          name
+          title
+        }
+        editors {
+          nextToken
         }
         owner
-        # comments {
-        #   nextToken
-        # }
+        comments {
+          nextToken
+        }
       }
       nextToken
     }
@@ -71,23 +122,21 @@ export const getPost = /* GraphQL */ `
     getPost(id: $id) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -142,17 +191,13 @@ export const getComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -175,6 +220,7 @@ export const listComments = /* GraphQL */ `
         post {
           id
           title
+          content
           owner
         }
       }

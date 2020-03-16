@@ -1,76 +1,26 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const onCreateBlog = /* GraphQL */ `
-  subscription OnCreateBlog {
-    onCreateBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onUpdateBlog = /* GraphQL */ `
-  subscription OnUpdateBlog {
-    onUpdateBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onDeleteBlog = /* GraphQL */ `
-  subscription OnDeleteBlog {
-    onDeleteBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
 export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost($owner: String) {
     onCreatePost(owner: $owner) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -88,23 +38,21 @@ export const onUpdatePost = /* GraphQL */ `
     onUpdatePost(owner: $owner, editors: $editors) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -122,23 +70,21 @@ export const onDeletePost = /* GraphQL */ `
     onDeletePost(owner: $owner) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -151,6 +97,45 @@ export const onDeletePost = /* GraphQL */ `
     }
   }
 `;
+export const onCreateMedia = /* GraphQL */ `
+  subscription OnCreateMedia($editors: String) {
+    onCreateMedia(editors: $editors) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
+export const onUpdateMedia = /* GraphQL */ `
+  subscription OnUpdateMedia($editors: String) {
+    onUpdateMedia(editors: $editors) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
+export const onDeleteMedia = /* GraphQL */ `
+  subscription OnDeleteMedia($editors: String) {
+    onDeleteMedia(editors: $editors) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
 export const onCreatePostEditor = /* GraphQL */ `
   subscription OnCreatePostEditor($editors: String) {
     onCreatePostEditor(editors: $editors) {
@@ -158,17 +143,13 @@ export const onCreatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -193,17 +174,13 @@ export const onUpdatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -228,17 +205,13 @@ export const onDeletePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -309,17 +282,13 @@ export const onCreateComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -337,17 +306,13 @@ export const onUpdateComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -365,17 +330,13 @@ export const onDeleteComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {

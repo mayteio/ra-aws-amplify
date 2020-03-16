@@ -3,25 +3,26 @@ import {
   Admin,
   Resource,
   ListGuesser,
-  UpdateGuesser,
+  EditGuesser,
   ShowGuesser,
 } from 'react-admin';
 import { buildDataProvider, defaultDataProvider } from './dataProvider';
 import { useAuthProvider, useUser, nextTokenReducer } from '../../';
-import { PostList } from './Post';
+import { PostList, PostCreate } from './Post';
 
 export const App = () => {
+  // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
   const [dataProvider, setDataProvider] = React.useState(defaultDataProvider);
-
-  const authProvider = useAuthProvider();
   const user = useUser();
-
   React.useEffect(() => {
     user &&
       buildDataProvider().then(dataProvider =>
         setDataProvider(() => dataProvider)
       );
   }, [user]);
+
+  // get authProvider for <Admin /> component.
+  const authProvider = useAuthProvider();
 
   return (
     <Admin
@@ -33,9 +34,9 @@ export const App = () => {
         <Resource
           name="Post"
           list={PostList}
-          // show={ShowGuesser}
-          // create={UpdateGuesser}
-          // update={UpdateGuesser}
+          show={ShowGuesser}
+          create={PostCreate}
+          edit={EditGuesser}
         />,
         // <Resource
         //   name="Comment"

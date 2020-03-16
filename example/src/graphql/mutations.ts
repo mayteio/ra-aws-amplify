@@ -1,63 +1,6 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const createBlog = /* GraphQL */ `
-  mutation CreateBlog(
-    $input: CreateBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    createBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const updateBlog = /* GraphQL */ `
-  mutation UpdateBlog(
-    $input: UpdateBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    updateBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const deleteBlog = /* GraphQL */ `
-  mutation DeleteBlog(
-    $input: DeleteBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    deleteBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
 export const createPost = /* GraphQL */ `
   mutation CreatePost(
     $input: CreatePostInput!
@@ -66,23 +9,21 @@ export const createPost = /* GraphQL */ `
     createPost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -103,23 +44,21 @@ export const updatePost = /* GraphQL */ `
     updatePost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -140,23 +79,21 @@ export const deletePost = /* GraphQL */ `
     deletePost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
-        key
-        identityId
-        level
+        id
+        title
+        attachment {
+          key
+          identityId
+          level
+        }
       }
       editors {
         items {
           id
         }
         nextToken
-      }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
       }
       owner
       comments {
@@ -165,6 +102,54 @@ export const deletePost = /* GraphQL */ `
           content
         }
         nextToken
+      }
+    }
+  }
+`;
+export const createMedia = /* GraphQL */ `
+  mutation CreateMedia(
+    $input: CreateMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    createMedia(input: $input, condition: $condition) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
+export const updateMedia = /* GraphQL */ `
+  mutation UpdateMedia(
+    $input: UpdateMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    updateMedia(input: $input, condition: $condition) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
+      }
+    }
+  }
+`;
+export const deleteMedia = /* GraphQL */ `
+  mutation DeleteMedia(
+    $input: DeleteMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    deleteMedia(input: $input, condition: $condition) {
+      id
+      title
+      attachment {
+        key
+        identityId
+        level
       }
     }
   }
@@ -179,17 +164,13 @@ export const createPostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -217,17 +198,13 @@ export const updatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -255,17 +232,13 @@ export const deletePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -348,17 +321,13 @@ export const createComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -379,17 +348,13 @@ export const updateComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -410,17 +375,13 @@ export const deleteComment = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
-          key
-          identityId
-          level
+          id
+          title
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {

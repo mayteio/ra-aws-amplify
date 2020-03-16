@@ -13,6 +13,8 @@
   "alias": {
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom",
+    "aws-amplify": "../node_modules/aws-amplify",
+    "aws-sdk": "../node_modules/aws-sdk",
     "scheduler/tracing": "../node_modules/scheduler/tracing-profiling"
   },
   "devDependencies": {
