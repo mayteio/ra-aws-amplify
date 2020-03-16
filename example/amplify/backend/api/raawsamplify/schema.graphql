@@ -1,0 +1,89 @@
+type Blog
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["admin"] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  posts: [Post] @connection(name: "BlogPosts")
+}
+
+type Post
+  @model
+  @auth(
+    rules: [
+      # Defaults to use the "owner" field.
+      { allow: owner }
+      # Authorize the update mutation and both queries. Use `queries: null` to disable auth for queries.
+      { allow: owner, ownerField: "editors", operations: [update] }
+      { allow: public, operations: [read] }
+      { allow: groups, groups: ["admin"] }
+    ]
+  ) {
+  id: ID!
+  title: String!
+  image: S3Object
+  blog: Blog @connection(name: "BlogPosts")
+  comments: [Comment] @connection(name: "PostComments")
+  editors: [PostEditor] @connection(name: "PostEditors")
+}
+
+type PostEditor
+  @model(queries: null)
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "editors" }
+      { allow: groups, groups: ["admin"] }
+    ]
+  ) {
+  id: ID!
+  post: Post! @connection(name: "PostEditors")
+  editor: User! @connection(name: "UserEditors")
+}
+
+type User
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["admin"] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  username: String!
+  posts: [PostEditor] @connection(name: "UserEditors")
+}
+
+type Comment
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [read] }
+      { allow: groups, groups: ["admin", "editor"] }
+    ]
+  ) {
+  id: ID!
+  content: String
+  post: Post @connection(name: "PostComments")
+}
+
+# type Media
+#   @model
+#   @auth(
+#     rules: [{ allow: owner }, { allow: groups, groups: ["admin", "editor"] }]
+#   ) {
+#   id: ID!
+#   name: String
+#   attachment: S3Object!
+# }
+
+# S3Object minimum type
+type S3Object {
+  key: String!
+  identityId: String
+  level: String
+}

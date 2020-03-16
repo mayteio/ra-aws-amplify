@@ -1,0 +1,61 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "ra-aws-amplify",
+  "author": "Harley Alexander",
+  "module": "dist/ra-aws-amplify.esm.js",
+  "devDependencies": {
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^25.1.4",
+    "@types/lodash": "^4.14.149",
+    "@types/pluralize": "^0.0.29",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-redux": "^7.1.7",
+    "aws-amplify": "^2.2.6",
+    "aws-amplify-react": "^3.1.7",
+    "husky": "^4.2.3",
+    "lodash.merge": "^4.6.2",
+    "ra-data-graphql": "^3.2.2",
+    "react": "^16.13.0",
+    "react-admin": "^3.3.1",
+    "react-dom": "^16.13.0",
+    "react-redux": "^7.2.0",
+    "tsdx": "^0.12.3",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3",
+    "uuidv4": "^6.0.6"
+  },
+  "dependencies": {
+    "aws-appsync": "^3.0.2",
+    "graphql": "^14.6.0"
+  }
+}
