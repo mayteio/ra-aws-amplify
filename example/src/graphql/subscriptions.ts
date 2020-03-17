@@ -1,59 +1,12 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const onCreateBlog = /* GraphQL */ `
-  subscription OnCreateBlog {
-    onCreateBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onUpdateBlog = /* GraphQL */ `
-  subscription OnUpdateBlog {
-    onUpdateBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onDeleteBlog = /* GraphQL */ `
-  subscription OnDeleteBlog {
-    onDeleteBlog {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
 export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost($owner: String) {
     onCreatePost(owner: $owner) {
       id
       title
+      content
       image {
         key
         identityId
@@ -65,18 +18,12 @@ export const onCreatePost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -88,6 +35,7 @@ export const onUpdatePost = /* GraphQL */ `
     onUpdatePost(owner: $owner, editors: $editors) {
       id
       title
+      content
       image {
         key
         identityId
@@ -99,18 +47,12 @@ export const onUpdatePost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -122,6 +64,7 @@ export const onDeletePost = /* GraphQL */ `
     onDeletePost(owner: $owner) {
       id
       title
+      content
       image {
         key
         identityId
@@ -133,18 +76,12 @@ export const onDeletePost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -158,6 +95,7 @@ export const onCreatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -165,10 +103,6 @@ export const onCreatePostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -193,6 +127,7 @@ export const onUpdatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -200,10 +135,6 @@ export const onUpdatePostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -228,6 +159,7 @@ export const onDeletePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -235,10 +167,6 @@ export const onDeletePostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -306,26 +234,7 @@ export const onCreateComment = /* GraphQL */ `
     onCreateComment {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -334,26 +243,7 @@ export const onUpdateComment = /* GraphQL */ `
     onUpdateComment {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -362,26 +252,7 @@ export const onDeleteComment = /* GraphQL */ `
     onDeleteComment {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;

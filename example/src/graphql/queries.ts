@@ -1,37 +1,60 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const listBlogs = /* GraphQL */ `
-  query ListBlogs(
-    $filter: ModelBlogFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listBlogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
+export const getPostEditor = /* GraphQL */ `
+  query GetPostEditor($id: ID!) {
+    getPostEditor(id: $id) {
+      id
+      post {
         id
-        name
-        posts {
+        title
+        content
+        image {
+          key
+          identityId
+          level
+        }
+        editors {
+          nextToken
+        }
+        owner
+        comments {
           nextToken
         }
       }
-      nextToken
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
     }
   }
 `;
-export const getBlog = /* GraphQL */ `
-  query GetBlog($id: ID!) {
-    getBlog(id: $id) {
-      id
-      name
-      posts {
-        items {
+export const listPostEditors = /* GraphQL */ `
+  query ListPostEditors(
+    $filter: ModelPostEditorFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostEditors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        post {
           id
           title
+          content
           owner
         }
-        nextToken
+        editor {
+          id
+          username
+          owner
+        }
       }
+      nextToken
     }
   }
 `;
@@ -45,22 +68,19 @@ export const listPosts = /* GraphQL */ `
       items {
         id
         title
+        content
         image {
           key
           identityId
           level
         }
-        # editors {
-        #   nextToken
-        # }
-        blog {
-          id
-          name
+        editors {
+          nextToken
         }
         owner
-        # comments {
-        #   nextToken
-        # }
+        comments {
+          nextToken
+        }
       }
       nextToken
     }
@@ -71,6 +91,7 @@ export const getPost = /* GraphQL */ `
     getPost(id: $id) {
       id
       title
+      content
       image {
         key
         identityId
@@ -82,18 +103,12 @@ export const getPost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -139,26 +154,7 @@ export const getComment = /* GraphQL */ `
     getComment(id: $id) {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -172,11 +168,31 @@ export const listComments = /* GraphQL */ `
       items {
         id
         content
-        post {
-          id
-          title
-          owner
-        }
+        postId
+      }
+      nextToken
+    }
+  }
+`;
+export const commentsByPost = /* GraphQL */ `
+  query CommentsByPost(
+    $postId: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    commentsByPost(
+      postId: $postId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        content
+        postId
       }
       nextToken
     }

@@ -39,9 +39,11 @@ export const buildQueryFactory = (
       params,
       queryType
     );
+
     const query = getGqlQuery(introspectionResults)(
       aorFetchType,
       resource,
+      params,
       queries,
       mutations
     );
@@ -49,7 +51,8 @@ export const buildQueryFactory = (
     const parseResponse = getResponseParserImpl(introspectionResults)(
       aorFetchType,
       resource,
-      queryType
+      queryType,
+      params
     );
 
     return {

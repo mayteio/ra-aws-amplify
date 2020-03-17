@@ -1,63 +1,6 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const createBlog = /* GraphQL */ `
-  mutation CreateBlog(
-    $input: CreateBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    createBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const updateBlog = /* GraphQL */ `
-  mutation UpdateBlog(
-    $input: UpdateBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    updateBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const deleteBlog = /* GraphQL */ `
-  mutation DeleteBlog(
-    $input: DeleteBlogInput!
-    $condition: ModelBlogConditionInput
-  ) {
-    deleteBlog(input: $input, condition: $condition) {
-      id
-      name
-      posts {
-        items {
-          id
-          title
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
 export const createPost = /* GraphQL */ `
   mutation CreatePost(
     $input: CreatePostInput!
@@ -66,6 +9,7 @@ export const createPost = /* GraphQL */ `
     createPost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
         key
         identityId
@@ -77,18 +21,12 @@ export const createPost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -103,6 +41,7 @@ export const updatePost = /* GraphQL */ `
     updatePost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
         key
         identityId
@@ -114,18 +53,12 @@ export const updatePost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -140,6 +73,7 @@ export const deletePost = /* GraphQL */ `
     deletePost(input: $input, condition: $condition) {
       id
       title
+      content
       image {
         key
         identityId
@@ -151,18 +85,12 @@ export const deletePost = /* GraphQL */ `
         }
         nextToken
       }
-      blog {
-        id
-        name
-        posts {
-          nextToken
-        }
-      }
       owner
       comments {
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -179,6 +107,7 @@ export const createPostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -186,10 +115,6 @@ export const createPostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -217,6 +142,7 @@ export const updatePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -224,10 +150,6 @@ export const updatePostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -255,6 +177,7 @@ export const deletePostEditor = /* GraphQL */ `
       post {
         id
         title
+        content
         image {
           key
           identityId
@@ -262,10 +185,6 @@ export const deletePostEditor = /* GraphQL */ `
         }
         editors {
           nextToken
-        }
-        blog {
-          id
-          name
         }
         owner
         comments {
@@ -345,26 +264,7 @@ export const createComment = /* GraphQL */ `
     createComment(input: $input, condition: $condition) {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -376,26 +276,7 @@ export const updateComment = /* GraphQL */ `
     updateComment(input: $input, condition: $condition) {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -407,26 +288,7 @@ export const deleteComment = /* GraphQL */ `
     deleteComment(input: $input, condition: $condition) {
       id
       content
-      post {
-        id
-        title
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        blog {
-          id
-          name
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;

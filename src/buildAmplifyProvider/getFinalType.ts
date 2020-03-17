@@ -5,7 +5,7 @@ import { TypeKind } from 'graphql';
  * @param {GraphQLType} type
  */
 const getFinalType = (type: any): any => {
-  if (type.kind === TypeKind.NON_NULL || type.kind === TypeKind.LIST) {
+  if (type?.kind === TypeKind.NON_NULL || type?.kind === TypeKind.LIST) {
     return getFinalType(type.ofType);
   }
 

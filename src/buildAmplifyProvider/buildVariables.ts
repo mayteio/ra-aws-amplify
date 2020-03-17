@@ -220,57 +220,47 @@ const buildGetListVariables = (introspectionResults: any) => (
 /**
  * This handles sanitisation of upload data.
  */
-const buildCreateUpdateVariables = (
+const buildCreateUpdateVariables = (introspectionResults: any) => (
   resource: any,
-  _2: any,
+  _: any,
   params: any,
-  _4: any
+  queryType: any
 ) => {
-  const input = Object.keys(params.data).reduce((acc, key) => {
-    // if (Array.isArray(params.data[key])) {
-    //   const arg = queryType.args.find((a: any) => a.name === `${key}Ids`);
+  const inputArgument = queryType.args.find((a: any) => a.name === 'input');
+  const inputTypeName = getFinalType(inputArgument.type);
+  const inputType = introspectionResults.types.find(
+    (t: any) => t.name === inputTypeName.name
+  );
+  const inputTypeFields = inputType.inputFields.map((f: any) => f.name);
 
-    //   if (arg) {
-    //     return {
-    //       ...acc,
-    //       [`${key}Ids`]: params.data[key].map(({ id }: any) => id),
-    //     };
-    //   }
-    // }
+  const input = Object.keys(params.data).reduce((acc, key) => {
+    const field = resource.type.fields.find((f: any) => f.name === key);
+    // guard against any fields that shouldn't be in the input
+    if (!inputTypeFields.includes(field.name)) {
+      return acc;
+    }
 
     // file upload should be handled by Amplify.Storage, so instead we check
     // if the field is an S3Object model, and if so pull out the relevant information
-    // and return a clean object so that GraphQL doesn't complain.
-    const field = resource.type.fields.find((f: any) => f.name === key);
-    if (field.type.name === 'S3Object') {
-      const { key: imgKey, level, identityId, region, bucket } = params.data[
-        key
-      ];
-      const cleanS3Object: any = {
-        key: imgKey,
-        level,
-        identityId,
-        region,
-        bucket,
-      };
-      Object.keys(cleanS3Object).forEach(
-        key => cleanS3Object[key] === undefined && delete cleanS3Object[key]
+    // and return a clean object for GraphQL
+    if (field.type.name?.match(/S3Object/i)) {
+      const fields = ['key', 'level', 'identityId', 'region', 'bucket'];
+      const cleanS3Object = Object.entries(params.data[key]).reduce(
+        (acc: any, [k, v]: [string, unknown]): Record<string, string> => {
+          if (fields.includes(k)) {
+            acc[k] = v;
+          }
+
+          return acc;
+        },
+        {}
       );
+
       return {
         ...acc,
         [key]: cleanS3Object,
       };
     }
-
-    // if (typeof params.data[key] === 'object') {
-    //   const arg = queryType.args.find((a: any) => a.name === `${key}Id`);
-    //   if (arg) {
-    //     return {
-    //       ...acc,
-    //       [`${key}Id`]: params.data[key].id,
-    //     };
-    //   }
-    // }
 
     return {
       ...acc,
@@ -304,16 +294,19 @@ export default (introspectionResults: any) => (
           or: params.ids.map((id: string | number) => ({ id: { eq: id } })),
         },
       };
-    case GET_MANY_REFERENCE: {
-      const parts = preparedParams.target.split('.');
-      let variables = buildGetListVariables(introspectionResults)(
-        resource,
-        aorFetchType,
-        preparedParams
+    case GET_MANY_REFERENCE:
+      // grab the arg the secondary GSI key is searching for an use that
+      // as the param in our query.
+      const query = introspectionResults.queries.find(
+        (q: any) => q.name === params.target
       );
-      variables.filter[`${parts[0]}Id`] = preparedParams.id;
-      return variables;
-    }
+      const key = query.args[0].name;
+
+      return {
+        limit: preparedParams.pagination.perPage,
+        [key]: preparedParams.id,
+      };
+
     case GET_ONE:
       return { id: preparedParams.id };
     case DELETE:
@@ -322,7 +315,7 @@ export default (introspectionResults: any) => (
       };
     case CREATE:
     case UPDATE: {
-      return buildCreateUpdateVariables(
+      return buildCreateUpdateVariables(introspectionResults)(
         resource,
         aorFetchType,
         preparedParams,

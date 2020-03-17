@@ -2,16 +2,25 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateBlogInput = {
+export type CreatePostInput = {
   id?: string | null,
-  name: string,
+  title: string,
+  content?: string | null,
+  image?: S3ObjectInput | null,
 };
 
-export type ModelBlogConditionInput = {
-  name?: ModelStringInput | null,
-  and?: Array< ModelBlogConditionInput | null > | null,
-  or?: Array< ModelBlogConditionInput | null > | null,
-  not?: ModelBlogConditionInput | null,
+export type S3ObjectInput = {
+  key: string,
+  identityId?: string | null,
+  level?: string | null,
+};
+
+export type ModelPostConditionInput = {
+  title?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  and?: Array< ModelPostConditionInput | null > | null,
+  or?: Array< ModelPostConditionInput | null > | null,
+  not?: ModelPostConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -54,40 +63,11 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type UpdateBlogInput = {
-  id: string,
-  name?: string | null,
-};
-
-export type DeleteBlogInput = {
-  id?: string | null,
-};
-
-export type CreatePostInput = {
-  id?: string | null,
-  title: string,
-  image?: S3ObjectInput | null,
-  postBlogId?: string | null,
-};
-
-export type S3ObjectInput = {
-  key: string,
-  identityId?: string | null,
-  level?: string | null,
-};
-
-export type ModelPostConditionInput = {
-  title?: ModelStringInput | null,
-  and?: Array< ModelPostConditionInput | null > | null,
-  or?: Array< ModelPostConditionInput | null > | null,
-  not?: ModelPostConditionInput | null,
-};
-
 export type UpdatePostInput = {
   id: string,
   title?: string | null,
+  content?: string | null,
   image?: S3ObjectInput | null,
-  postBlogId?: string | null,
 };
 
 export type DeletePostInput = {
@@ -140,32 +120,15 @@ export type DeleteUserInput = {
 export type CreateCommentInput = {
   id?: string | null,
   content?: string | null,
-  commentPostId?: string | null,
+  postId: string,
 };
 
 export type ModelCommentConditionInput = {
   content?: ModelStringInput | null,
+  postId?: ModelIDInput | null,
   and?: Array< ModelCommentConditionInput | null > | null,
   or?: Array< ModelCommentConditionInput | null > | null,
   not?: ModelCommentConditionInput | null,
-};
-
-export type UpdateCommentInput = {
-  id: string,
-  content?: string | null,
-  commentPostId?: string | null,
-};
-
-export type DeleteCommentInput = {
-  id?: string | null,
-};
-
-export type ModelBlogFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  and?: Array< ModelBlogFilterInput | null > | null,
-  or?: Array< ModelBlogFilterInput | null > | null,
-  not?: ModelBlogFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -184,9 +147,27 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type UpdateCommentInput = {
+  id: string,
+  content?: string | null,
+  postId?: string | null,
+};
+
+export type DeleteCommentInput = {
+  id?: string | null,
+};
+
+export type ModelPostEditorFilterInput = {
+  id?: ModelIDInput | null,
+  and?: Array< ModelPostEditorFilterInput | null > | null,
+  or?: Array< ModelPostEditorFilterInput | null > | null,
+  not?: ModelPostEditorFilterInput | null,
+};
+
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
   title?: ModelStringInput | null,
+  content?: ModelStringInput | null,
   and?: Array< ModelPostFilterInput | null > | null,
   or?: Array< ModelPostFilterInput | null > | null,
   not?: ModelPostFilterInput | null,
@@ -203,79 +184,17 @@ export type ModelUserFilterInput = {
 export type ModelCommentFilterInput = {
   id?: ModelIDInput | null,
   content?: ModelStringInput | null,
+  postId?: ModelIDInput | null,
   and?: Array< ModelCommentFilterInput | null > | null,
   or?: Array< ModelCommentFilterInput | null > | null,
   not?: ModelCommentFilterInput | null,
 };
 
-export type CreateBlogMutationVariables = {
-  input: CreateBlogInput,
-  condition?: ModelBlogConditionInput | null,
-};
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 
-export type CreateBlogMutation = {
-  createBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type UpdateBlogMutationVariables = {
-  input: UpdateBlogInput,
-  condition?: ModelBlogConditionInput | null,
-};
-
-export type UpdateBlogMutation = {
-  updateBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type DeleteBlogMutationVariables = {
-  input: DeleteBlogInput,
-  condition?: ModelBlogConditionInput | null,
-};
-
-export type DeleteBlogMutation = {
-  deleteBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
 
 export type CreatePostMutationVariables = {
   input: CreatePostInput,
@@ -287,6 +206,7 @@ export type CreatePostMutation = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -301,15 +221,6 @@ export type CreatePostMutation = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -317,6 +228,7 @@ export type CreatePostMutation = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -333,6 +245,7 @@ export type UpdatePostMutation = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -347,15 +260,6 @@ export type UpdatePostMutation = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -363,6 +267,7 @@ export type UpdatePostMutation = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -379,6 +284,7 @@ export type DeletePostMutation = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -393,15 +299,6 @@ export type DeletePostMutation = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -409,6 +306,7 @@ export type DeletePostMutation = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -428,6 +326,7 @@ export type CreatePostEditorMutation = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -437,11 +336,6 @@ export type CreatePostEditorMutation = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -475,6 +369,7 @@ export type UpdatePostEditorMutation = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -484,11 +379,6 @@ export type UpdatePostEditorMutation = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -522,6 +412,7 @@ export type DeletePostEditorMutation = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -531,11 +422,6 @@ export type DeletePostEditorMutation = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -632,31 +518,7 @@ export type CreateCommentMutation = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };
 
@@ -670,31 +532,7 @@ export type UpdateCommentMutation = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };
 
@@ -708,10 +546,23 @@ export type DeleteCommentMutation = {
     __typename: "Comment",
     id: string,
     content: string | null,
+    postId: string,
+  } | null,
+};
+
+export type GetPostEditorQueryVariables = {
+  id: string,
+};
+
+export type GetPostEditorQuery = {
+  getPostEditor:  {
+    __typename: "PostEditor",
+    id: string,
     post:  {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -722,61 +573,52 @@ export type DeleteCommentMutation = {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
       } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
       owner: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
         nextToken: string | null,
       } | null,
-    } | null,
+    },
+    editor:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      posts:  {
+        __typename: "ModelPostEditorConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
   } | null,
 };
 
-export type ListBlogsQueryVariables = {
-  filter?: ModelBlogFilterInput | null,
+export type ListPostEditorsQueryVariables = {
+  filter?: ModelPostEditorFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListBlogsQuery = {
-  listBlogs:  {
-    __typename: "ModelBlogConnection",
+export type ListPostEditorsQuery = {
+  listPostEditors:  {
+    __typename: "ModelPostEditorConnection",
     items:  Array< {
-      __typename: "Blog",
+      __typename: "PostEditor",
       id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
-};
-
-export type GetBlogQueryVariables = {
-  id: string,
-};
-
-export type GetBlogQuery = {
-  getBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
+      post:  {
         __typename: "Post",
         id: string,
         title: string,
+        content: string | null,
         owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
+      },
+      editor:  {
+        __typename: "User",
+        id: string,
+        username: string,
+        owner: string | null,
+      },
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };
 
@@ -793,6 +635,7 @@ export type ListPostsQuery = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -802,11 +645,6 @@ export type ListPostsQuery = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -827,6 +665,7 @@ export type GetPostQuery = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -841,15 +680,6 @@ export type GetPostQuery = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -857,6 +687,7 @@ export type GetPostQuery = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -916,31 +747,7 @@ export type GetCommentQuery = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };
 
@@ -957,68 +764,30 @@ export type ListCommentsQuery = {
       __typename: "Comment",
       id: string,
       content: string | null,
-      post:  {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null,
+      postId: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
 };
 
-export type OnCreateBlogSubscription = {
-  onCreateBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
+export type CommentsByPostQueryVariables = {
+  postId?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCommentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type OnUpdateBlogSubscription = {
-  onUpdateBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnDeleteBlogSubscription = {
-  onDeleteBlog:  {
-    __typename: "Blog",
-    id: string,
-    name: string,
-    posts:  {
-      __typename: "ModelPostConnection",
-      items:  Array< {
-        __typename: "Post",
-        id: string,
-        title: string,
-        owner: string | null,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
+export type CommentsByPostQuery = {
+  commentsByPost:  {
+    __typename: "ModelCommentConnection",
+    items:  Array< {
+      __typename: "Comment",
+      id: string,
+      content: string | null,
+      postId: string,
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };
 
@@ -1031,6 +800,7 @@ export type OnCreatePostSubscription = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -1045,15 +815,6 @@ export type OnCreatePostSubscription = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -1061,6 +822,7 @@ export type OnCreatePostSubscription = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1077,6 +839,7 @@ export type OnUpdatePostSubscription = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -1091,15 +854,6 @@ export type OnUpdatePostSubscription = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -1107,6 +861,7 @@ export type OnUpdatePostSubscription = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1122,6 +877,7 @@ export type OnDeletePostSubscription = {
     __typename: "Post",
     id: string,
     title: string,
+    content: string | null,
     image:  {
       __typename: "S3Object",
       key: string,
@@ -1136,15 +892,6 @@ export type OnDeletePostSubscription = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    blog:  {
-      __typename: "Blog",
-      id: string,
-      name: string,
-      posts:  {
-        __typename: "ModelPostConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -1152,6 +899,7 @@ export type OnDeletePostSubscription = {
         __typename: "Comment",
         id: string,
         content: string | null,
+        postId: string,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1170,6 +918,7 @@ export type OnCreatePostEditorSubscription = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -1179,11 +928,6 @@ export type OnCreatePostEditorSubscription = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -1216,6 +960,7 @@ export type OnUpdatePostEditorSubscription = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -1225,11 +970,6 @@ export type OnUpdatePostEditorSubscription = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -1262,6 +1002,7 @@ export type OnDeletePostEditorSubscription = {
       __typename: "Post",
       id: string,
       title: string,
+      content: string | null,
       image:  {
         __typename: "S3Object",
         key: string,
@@ -1271,11 +1012,6 @@ export type OnDeletePostEditorSubscription = {
       editors:  {
         __typename: "ModelPostEditorConnection",
         nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
       } | null,
       owner: string | null,
       comments:  {
@@ -1364,31 +1100,7 @@ export type OnCreateCommentSubscription = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };
 
@@ -1397,31 +1109,7 @@ export type OnUpdateCommentSubscription = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };
 
@@ -1430,30 +1118,6 @@ export type OnDeleteCommentSubscription = {
     __typename: "Comment",
     id: string,
     content: string | null,
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      image:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      blog:  {
-        __typename: "Blog",
-        id: string,
-        name: string,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    } | null,
+    postId: string,
   } | null,
 };

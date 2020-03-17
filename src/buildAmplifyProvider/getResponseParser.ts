@@ -1,6 +1,7 @@
 import { GET_LIST, GET_MANY, GET_MANY_REFERENCE } from 'ra-core';
-import { IntrospectionResultData } from 'apollo-cache-inmemory';
 import pluralize from 'pluralize';
+
+export const LARGE_TOTAL = 9999;
 
 const sanitizeResource = (data: any) => {
   const result: any = Object.keys(data).reduce((acc, key) => {
@@ -43,25 +44,35 @@ const sanitizeResource = (data: any) => {
   return result;
 };
 
-export default (_: IntrospectionResultData) => (
+export default (_introspectionResults: any) => (
   aorFetchType: string,
-  resource: any
+  resource: any,
+  queryType: any,
+  params: any
 ) => (response: any) => {
   const data = response.data;
 
-  if (
-    aorFetchType === GET_LIST ||
-    aorFetchType === GET_MANY ||
-    aorFetchType === GET_MANY_REFERENCE
-  ) {
+  if (aorFetchType === GET_LIST || aorFetchType === GET_MANY) {
     return {
       data: data[`list${pluralize(resource.type.name)}`].items.map(
         sanitizeResource
       ),
       nextToken: data[`list${pluralize(resource.type.name)}`].nextToken,
-      total: 999,
+      total: LARGE_TOTAL,
     };
   }
 
-  return { data: sanitizeResource(data) };
+  if (aorFetchType === GET_MANY_REFERENCE) {
+    return {
+      data:
+        data[params.target] && data[params.target].items.map(sanitizeResource),
+      nextToken: data[params.target].nextToken,
+      total: LARGE_TOTAL,
+    };
+  }
+
+  return {
+    data: data[queryType.name] && sanitizeResource(data[queryType.name]),
+    total: LARGE_TOTAL,
+  };
 };

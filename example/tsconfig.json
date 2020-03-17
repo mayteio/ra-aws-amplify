@@ -15,7 +15,7 @@
     "resolveJsonModule": true,
     "lib": ["es2015", "es2016", "dom"],
     "baseUrl": ".",
-    "types": ["node"],
-    "esModuleInterop": true
-  }
+    "types": ["node"]
+  },
+  "esModuleInterop": true
 }

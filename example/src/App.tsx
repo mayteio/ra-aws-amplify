@@ -2,26 +2,34 @@ import * as React from 'react';
 import {
   Admin,
   Resource,
-  ListGuesser,
-  UpdateGuesser,
+  EditGuesser,
   ShowGuesser,
+  ListGuesser,
 } from 'react-admin';
 import { buildDataProvider, defaultDataProvider } from './dataProvider';
-import { useAuthProvider, useUser, nextTokenReducer } from '../../';
-import { PostList } from './Post';
+import { useRaAuthProvider, useUser, nextTokenReducer } from '../../';
+import { PostList, PostCreate, PostShow, PostEdit, PostIcon } from './Post';
+import {
+  CommentList,
+  CommentCreate,
+  CommentShow,
+  CommentEdit,
+  CommentIcon,
+} from './Comment';
 
 export const App = () => {
+  // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
   const [dataProvider, setDataProvider] = React.useState(defaultDataProvider);
-
-  const authProvider = useAuthProvider();
   const user = useUser();
-
   React.useEffect(() => {
     user &&
       buildDataProvider().then(dataProvider =>
         setDataProvider(() => dataProvider)
       );
   }, [user]);
+
+  // get authProvider for <Admin /> component.
+  const authProvider = useRaAuthProvider();
 
   return (
     <Admin
@@ -33,17 +41,19 @@ export const App = () => {
         <Resource
           name="Post"
           list={PostList}
-          // show={ShowGuesser}
-          // create={UpdateGuesser}
-          // update={UpdateGuesser}
+          show={PostShow}
+          create={PostCreate}
+          edit={PostEdit}
+          icon={PostIcon}
         />,
-        // <Resource
-        //   name="Comment"
-        //   list={ListGuesser}
-        //   show={ShowGuesser}
-        //   create={UpdateGuesser}
-        //   update={UpdateGuesser}
-        // />,
+        <Resource
+          name="Comment"
+          list={CommentList}
+          show={CommentShow}
+          create={CommentCreate}
+          edit={CommentEdit}
+          icon={CommentIcon}
+        />,
         // permissions.groups.includes('admin') ? (
         //   <Resource
         //     name="User"

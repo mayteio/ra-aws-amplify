@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useInput,
-  ImageInput,
-  TextInput,
-  useNotify,
-  usePermissions,
-} from 'react-admin';
+import { useInput, ImageInput, useNotify, usePermissions } from 'react-admin';
 import { Storage } from 'aws-amplify';
 import { S3ImageField } from '../S3ImageField';
 import { uuid } from 'uuidv4';
@@ -43,6 +37,8 @@ export const S3Input: React.FC<S3InputProps> = ({
         }
         // note: rawFile gets stripped when building params
       } catch (error) {
+        console.log(error);
+        key.input.onChange(undefined);
         notify('There was an error uploading your file.');
       }
     });
@@ -55,10 +51,8 @@ export const S3Input: React.FC<S3InputProps> = ({
         {...props}
         source={source}
       >
-        <S3ImageField source="key" />
+        <S3ImageField source={source} />
       </ImageInput>
-      <TextInput disabled source={source + '.key'} />
-      <TextInput disabled source={source + '.identityId'} />
     </>
   );
 };

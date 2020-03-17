@@ -2,16 +2,25 @@ import React from 'react';
 import { Storage } from 'aws-amplify';
 import { CircularProgress } from '@material-ui/core';
 
-interface S3ImageFieldProps {
+interface S3ImageFieldProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   source?: string;
   record?: Record<string, any>;
   label?: string;
+  basePath?: string;
 }
 
-export const S3ImageField: React.FC<S3ImageFieldProps> = ({ record = {} }) => {
+export const S3ImageField: React.FC<S3ImageFieldProps> = ({
+  source = 'S3Object',
+  record = {},
+  label,
+  // to avoid html img prop errors
+  basePath: _basePath,
+  ...imgProps
+}) => {
   // store the S3 signed URL in state for use in return
   const [src, set] = React.useState<string | undefined>();
-  const { key, identityId, level } = record;
+  const { key, identityId, level } =
+    typeof record[source] === 'object' ? record[source] : record;
 
   // Listen for changes on
   React.useEffect(() => {
@@ -38,7 +47,7 @@ export const S3ImageField: React.FC<S3ImageFieldProps> = ({ record = {} }) => {
 
   // if there's a src, show the image!
   if (src) {
-    return <img src={src} />;
+    return <img src={src} {...imgProps} />;
   }
 
   // otherwise do nothing

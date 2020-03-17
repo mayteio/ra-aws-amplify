@@ -1,16 +1,3 @@
-type Blog
-  @model
-  @auth(
-    rules: [
-      { allow: groups, groups: ["admin"] }
-      { allow: public, operations: [read] }
-    ]
-  ) {
-  id: ID!
-  name: String!
-  posts: [Post] @connection(name: "BlogPosts")
-}
-
 type Post
   @model
   @auth(
@@ -25,14 +12,14 @@ type Post
   ) {
   id: ID!
   title: String!
+  content: String
   image: S3Object
-  blog: Blog @connection(name: "BlogPosts")
-  comments: [Comment] @connection(name: "PostComments")
   editors: [PostEditor] @connection(name: "PostEditors")
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 }
 
 type PostEditor
-  @model(queries: null)
+  @model
   @auth(
     rules: [
       { allow: owner, ownerField: "editors" }
@@ -65,10 +52,12 @@ type Comment
       { allow: public, operations: [read] }
       { allow: groups, groups: ["admin", "editor"] }
     ]
-  ) {
+  )
+  @key(name: "byPost", fields: ["postId"], queryField: "commentsByPost") {
   id: ID!
   content: String
-  post: Post @connection(name: "PostComments")
+  # post: Post @connection(fields: ["postId"])
+  postId: ID!
 }
 
 # type Media

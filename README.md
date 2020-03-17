@@ -15,9 +15,20 @@ What they don't do, is provide an easy admin interface to manage this data. Ente
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Sign in with `Auth`](#signin-with-auth)
+- [Note: DynamoDB Access Patterns with `react-admin`](#note-dynamodb-access-patterns-with-react-admin)
+- [Authentication and Sign in with `Auth`](#signin-with-auth)
+  - [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+  - [`useAuth`](#useauth)
+  - [`useAuthProvider`](#useauthprovider)
+  - [`useUser`](#useuser)
+  - [Federated sign in](#federated-sign-in)
+  - [Permissions](#permissions)
 - [Authenticating `API` with `Auth`](#authenticating-api)
 - [Image Upload with `Storage`](#image-upload)
+  - [Required schema](#required-schema)
+  - [`<S3Input />`](#s3input)
+  - [`<S3ImageField />`](#s3imagefield)
+  - [`protected`, `private` files](#protected-private-files)
 - [Pagination using `nextToken`](#pagination-using-nexttoken)
 
 ## Whats missing and needs help?
@@ -111,26 +122,181 @@ export default App;
 
 [Screenshot of working app, pending https://github.com/marmelab/react-admin/issues/4444]
 
-## Sign in with `Auth`
+# Note: DynamoDB Access Patterns with `react-admin`
 
-An `authProvider` is exported that works with both cognito pools and federated sign-in. If you're just after simple cognito authentication, you can pass the authProvider directly into your admin component:
+Coming with DynamoDB's powerful speed and scaling features are painful rigidity problems with access patterns. You need to consider access patterns for your front-end **and** your back-end when writing your schema. In general, favour flexible relationships over simpler ones, i.e. `belongs to` over `has one`. Here are a few scenarios:
+
+### A product with an image
+
+### A post with comments
+
+### Using `<ReferenceManyField />`
+
+`react-admin`'s model assumes that when using any component or hook that calls a `GET_MANY_REFERENCE`, you can query your model by its connection. DyanmoDB doesn't support this out of the box, so we need to use a `has many` connection with the `@key` directive, specifying a `queryField`. This will generate a query that allows this access pattern.
+
+```graphql
+type Post @model {
+  id: ID!
+  title: String!
+  content: String
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+}
+
+type Comment
+  @model
+  @key(name: "byPost", fields: ["postId"], queryField: "commentsByPost") {
+  id: ID!
+  content: String
+  postId: ID!
+}
+```
+
+Your generated GraphQL queries will pump out something like this:
+
+```js
+export const commentsByPost = /* GraphQL */ `
+  query CommentsByPost(
+    $postId: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    commentsByPost(
+      postId: $postId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        content
+        postId
+      }
+      nextToken
+    }
+  }
+`;
+```
+
+Under the hood, `ra-aws-amplify` will look to match this query during a `GET_MANY_REFERENCE` call.
+
+Here's an example where we show comments on a post. You **must** set the `target` prop to the `queryField` value in your schema, like so:
+
+```js
+// PostsShow.js
+
+export const PostShow = prop => {
+  <Show {...props}>
+    ...
+    <ReferenceManyField
+      reference="Comment"
+      // target here should match queryField.
+      target="commentsByPost"
+    >
+      <Datagrid>
+        <TextField source="content" />
+      </Datagrid>
+    </ReferenceManyField>
+  </Show>;
+};
+```
+
+The package will pick up on this and wire everything up as expected.
+
+### Post editors
+
+---
+
+## Authentication and Sign in with `Auth`
+
+This package exposes a few tools for handling authentication out of the box with `@aws-amplify/Auth`:
+
+- [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+- [`useAuth`](#useauth)
+- [`useAuthProvider`](#useauthprovider)
+- [`useUser`](#useuser)
+- [Federated sign in](#federated-sign-in)
+- [Permissions](#permissions)
+
+### `<RaAmplifyAuthProvider />`
+
+Wrap your app in this provider so Auth is available at all contexts, with an abstracted API so it's easier to refactor to another provider if DynamoDB drives you nuts 😉.
+
+```js
+// index.tsx
+import ReactDOM from 'react-dom';
+import { RaAmplifyAuthProvider } from 'ra-aws-amplify';
+import { App } from './App';
+
+ReactDOM.render(
+  <RaAmplifyAuthProvider>
+    <App />
+  </RaAmplifyAuthProvider>,
+  document.getElementById('root')
+);
+```
+
+This context provider is used by the following hooks.
+
+### `useAuth()`
+
+Just provides direct access to the aws amplify `Auth` class via a hook.
+
+```js
+import { useAuth } from 'ra-aws-amplify';
+...
+const auth = useAuth();
+// https://aws-amplify.github.io/docs/js/authentication#sign-up
+auth.signUp({username, password}).then(...);
+```
+
+This has been included to encourage flexibility. In the future, should you switch to say, Azure, you can build a hook called `useAuth` that exposes the methods you use (i.e. signUp, signOut) and do a relatively small refactor on your front end.
+
+## `useRaAuthProvider()`
+
+`react-admin` has some [login functionality built in](https://marmelab.com/react-admin/Authentication.html) that we can tap into. This hook does just that and integrates `Auth` with `react-admin` out of the box.
 
 ```js
 import React from 'react';
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authProvider } from 'ra-data-appsync';
+import { useRaAuthProvider } from 'ra-aws-amplify';
 
 export const App = () => {
-  // don't forget your dataProvider stuff
+  const authProvider = useRaAuthProvider();
   return (
-    <Admin authProvider={authProvider}>
+    <Admin authProvider={authProvider} dataProvider={...}>
       <Resource name="Post" list={ListGuesser} />
     </Admin>
   );
 };
 ```
 
-Federated sign in requires a bit of custom work, so you need to use the [`useLogin` hook](https://marmelab.com/react-admin/Authentication.html#customizing-the-login-and-logout-components) exposed by `react-admin`, passing in `federated` and `provider` properties. Your Login components might look like this:
+## `useUser()`
+
+Listening for Amplify Hub events is a pain in the ass, so, at least for login, this package does that for you. Internally, it listens to the Hub and 'hookifies' the user object, so you don't have to worry about promises.
+
+This returns `undefined` when not signed in, and the result of [`Auth.currentAuthenticatedUser`](https://aws-amplify.github.io/docs/js/authentication#retrieve-current-authenticated-user) when successfully authenticated.
+
+```js
+import { useUser } from 'ra-aws-amplify';
+...
+const user = useUser();
+const auth = useAuth();
+auth.changePassword(user, ...);
+```
+
+### Federated Sign-in
+
+You'll have to create a custom `LoginPage` for federated sign in to work. You can use the [`useLogin` hook](https://marmelab.com/react-admin/Authentication.html#customizing-the-login-and-logout-components) exposed by `react-admin` to access the login method inside the `authProvider` from this package. It'll automatically popup sign-in windows when you pass in the a `provider` property, i.e.
+
+```js
+const login = useLogin();
+login({ provider: 'google' });
+```
+
+For a complete example, your Login components might look like this:
 
 ```js
 import React from 'react';
@@ -148,17 +314,26 @@ const LoginForm = () => {
 const LoginPage = props => <Login {...props} loginForm={<LoginForm />} />;
 
 // <App />
-const App = () => <Admin authProvider={authProvider} loginPage={LoginPage} />;
+const App = () => {
+  const authProvider = useAuthProvider();
+  return <Admin authProvider={authProvider} loginPage={LoginPage} />;
+};
 ```
 
-You also get access to the user groups via `usePermissions` hook when you use this `authProvider`.
+### Permissions
+
+`react-admin` has tools for [dealing with permissions](https://marmelab.com/react-admin/Authorization.html). By using the `authProvider` from this package, you automatically get cognito groups passed in for use via the `usePermissions` hook:
 
 ```js
 import { usePermissions } from 'react-admin';
 
 const { permissions } = usePermissions();
-console.log(permissions); // => { identityId: "...", groups: ['admin', 'user'] }
+console.log(permissions.groups); // => ['admin', 'user']
 ```
+
+You can then use these in your `Resource`, `List`, `Show`, `Create`, `Edit` components. See the [`react-admin` Authorization docs](https://marmelab.com/react-admin/Authorization.html) for use cases.
+
+---
 
 ## Authenticating `API` with `Auth`
 
@@ -166,6 +341,12 @@ All the auth options get passed to the `createAppSyncLink` link function from `a
 
 ```js
 // buildDataProvider.js
+import { Auth } from 'aws-amplify';
+import { buildAmplifyProvider } from 'ra-aws-amplify;
+import config from './aws-exports';
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+
 export const buildDataProvider = async () =>
   await buildAppsyncProvider({
     endpoint: config.aws_appsync_graphqlEndpoint,
@@ -186,9 +367,48 @@ export const buildDataProvider = async () =>
   });
 ```
 
-## File Upload
+Alternatively, use API Key authentication:
 
-This package exposes `<S3Input />` and `<S3ImageField />` components to help you deal with image & file upload. Before you do, your schema must include an `S3Object` type where you want your file upload to be:
+```js
+// buildDataProvider.js
+import { Auth } from 'aws-amplify';
+import { buildAmplifyProvider } from 'ra-aws-amplify;
+import config from './aws-exports';
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+
+export const buildDataProvider = async () =>
+  await buildAppsyncProvider({
+    endpoint: config.aws_appsync_graphqlEndpoint,
+    schema: schema.data,
+    auth: {
+      url: config.aws_appsync_graphqlEndpoint,
+      region: config.aws_appsync_region,
+      auth: {
+        // pass in the API Key.
+        type: config.aws_appsync_authenticationType,
+        key: config.aws_appsync_apiKey
+      },
+    },
+    queries,
+    mutations,
+  });
+```
+
+---
+
+## Image Upload with `Storage`
+
+This package exposes `<S3Input />` and `<S3ImageField />` components to help you deal with image & file upload.
+
+- [Required schema](#required-schema)
+- [`<S3Input />`](#s3input)
+- [`<S3ImageField />`](#s3imagefield)
+- [`protected`, `private` files](#protected-private-files)
+
+### Required Schema
+
+Your schema must include an `S3Object` type where you want your file upload to be:
 
 ```graphql
 type Post @model {
@@ -200,19 +420,20 @@ type Post @model {
 
 type S3Object {
   key: String!
-  region: String
-  bucket: String
   identityId: String
+  level: String
 }
 ```
 
-Your `<CreatePost />` might look something like the following:
+### `<S3Input />`
+
+You can then use `<S3Input />`, for example your `<CreatePost />` might look something like the following:
 
 ```js
 // CreatePost.js
 import React from 'react';
 import { Create, SimpleForm, TextInput } from 'react-admin';
-import { S3Input } from '../ra-data-appsync/ra-data-appsync.cjs.development';
+import { S3Input } from 'ra-aws-amplify';
 
 export const CreateApp: React.FC = props => {
   return (
@@ -227,18 +448,20 @@ export const CreateApp: React.FC = props => {
 };
 ```
 
+### `<S3ImageField />`
+
 If you want to use the Image in your `<List />` component, you can use `<S3ImageField />` passing, in this example, the `featureImage` field as the source:
 
 ```js
 import React from 'react';
 import { List, Datagrid, TextField } from 'react-admin';
-import { S3ImageField } from 'ra-data-appsync';
+import { S3ImageField } from 'ra-aws-amplify';
 
 export const ListPosts = props => {
   return (
     <List {...props}>
       <Datagrid rowClick="edit">
-        <S3ImageField source="coverImage" />
+        <S3ImageField source="featureImage" />
         <TextField source="title" />
         <TextField source="content" />
       </Datagrid>
@@ -247,9 +470,9 @@ export const ListPosts = props => {
 };
 ```
 
-### Protected, Private files
+### `protected`, `private` files
 
-You can pass in the `level` option as a prop to S3Input (one of `public`, `protected`, and `private`) and that will get passed on to `Storage`. If you do this, it's important to either use the `authProvider` from this package, or in your custom `authProvider` pass the `identityId` into `getPermissions`:
+You can pass in the `level` option as a prop to `<S3Input level={...} />` (one of `public`, `protected`, and `private`) and that will get passed on to `Storage`. If you do this, it's important to either use the `authProvider` from this package, or in your custom `authProvider` pass the `identityId` into `getPermissions`:
 
 ```js
 export const authProvider = {
@@ -266,25 +489,29 @@ export const authProvider = {
 }
 ```
 
+If you set the level to either `private` or `protected` the `<S3Input />` component will automatically attach both level and identityId to the record under the hood, required for access later.
+
+---
+
 ## Pagination using `nextToken`
 
-This package also exports some helpers and components for handling pagination specific to dynamodb - which has no concept of totals or pages. You can [hack around that fact](https://stackoverflow.com/questions/55737518/how-to-paginate-react-admin-lists-when-the-total-is-unknown), or just embrace it and use next/prev as described in that link:
+This package also exports some reducers and components for handling pagination specific to dynamodb - which has no concept of totals or pages. This library utilises custom reducers to catch the `nextToken` and use it in subsequent `GET_LIST` calls.
 
 ```js
 // App.js
-import { nextTokenReducer } from 'ra-data-appsync';
+import { reducers } from 'ra-aws-amplify';
 import { PostsList } from './PostsList';
 ...
 
 export const App = () => (
-  <Admin ... customReducers={{nextToken: nextTokenReducer }}>
+  <Admin ... customReducers={{...reducers}}>
     <Resource name="Post" list={PostsList}>
   </Admin>
 )
 
 // PostsList.js
 import { List, ... } from 'react-admin';
-import { RaAmplifyPagination } from 'ra-data-appsync';
+import { RaAmplifyPagination } from 'ra-aws-amplify';
 
 export const PostsList = props => (
   <List {...props} pagination={<RaAppSyncPagination />}>
@@ -293,9 +520,11 @@ export const PostsList = props => (
 )
 ```
 
+The `dataProvider` handles the rest for you.
+
 ## Contributing
 
-Did you learn something about integrating `react-admin` with AWS Amplify on a private project? Open source only works because people like you help people like me create awesome things and share our knowledge. Any help with this package is much appreciated, whether it's knowledge, tests, improving types, additional components, optimisations, solutions, etc. Just create an issue and let's get started!
+Have you learnt something interesting about integrating `react-admin` with AWS Amplify on a private project? Open source only works because people like you help people like me create awesome things and share our knowledge. Any help with this package is much appreciated, whether it's knowledge, tests, improving types, additional components, optimisations, solutions, etc. Just create an issue and let's get started!
 
 ## License
 

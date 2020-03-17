@@ -22,7 +22,7 @@ const UserContext = React.createContext<CognitoUser | undefined>(undefined);
  * this provider with another provider (say <AzureProvider />) that replicates
  * the API above and everything using useAuth and useUser should just work!
  */
-export const AmplifyProvider: React.FC = ({ children }) => {
+export const RaAmplifyAuthProvider: React.FC = ({ children }) => {
   // on mount, store the user and listen to hub changes (Amplify's internal)
   const [user, setUser] = useState<undefined | CognitoUser>(undefined);
   useEffect(() => {
@@ -61,20 +61,22 @@ export const AmplifyProvider: React.FC = ({ children }) => {
    * Used by react-admin
    */
   const authProvider = {
-    login: ({ username, password, federated, provider }: any) =>
-      username && password && !federated
+    /** Signs in either using username and password, or federated if a provider is passed. */
+    login: ({ username, password, provider }: any) =>
+      username && password && !provider
         ? Auth.signIn(username, password)
         : Auth.federatedSignIn({ provider }),
     logout: () => Auth.signOut(),
     checkAuth: () => Auth.currentAuthenticatedUser(),
     checkError: () => Auth.currentCredentials(),
+    /** Providers permissions for the whole app. identityId is used with S3Input. */
     getPermissions: () =>
       Promise.all([
         Auth.currentAuthenticatedUser(),
         Auth.currentCredentials(),
       ]).then(([user, { identityId }]) => ({
-        identityId,
         groups: user.signInUserSession.accessToken.payload['cognito:groups'],
+        identityId,
       })),
   };
 
@@ -93,7 +95,7 @@ export function useAuth() {
   return context;
 }
 
-export function useAuthProvider() {
+export function useRaAuthProvider() {
   const context = useContext(RaAuthProviderContext);
   if (!context) throw Error(NOT_INSIDE_AMPLIFY_PROVIDER);
   return context;

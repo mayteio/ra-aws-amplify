@@ -4,21 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "webpack-dev-server --open"
   },
   "dependencies": {
     "react-app-polyfill": "^1.0.0"
   },
-  "alias": {
-    "react": "../node_modules/react",
-    "react-dom": "../node_modules/react-dom",
-    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling"
-  },
   "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.8.4",
-    "parcel": "^1.12.3",
-    "typescript": "^3.4.5"
+    "babel-loader": "^8.0.6",
+    "file-loader": "^5.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }
