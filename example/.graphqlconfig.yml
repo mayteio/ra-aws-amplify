@@ -1,6 +1,6 @@
 projects:
   raawsamplify:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/raawsamplify/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
     excludes:

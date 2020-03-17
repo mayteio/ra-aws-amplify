@@ -45,7 +45,8 @@ const sanitizeResource = (data: any) => {
 
 export default (_: IntrospectionResultData) => (
   aorFetchType: string,
-  resource: any
+  resource: any,
+  queryType: any
 ) => (response: any) => {
   const data = response.data;
 
@@ -63,5 +64,9 @@ export default (_: IntrospectionResultData) => (
     };
   }
 
-  return { data: sanitizeResource(data) };
+  console.log(aorFetchType, data, queryType);
+
+  return {
+    data: data[queryType.name] && sanitizeResource(data[queryType.name]),
+  };
 };

@@ -8,13 +8,9 @@ export const onCreatePost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -40,13 +36,9 @@ export const onUpdatePost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -72,13 +64,9 @@ export const onDeletePost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -97,45 +85,6 @@ export const onDeletePost = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMedia = /* GraphQL */ `
-  subscription OnCreateMedia($editors: String) {
-    onCreateMedia(editors: $editors) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
-export const onUpdateMedia = /* GraphQL */ `
-  subscription OnUpdateMedia($editors: String) {
-    onUpdateMedia(editors: $editors) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
-export const onDeleteMedia = /* GraphQL */ `
-  subscription OnDeleteMedia($editors: String) {
-    onDeleteMedia(editors: $editors) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
 export const onCreatePostEditor = /* GraphQL */ `
   subscription OnCreatePostEditor($editors: String) {
     onCreatePostEditor(editors: $editors) {
@@ -145,8 +94,9 @@ export const onCreatePostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -176,8 +126,9 @@ export const onUpdatePostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -207,8 +158,9 @@ export const onDeletePostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -284,8 +236,9 @@ export const onCreateComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -308,8 +261,9 @@ export const onUpdateComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -332,8 +286,9 @@ export const onDeleteComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken

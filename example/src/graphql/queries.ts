@@ -1,39 +1,6 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const getMedia = /* GraphQL */ `
-  query GetMedia($id: ID!) {
-    getMedia(id: $id) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
-export const listMedias = /* GraphQL */ `
-  query ListMedias(
-    $filter: ModelMediaFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listMedias(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
-      }
-      nextToken
-    }
-  }
-`;
 export const getPostEditor = /* GraphQL */ `
   query GetPostEditor($id: ID!) {
     getPostEditor(id: $id) {
@@ -43,8 +10,9 @@ export const getPostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -102,8 +70,9 @@ export const listPosts = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -124,13 +93,9 @@ export const getPost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -193,8 +158,9 @@ export const getComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken

@@ -11,13 +11,9 @@ export const createPost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -46,13 +42,9 @@ export const updatePost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -81,13 +73,9 @@ export const deletePost = /* GraphQL */ `
       title
       content
       image {
-        id
-        title
-        attachment {
-          key
-          identityId
-          level
-        }
+        key
+        identityId
+        level
       }
       editors {
         items {
@@ -106,54 +94,6 @@ export const deletePost = /* GraphQL */ `
     }
   }
 `;
-export const createMedia = /* GraphQL */ `
-  mutation CreateMedia(
-    $input: CreateMediaInput!
-    $condition: ModelMediaConditionInput
-  ) {
-    createMedia(input: $input, condition: $condition) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
-export const updateMedia = /* GraphQL */ `
-  mutation UpdateMedia(
-    $input: UpdateMediaInput!
-    $condition: ModelMediaConditionInput
-  ) {
-    updateMedia(input: $input, condition: $condition) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
-export const deleteMedia = /* GraphQL */ `
-  mutation DeleteMedia(
-    $input: DeleteMediaInput!
-    $condition: ModelMediaConditionInput
-  ) {
-    deleteMedia(input: $input, condition: $condition) {
-      id
-      title
-      attachment {
-        key
-        identityId
-        level
-      }
-    }
-  }
-`;
 export const createPostEditor = /* GraphQL */ `
   mutation CreatePostEditor(
     $input: CreatePostEditorInput!
@@ -166,8 +106,9 @@ export const createPostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -200,8 +141,9 @@ export const updatePostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -234,8 +176,9 @@ export const deletePostEditor = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -323,8 +266,9 @@ export const createComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -350,8 +294,9 @@ export const updateComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken
@@ -377,8 +322,9 @@ export const deleteComment = /* GraphQL */ `
         title
         content
         image {
-          id
-          title
+          key
+          identityId
+          level
         }
         editors {
           nextToken

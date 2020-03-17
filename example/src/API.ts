@@ -6,7 +6,13 @@ export type CreatePostInput = {
   id?: string | null,
   title: string,
   content?: string | null,
-  postImageId?: string | null,
+  image?: S3ObjectInput | null,
+};
+
+export type S3ObjectInput = {
+  key: string,
+  identityId?: string | null,
+  level?: string | null,
 };
 
 export type ModelPostConditionInput = {
@@ -61,39 +67,10 @@ export type UpdatePostInput = {
   id: string,
   title?: string | null,
   content?: string | null,
-  postImageId?: string | null,
+  image?: S3ObjectInput | null,
 };
 
 export type DeletePostInput = {
-  id?: string | null,
-};
-
-export type CreateMediaInput = {
-  id?: string | null,
-  title?: string | null,
-  attachment?: S3ObjectInput | null,
-};
-
-export type S3ObjectInput = {
-  key: string,
-  identityId?: string | null,
-  level?: string | null,
-};
-
-export type ModelMediaConditionInput = {
-  title?: ModelStringInput | null,
-  and?: Array< ModelMediaConditionInput | null > | null,
-  or?: Array< ModelMediaConditionInput | null > | null,
-  not?: ModelMediaConditionInput | null,
-};
-
-export type UpdateMediaInput = {
-  id: string,
-  title?: string | null,
-  attachment?: S3ObjectInput | null,
-};
-
-export type DeleteMediaInput = {
   id?: string | null,
 };
 
@@ -163,12 +140,11 @@ export type DeleteCommentInput = {
   id?: string | null,
 };
 
-export type ModelMediaFilterInput = {
+export type ModelPostEditorFilterInput = {
   id?: ModelIDInput | null,
-  title?: ModelStringInput | null,
-  and?: Array< ModelMediaFilterInput | null > | null,
-  or?: Array< ModelMediaFilterInput | null > | null,
-  not?: ModelMediaFilterInput | null,
+  and?: Array< ModelPostEditorFilterInput | null > | null,
+  or?: Array< ModelPostEditorFilterInput | null > | null,
+  not?: ModelPostEditorFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -185,13 +161,6 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
-};
-
-export type ModelPostEditorFilterInput = {
-  id?: ModelIDInput | null,
-  and?: Array< ModelPostEditorFilterInput | null > | null,
-  or?: Array< ModelPostEditorFilterInput | null > | null,
-  not?: ModelPostEditorFilterInput | null,
 };
 
 export type ModelPostFilterInput = {
@@ -231,15 +200,10 @@ export type CreatePostMutation = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -274,15 +238,10 @@ export type UpdatePostMutation = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -317,15 +276,10 @@ export type DeletePostMutation = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -348,63 +302,6 @@ export type DeletePostMutation = {
   } | null,
 };
 
-export type CreateMediaMutationVariables = {
-  input: CreateMediaInput,
-  condition?: ModelMediaConditionInput | null,
-};
-
-export type CreateMediaMutation = {
-  createMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
-export type UpdateMediaMutationVariables = {
-  input: UpdateMediaInput,
-  condition?: ModelMediaConditionInput | null,
-};
-
-export type UpdateMediaMutation = {
-  updateMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
-export type DeleteMediaMutationVariables = {
-  input: DeleteMediaInput,
-  condition?: ModelMediaConditionInput | null,
-};
-
-export type DeleteMediaMutation = {
-  deleteMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
 export type CreatePostEditorMutationVariables = {
   input: CreatePostEditorInput,
   condition?: ModelPostEditorConditionInput | null,
@@ -420,9 +317,10 @@ export type CreatePostEditorMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -462,9 +360,10 @@ export type UpdatePostEditorMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -504,9 +403,10 @@ export type DeletePostEditorMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -613,9 +513,10 @@ export type CreateCommentMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -646,9 +547,10 @@ export type UpdateCommentMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -679,9 +581,10 @@ export type DeleteCommentMutation = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -693,48 +596,6 @@ export type DeleteCommentMutation = {
         nextToken: string | null,
       } | null,
     } | null,
-  } | null,
-};
-
-export type GetMediaQueryVariables = {
-  id: string,
-};
-
-export type GetMediaQuery = {
-  getMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
-export type ListMediasQueryVariables = {
-  filter?: ModelMediaFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListMediasQuery = {
-  listMedias:  {
-    __typename: "ModelMediaConnection",
-    items:  Array< {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
-    } | null > | null,
-    nextToken: string | null,
   } | null,
 };
 
@@ -752,9 +613,10 @@ export type GetPostEditorQuery = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -824,9 +686,10 @@ export type ListPostsQuery = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -853,15 +716,10 @@ export type GetPostQuery = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -943,9 +801,10 @@ export type GetCommentQuery = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -996,15 +855,10 @@ export type OnCreatePostSubscription = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -1039,15 +893,10 @@ export type OnUpdatePostSubscription = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -1081,15 +930,10 @@ export type OnDeletePostSubscription = {
     title: string,
     content: string | null,
     image:  {
-      __typename: "Media",
-      id: string,
-      title: string | null,
-      attachment:  {
-        __typename: "S3Object",
-        key: string,
-        identityId: string | null,
-        level: string | null,
-      } | null,
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
     } | null,
     editors:  {
       __typename: "ModelPostEditorConnection",
@@ -1112,60 +956,6 @@ export type OnDeletePostSubscription = {
   } | null,
 };
 
-export type OnCreateMediaSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnCreateMediaSubscription = {
-  onCreateMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnUpdateMediaSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnUpdateMediaSubscription = {
-  onUpdateMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnDeleteMediaSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnDeleteMediaSubscription = {
-  onDeleteMedia:  {
-    __typename: "Media",
-    id: string,
-    title: string | null,
-    attachment:  {
-      __typename: "S3Object",
-      key: string,
-      identityId: string | null,
-      level: string | null,
-    } | null,
-  } | null,
-};
-
 export type OnCreatePostEditorSubscriptionVariables = {
   editors?: string | null,
 };
@@ -1180,9 +970,10 @@ export type OnCreatePostEditorSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -1221,9 +1012,10 @@ export type OnUpdatePostEditorSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -1262,9 +1054,10 @@ export type OnDeletePostEditorSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -1363,9 +1156,10 @@ export type OnCreateCommentSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -1391,9 +1185,10 @@ export type OnUpdateCommentSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",
@@ -1419,9 +1214,10 @@ export type OnDeleteCommentSubscription = {
       title: string,
       content: string | null,
       image:  {
-        __typename: "Media",
-        id: string,
-        title: string | null,
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
       } | null,
       editors:  {
         __typename: "ModelPostEditorConnection",

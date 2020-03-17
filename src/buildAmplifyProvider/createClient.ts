@@ -6,7 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { createClientOpts } from '../types';
 
-export const createClient = ({ endpoint, schema, auth }: createClientOpts) => {
+export const createClient = ({ endpoint, auth }: createClientOpts) => {
   // create HTTPLink
   const httpLink = createHttpLink({
     uri: endpoint,
@@ -17,7 +17,11 @@ export const createClient = ({ endpoint, schema, auth }: createClientOpts) => {
 
   const fragmentMatcher: IntrospectionFragmentMatcher = new IntrospectionFragmentMatcher(
     {
-      introspectionQueryResultData: schema,
+      introspectionQueryResultData: {
+        __schema: {
+          types: [],
+        },
+      },
     }
   );
 

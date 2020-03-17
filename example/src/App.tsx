@@ -1,14 +1,8 @@
 import * as React from 'react';
-import {
-  Admin,
-  Resource,
-  ListGuesser,
-  EditGuesser,
-  ShowGuesser,
-} from 'react-admin';
+import { Admin, Resource, EditGuesser } from 'react-admin';
 import { buildDataProvider, defaultDataProvider } from './dataProvider';
 import { useAuthProvider, useUser, nextTokenReducer } from '../../';
-import { PostList, PostCreate } from './Post';
+import { PostList, PostCreate, PostShow, PostEdit } from './Post';
 
 export const App = () => {
   // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
@@ -34,9 +28,9 @@ export const App = () => {
         <Resource
           name="Post"
           list={PostList}
-          show={ShowGuesser}
+          show={PostShow}
           create={PostCreate}
-          edit={EditGuesser}
+          edit={PostEdit}
         />,
         // <Resource
         //   name="Comment"
