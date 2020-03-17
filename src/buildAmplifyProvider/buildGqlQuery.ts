@@ -1,13 +1,21 @@
-import { IntrospectionResultData } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
-import { GET_LIST, GET_ONE, GET_MANY, CREATE, UPDATE, DELETE } from 'ra-core';
+import {
+  GET_LIST,
+  GET_ONE,
+  GET_MANY,
+  GET_MANY_REFERENCE,
+  CREATE,
+  UPDATE,
+  DELETE,
+} from 'ra-core';
 
 /**
  * Curried in case we want introspection results
  */
-export const getGqlQuery = (_: IntrospectionResultData) => (
+export const getGqlQuery = (_introspectionResults: any) => (
   raFetchType: string,
   resource: any,
+  params: any,
   queries: any,
   mutations: any
 ) => {
@@ -18,6 +26,9 @@ export const getGqlQuery = (_: IntrospectionResultData) => (
       return gql(queries[`get${resource.type.name}`]);
     case GET_MANY:
       return gql(queries[`list${resource.type.name}s`]);
+    case GET_MANY_REFERENCE:
+      const targetQuery = params.target;
+      return gql(queries[targetQuery]);
     case CREATE:
       return gql(mutations[`create${resource.type.name}`]);
     case UPDATE:

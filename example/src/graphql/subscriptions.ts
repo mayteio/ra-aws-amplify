@@ -23,6 +23,7 @@ export const onCreatePost = /* GraphQL */ `
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -51,6 +52,7 @@ export const onUpdatePost = /* GraphQL */ `
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -79,6 +81,7 @@ export const onDeletePost = /* GraphQL */ `
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -231,23 +234,7 @@ export const onCreateComment = /* GraphQL */ `
     onCreateComment {
       id
       content
-      post {
-        id
-        title
-        content
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -256,23 +243,7 @@ export const onUpdateComment = /* GraphQL */ `
     onUpdateComment {
       id
       content
-      post {
-        id
-        title
-        content
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -281,23 +252,7 @@ export const onDeleteComment = /* GraphQL */ `
     onDeleteComment {
       id
       content
-      post {
-        id
-        title
-        content
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;

@@ -294,16 +294,19 @@ export default (introspectionResults: any) => (
           or: params.ids.map((id: string | number) => ({ id: { eq: id } })),
         },
       };
-    case GET_MANY_REFERENCE: {
-      const parts = preparedParams.target.split('.');
-      let variables = buildGetListVariables(introspectionResults)(
-        resource,
-        aorFetchType,
-        preparedParams
+    case GET_MANY_REFERENCE:
+      // grab the arg the secondary GSI key is searching for an use that
+      // as the param in our query.
+      const query = introspectionResults.queries.find(
+        (q: any) => q.name === params.target
       );
-      variables.filter[`${parts[0]}Id`] = preparedParams.id;
-      return variables;
-    }
+      const key = query.args[0].name;
+
+      return {
+        limit: preparedParams.pagination.perPage,
+        [key]: preparedParams.id,
+      };
+
     case GET_ONE:
       return { id: preparedParams.id };
     case DELETE:

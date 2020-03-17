@@ -1,8 +1,21 @@
 import * as React from 'react';
-import { Admin, Resource, EditGuesser } from 'react-admin';
+import {
+  Admin,
+  Resource,
+  EditGuesser,
+  ShowGuesser,
+  ListGuesser,
+} from 'react-admin';
 import { buildDataProvider, defaultDataProvider } from './dataProvider';
-import { useAuthProvider, useUser, nextTokenReducer } from '../../';
-import { PostList, PostCreate, PostShow, PostEdit } from './Post';
+import { useRaAuthProvider, useUser, nextTokenReducer } from '../../';
+import { PostList, PostCreate, PostShow, PostEdit, PostIcon } from './Post';
+import {
+  CommentList,
+  CommentCreate,
+  CommentShow,
+  CommentEdit,
+  CommentIcon,
+} from './Comment';
 
 export const App = () => {
   // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
@@ -16,7 +29,7 @@ export const App = () => {
   }, [user]);
 
   // get authProvider for <Admin /> component.
-  const authProvider = useAuthProvider();
+  const authProvider = useRaAuthProvider();
 
   return (
     <Admin
@@ -31,14 +44,16 @@ export const App = () => {
           show={PostShow}
           create={PostCreate}
           edit={PostEdit}
+          icon={PostIcon}
         />,
-        // <Resource
-        //   name="Comment"
-        //   list={ListGuesser}
-        //   show={ShowGuesser}
-        //   create={UpdateGuesser}
-        //   update={UpdateGuesser}
-        // />,
+        <Resource
+          name="Comment"
+          list={CommentList}
+          show={CommentShow}
+          create={CommentCreate}
+          edit={CommentEdit}
+          icon={CommentIcon}
+        />,
         // permissions.groups.includes('admin') ? (
         //   <Resource
         //     name="User"

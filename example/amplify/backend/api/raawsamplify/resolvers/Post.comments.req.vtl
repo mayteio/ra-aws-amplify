@@ -1,11 +1,11 @@
 #set( $limit = $util.defaultIfNull($context.args.limit, 10) )
 #set( $query = {
-  "expression": "#connectionAttribute = :connectionAttribute",
+  "expression": "#partitionKey = :partitionKey",
   "expressionNames": {
-      "#connectionAttribute": "commentPostId"
+      "#partitionKey": "postId"
   },
   "expressionValues": {
-      ":connectionAttribute": {
+      ":partitionKey": {
           "S": "$context.source.id"
     }
   }
@@ -34,5 +34,5 @@ $util.toJson($context.args.nextToken)
   #else
 null
   #end,
-  "index": "gsi-PostComments"
+  "index": "byPost"
 }

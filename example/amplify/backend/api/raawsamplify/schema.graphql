@@ -14,22 +14,9 @@ type Post
   title: String!
   content: String
   image: S3Object
-  comments: [Comment] @connection(name: "PostComments")
   editors: [PostEditor] @connection(name: "PostEditors")
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 }
-
-# type Media
-#   @model
-#   @auth(
-#     rules: [
-#       { allow: owner, ownerField: "editors" }
-#       { allow: groups, groups: ["admin"] }
-#     ]
-#   ) {
-#   id: ID!
-#   title: String
-#   attachment: S3Object
-# }
 
 type PostEditor
   @model
@@ -65,10 +52,12 @@ type Comment
       { allow: public, operations: [read] }
       { allow: groups, groups: ["admin", "editor"] }
     ]
-  ) {
+  )
+  @key(name: "byPost", fields: ["postId"], queryField: "commentsByPost") {
   id: ID!
   content: String
-  post: Post @connection(name: "PostComments")
+  # post: Post @connection(fields: ["postId"])
+  postId: ID!
 }
 
 # type Media

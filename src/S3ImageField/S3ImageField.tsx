@@ -6,12 +6,15 @@ interface S3ImageFieldProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   source?: string;
   record?: Record<string, any>;
   label?: string;
+  basePath?: string;
 }
 
 export const S3ImageField: React.FC<S3ImageFieldProps> = ({
   source = 'S3Object',
   record = {},
   label,
+  // to avoid html img prop errors
+  basePath: _basePath,
   ...imgProps
 }) => {
   // store the S3 signed URL in state for use in return

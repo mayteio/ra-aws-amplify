@@ -108,6 +108,7 @@ export const getPost = /* GraphQL */ `
         items {
           id
           content
+          postId
         }
         nextToken
       }
@@ -153,23 +154,7 @@ export const getComment = /* GraphQL */ `
     getComment(id: $id) {
       id
       content
-      post {
-        id
-        title
-        content
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
+      postId
     }
   }
 `;
@@ -183,12 +168,31 @@ export const listComments = /* GraphQL */ `
       items {
         id
         content
-        post {
-          id
-          title
-          content
-          owner
-        }
+        postId
+      }
+      nextToken
+    }
+  }
+`;
+export const commentsByPost = /* GraphQL */ `
+  query CommentsByPost(
+    $postId: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    commentsByPost(
+      postId: $postId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        content
+        postId
       }
       nextToken
     }
