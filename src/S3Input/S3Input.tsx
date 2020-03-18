@@ -18,8 +18,11 @@ export const S3Input: React.FC<S3InputProps> = ({
 }) => {
   // we use permissions to grab the identityId
   const { permissions } = usePermissions();
-  const key = useInput({ source: source + '.key' });
-  const identityId = useInput({ source: source + '.identityId' });
+  const { input: keyInput } = useInput({ source: source + '.key' });
+  const { input: identityIdInput } = useInput({
+    source: source + '.identityId',
+  });
+  const { input: levelInput } = useInput({ source: source + '.identityId' });
   const notify = useNotify();
 
   /**
@@ -30,15 +33,17 @@ export const S3Input: React.FC<S3InputProps> = ({
     files.forEach(async file => {
       try {
         const result: any = await Storage.put(uuid() + '-' + file.name, file);
-
-        key.input.onChange(result.key);
+        keyInput.onChange(result.key);
         if (level === 'protected' || level === 'private') {
-          identityId.input.onChange(permissions.identityId);
+          identityIdInput.onChange(permissions.claims.identityId);
+          levelInput.onChange(level);
         }
         // note: rawFile gets stripped when building params
       } catch (error) {
         console.log(error);
-        key.input.onChange(undefined);
+        keyInput.onChange(undefined);
+        identityIdInput.onChange(undefined);
+        levelInput.onChange(undefined);
         notify('There was an error uploading your file.');
       }
     });

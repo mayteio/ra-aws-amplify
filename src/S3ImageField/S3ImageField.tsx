@@ -6,16 +6,15 @@ interface S3ImageFieldProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   source?: string;
   record?: Record<string, any>;
   label?: string;
-  basePath?: string;
+  imgProps?: any;
+  addLabel?: boolean;
 }
 
 export const S3ImageField: React.FC<S3ImageFieldProps> = ({
   source = 'S3Object',
   record = {},
-  label,
   // to avoid html img prop errors
-  basePath: _basePath,
-  ...imgProps
+  imgProps = {},
 }) => {
   // store the S3 signed URL in state for use in return
   const [src, set] = React.useState<string | undefined>();
@@ -42,7 +41,7 @@ export const S3ImageField: React.FC<S3ImageFieldProps> = ({
 
   // if there's no source and there is a key, show a loading spinner
   if (!src && key) {
-    return <CircularProgress />;
+    return <CircularProgress data-testid="image-loading" />;
   }
 
   // if there's a src, show the image!
@@ -52,4 +51,8 @@ export const S3ImageField: React.FC<S3ImageFieldProps> = ({
 
   // otherwise do nothing
   return null;
+};
+
+S3ImageField.defaultProps = {
+  addLabel: true,
 };

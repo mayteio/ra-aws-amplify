@@ -11,8 +11,6 @@ export const NOT_INSIDE_AMPLIFY_PROVIDER =
 const AmplifyAuthContext = React.createContext<AuthClass | undefined>(
   undefined
 );
-/** provides the authProvider required by react-admin */
-const RaAuthProviderContext = React.createContext<any | undefined>(undefined);
 
 /** Provides just the user object */
 const UserContext = React.createContext<CognitoUser | undefined>(undefined);
@@ -22,7 +20,7 @@ const UserContext = React.createContext<CognitoUser | undefined>(undefined);
  * this provider with another provider (say <AzureProvider />) that replicates
  * the API above and everything using useAuth and useUser should just work!
  */
-export const RaAmplifyAuthProvider: React.FC = ({ children }) => {
+export const AmplifyAuthProvider: React.FC = ({ children }) => {
   // on mount, store the user and listen to hub changes (Amplify's internal)
   const [user, setUser] = useState<undefined | CognitoUser>(undefined);
   useEffect(() => {
@@ -60,31 +58,10 @@ export const RaAmplifyAuthProvider: React.FC = ({ children }) => {
   /**
    * Used by react-admin
    */
-  const authProvider = {
-    /** Signs in either using username and password, or federated if a provider is passed. */
-    login: ({ username, password, provider }: any) =>
-      username && password && !provider
-        ? Auth.signIn(username, password)
-        : Auth.federatedSignIn({ provider }),
-    logout: () => Auth.signOut(),
-    checkAuth: () => Auth.currentAuthenticatedUser(),
-    checkError: () => Auth.currentCredentials(),
-    /** Providers permissions for the whole app. identityId is used with S3Input. */
-    getPermissions: () =>
-      Promise.all([
-        Auth.currentAuthenticatedUser(),
-        Auth.currentCredentials(),
-      ]).then(([user, { identityId }]) => ({
-        groups: user.signInUserSession.accessToken.payload['cognito:groups'],
-        identityId,
-      })),
-  };
 
   return (
     <AmplifyAuthContext.Provider value={Auth}>
-      <RaAuthProviderContext.Provider value={authProvider}>
-        <UserContext.Provider value={user}>{children}</UserContext.Provider>
-      </RaAuthProviderContext.Provider>
+      <UserContext.Provider value={user}>{children}</UserContext.Provider>
     </AmplifyAuthContext.Provider>
   );
 };
@@ -96,9 +73,23 @@ export function useAuth() {
 }
 
 export function useRaAuthProvider() {
-  const context = useContext(RaAuthProviderContext);
-  if (!context) throw Error(NOT_INSIDE_AMPLIFY_PROVIDER);
-  return context;
+  return {
+    /** Signs in either using username and password, or federated if a provider is passed. */
+    login: ({ username, password, provider }: any) =>
+      username && password && !provider
+        ? Auth.signIn(username, password)
+        : Auth.federatedSignIn({ provider }),
+    logout: () => Auth.signOut(),
+    checkAuth: () => Auth.currentSession(),
+    checkError: () => Auth.currentCredentials(),
+    /** Providers permissions for the whole app. identityId is used with S3Input. */
+    getPermissions: () =>
+      Promise.all([Auth.currentSession(), Auth.currentCredentials()]).then(
+        ([session, { identityId }]) => ({
+          claims: { ...session.getIdToken().payload, identityId },
+        })
+      ),
+  };
 }
 
 export function useUser() {

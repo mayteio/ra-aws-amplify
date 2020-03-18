@@ -1,7 +1,7 @@
 # `ra-data-appsync`
 
 🚨 Work in progress. Use in production at your own risk!
-Feel free to [contribute](#contributing) though to get it there though. I love contributors.
+Feel free to [contribute](https://github.com/mayteio/ra-aws-amplify/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) though to get it there though. I love contributors.
 
 > Easily bootstrap an admin interface for your AppSync APIs.
 
@@ -36,8 +36,9 @@ What they don't do, is provide an easy admin interface to manage this data. Ente
 - Filtering, sorting of get & list
 - Multiple image/file upload
 - Recursively updating connections
+- Your knowledge and ideas
 
-[Start helping out!](https://github.com/mayteio/ra-data-appsync/issues)
+[Check out some `good first issues`](https://github.com/mayteio/ra-aws-amplify/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to start!
 
 ## Installation
 
@@ -128,7 +129,13 @@ Coming with DynamoDB's powerful speed and scaling features are painful rigidity 
 
 ### A product with an image
 
+Docs coming soon...
+See `example/src/Post/PostCreate.tsx` and `example/src/common/MediaUploadInput.tsx` for examples.
+
 ### A post with comments
+
+Docs coming soon...
+See `example/src/Post/PostShow.tsx` for an example
 
 ### Using `<ReferenceManyField />`
 
@@ -186,7 +193,6 @@ Here's an example where we show comments on a post. You **must** set the `target
 
 ```js
 // PostsShow.js
-
 export const PostShow = prop => {
   <Show {...props}>
     ...
@@ -206,6 +212,8 @@ export const PostShow = prop => {
 The package will pick up on this and wire everything up as expected.
 
 ### Post editors
+
+Coming soon...
 
 ---
 
@@ -322,16 +330,18 @@ const App = () => {
 
 ### Permissions
 
-`react-admin` has tools for [dealing with permissions](https://marmelab.com/react-admin/Authorization.html). By using the `authProvider` from this package, you automatically get cognito groups passed in for use via the `usePermissions` hook:
+`react-admin` has tools for [dealing with permissions](https://marmelab.com/react-admin/Authorization.html). By using the `authProvider` from this package, you automatically get [id token claims]() passed in for use via the `usePermissions` hook:
 
 ```js
 import { usePermissions } from 'react-admin';
 
 const { permissions } = usePermissions();
-console.log(permissions.groups); // => ['admin', 'user']
+console.log(permissions.claims['cognito:groups']); // => ['admin', 'user']
 ```
 
 You can then use these in your `Resource`, `List`, `Show`, `Create`, `Edit` components. See the [`react-admin` Authorization docs](https://marmelab.com/react-admin/Authorization.html) for use cases.
+
+Use this in conjunction with the [Pre Token Generation Lambda Trigger](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-token-generation.html) for even more fine-grained access control.
 
 ---
 
@@ -525,6 +535,8 @@ The `dataProvider` handles the rest for you.
 ## Contributing
 
 Have you learnt something interesting about integrating `react-admin` with AWS Amplify on a private project? Open source only works because people like you help people like me create awesome things and share our knowledge. Any help with this package is much appreciated, whether it's knowledge, tests, improving types, additional components, optimisations, solutions, etc. Just create an issue and let's get started!
+
+Read contribution guidelines.
 
 ## License
 

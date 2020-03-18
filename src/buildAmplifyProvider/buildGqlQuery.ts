@@ -2,16 +2,11 @@ import gql from 'graphql-tag';
 import {
   GET_LIST,
   GET_ONE,
-  GET_MANY,
   GET_MANY_REFERENCE,
   CREATE,
   UPDATE,
   DELETE,
 } from 'ra-core';
-
-/**
- * Curried in case we want introspection results
- */
 export const getGqlQuery = (_introspectionResults: any) => (
   raFetchType: string,
   resource: any,
@@ -24,8 +19,6 @@ export const getGqlQuery = (_introspectionResults: any) => (
       return gql(queries[`list${resource.type.name}s`]);
     case GET_ONE:
       return gql(queries[`get${resource.type.name}`]);
-    case GET_MANY:
-      return gql(queries[`list${resource.type.name}s`]);
     case GET_MANY_REFERENCE:
       const targetQuery = params.target;
       return gql(queries[targetQuery]);
