@@ -5,14 +5,22 @@ export const getPostEditor = /* GraphQL */ `
   query GetPostEditor($id: ID!) {
     getPostEditor(id: $id) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -21,14 +29,6 @@ export const getPostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -42,76 +42,34 @@ export const listPostEditors = /* GraphQL */ `
     listPostEditors(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        editor {
+          id
+          username
+          owner
+        }
         post {
           id
           title
           content
           owner
         }
-        editor {
-          id
-          username
-          owner
-        }
       }
       nextToken
     }
   }
 `;
-export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        content
-        image {
-          key
-          identityId
-          level
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
       id
-      title
-      content
-      image {
-        key
-        identityId
-        level
-      }
-      editors {
+      username
+      posts {
         items {
           id
         }
         nextToken
       }
       owner
-      comments {
-        items {
-          id
-          content
-          postId
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -134,18 +92,100 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+export const getMedia = /* GraphQL */ `
+  query GetMedia($id: ID!) {
+    getMedia(id: $id) {
       id
-      username
-      posts {
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
+    }
+  }
+`;
+export const listMedias = /* GraphQL */ `
+  query ListMedias(
+    $filter: ModelMediaFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedias(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const listPosts = /* GraphQL */ `
+  query ListPosts(
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        content
+        image {
+          id
+          name
+          owner
+        }
+        editors {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getPost = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      title
+      content
+      image {
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
+      }
+      editors {
         items {
           id
         }
         nextToken
       }
       owner
+      comments {
+        items {
+          id
+          content
+          postId
+        }
+        nextToken
+      }
     }
   }
 `;

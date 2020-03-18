@@ -221,36 +221,37 @@ const buildGetListVariables = (introspectionResults: any) => (
  * This handles sanitisation of upload data.
  */
 const buildCreateUpdateVariables = (introspectionResults: any) => (
-  resource: any,
-  _: any,
+  // unused, left for code cohesion. Can remove in future iterations if unused.
+  _resource: any,
+  _fetchType: any,
+  // used arguments
   params: any,
   queryType: any
 ) => {
   const inputArgument = queryType.args.find((a: any) => a.name === 'input');
   const inputTypeName = getFinalType(inputArgument.type);
-  const inputType = introspectionResults.types.find(
+  const { inputFields } = introspectionResults.types.find(
     (t: any) => t.name === inputTypeName.name
   );
-  const inputTypeFields = inputType.inputFields.map((f: any) => f.name);
 
+  /** Generate GraphQL input */
   const input = Object.keys(params.data).reduce((acc, key) => {
-    const field = resource.type.fields.find((f: any) => f.name === key);
-    // guard against any fields that shouldn't be in the input
-    if (!inputTypeFields.includes(field.name)) {
+    /** Get the input field (i.e. CreatePostInput) for validation */
+    const inputField = inputFields.find((f: any) => f.name === key);
+
+    /** Skip any params passed that are not an input field */
+    if (!inputFields.find((f: any) => f.name === inputField.name)) {
       return acc;
     }
 
-    // file upload should be handled by Amplify.Storage, so instead we check
-    // if the field is an S3Object model, and if so pull out the relevant information
-    // and return a clean object for GraphQL
-    if (field.type.name?.match(/S3Object/i)) {
+    /** Strip any S3Objects of unnecessary fields, pulling only what we need. */
+    if (getFinalType(inputField.type).name?.match(/S3Object/i)) {
       const fields = ['key', 'level', 'identityId', 'region', 'bucket'];
       const cleanS3Object = Object.entries(params.data[key]).reduce(
         (acc: any, [k, v]: [string, unknown]): Record<string, string> => {
           if (fields.includes(k)) {
             acc[k] = v;
           }
-
           return acc;
         },
         {}
@@ -288,12 +289,19 @@ export default (introspectionResults: any) => (
       );
     }
     case GET_MANY:
-      return {
-        limit: params.ids.length,
-        filter: {
-          or: params.ids.map((id: string | number) => ({ id: { eq: id } })),
+      return (preparedParams.ids as []).reduce(
+        (acc: Record<string, string>, id: string, i: number) => {
+          acc[`id${i}`] = id;
+          return acc;
         },
-      };
+        {}
+      );
+    // return {
+    //   limit: params.ids.length,
+    //   filter: {
+    //     or: params.ids.map((id: string | number) => ({ id: { eq: id } })),
+    //   },
+    // };
     case GET_MANY_REFERENCE:
       // grab the arg the secondary GSI key is searching for an use that
       // as the param in our query.

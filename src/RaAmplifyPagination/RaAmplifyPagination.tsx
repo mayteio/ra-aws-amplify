@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import { connect } from 'react-redux';
 
-function UnconnectedRaAmplifyPagination(props: any) {
+export function UnconnectedRaAmplifyPagination(props: any) {
   if (props.page === 1 && !props.nextToken) {
     return null;
   }

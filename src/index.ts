@@ -6,5 +6,5 @@ export * from './S3Input';
 
 import { nextTokenReducer } from './RaAmplifyPagination';
 export const reducers = {
-  nextTokenReducer,
+  nextToken: nextTokenReducer,
 };

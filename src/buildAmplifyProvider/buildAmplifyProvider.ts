@@ -14,16 +14,14 @@ import {
 
 import defaultBuildQuery from './buildQuery';
 import { createClient } from './createClient';
-import pluralize from 'pluralize';
 
 const defaultOptions = {
   introspection: {
     operationNames: {
-      [GET_LIST]: (resource: any) => `list${pluralize(resource.name)}`,
+      [GET_LIST]: (resource: any) => `list${resource.name}s`,
       [GET_ONE]: (resource: any) => `get${resource.name}`,
-      [GET_MANY]: (resource: any) => `list${pluralize(resource.name)}`,
-      [GET_MANY_REFERENCE]: (resource: any) =>
-        `list${pluralize(resource.name)}`,
+      [GET_MANY]: (resource: any) => `list${resource.name}s`,
+      [GET_MANY_REFERENCE]: (resource: any) => `list${resource.name}s`,
       [CREATE]: (resource: any) => `create${resource.name}`,
       [UPDATE]: (resource: any) => `update${resource.name}`,
       [DELETE]: (resource: any) => `delete${resource.name}`,

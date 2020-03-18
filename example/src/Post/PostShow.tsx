@@ -4,6 +4,7 @@ import {
   Datagrid,
   DeleteButton,
   EditButton,
+  ReferenceField,
   ReferenceManyField,
   Show,
   SimpleShowLayout,
@@ -15,6 +16,12 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubbleRounded';
 
 import { S3ImageField } from '../../../';
 
+/**
+ * 1. preview of image with edit button
+ * 2. edit opens a popup to upload a file, create media
+ * 3. on save saves the ID to the post
+ */
+
 export const PostShow: React.FC<{
   id: string;
 }> = props => (
@@ -23,7 +30,9 @@ export const PostShow: React.FC<{
       <TextField source="id" disabled />
       <TextField source="title" />
       <TextField source="content" />
-      <S3ImageField source="image" />
+      <ReferenceField source="postImageId" reference="Media">
+        <S3ImageField source="attachment" />
+      </ReferenceField>
       <ReferenceManyField reference="Comment" target="commentsByPost">
         <Datagrid>
           <TextField source="content" />

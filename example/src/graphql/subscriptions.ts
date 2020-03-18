@@ -8,9 +8,14 @@ export const onCreatePost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -37,9 +42,14 @@ export const onUpdatePost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -66,9 +76,14 @@ export const onDeletePost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -92,14 +107,22 @@ export const onCreatePostEditor = /* GraphQL */ `
   subscription OnCreatePostEditor($editors: String) {
     onCreatePostEditor(editors: $editors) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -108,14 +131,6 @@ export const onCreatePostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -124,14 +139,22 @@ export const onUpdatePostEditor = /* GraphQL */ `
   subscription OnUpdatePostEditor($editors: String) {
     onUpdatePostEditor(editors: $editors) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -140,14 +163,6 @@ export const onUpdatePostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -156,14 +171,22 @@ export const onDeletePostEditor = /* GraphQL */ `
   subscription OnDeletePostEditor($editors: String) {
     onDeletePostEditor(editors: $editors) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -172,14 +195,6 @@ export const onDeletePostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -253,6 +268,48 @@ export const onDeleteComment = /* GraphQL */ `
       id
       content
       postId
+    }
+  }
+`;
+export const onCreateMedia = /* GraphQL */ `
+  subscription OnCreateMedia($owner: String) {
+    onCreateMedia(owner: $owner) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
+    }
+  }
+`;
+export const onUpdateMedia = /* GraphQL */ `
+  subscription OnUpdateMedia($owner: String) {
+    onUpdateMedia(owner: $owner) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
+    }
+  }
+`;
+export const onDeleteMedia = /* GraphQL */ `
+  subscription OnDeleteMedia($owner: String) {
+    onDeleteMedia(owner: $owner) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
     }
   }
 `;

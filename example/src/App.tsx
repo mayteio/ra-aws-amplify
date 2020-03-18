@@ -16,6 +16,13 @@ import {
   CommentEdit,
   CommentIcon,
 } from './Comment';
+import {
+  MediaList,
+  MediaCreate,
+  MediaShow,
+  MediaEdit,
+  MediaIcon,
+} from './Media';
 
 export const App = () => {
   // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
@@ -53,6 +60,14 @@ export const App = () => {
           create={CommentCreate}
           edit={CommentEdit}
           icon={CommentIcon}
+        />,
+        <Resource
+          name="Media"
+          list={MediaList}
+          show={MediaShow}
+          create={MediaCreate}
+          edit={MediaEdit}
+          icon={MediaIcon}
         />,
         // permissions.groups.includes('admin') ? (
         //   <Resource

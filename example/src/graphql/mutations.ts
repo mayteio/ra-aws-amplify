@@ -11,9 +11,14 @@ export const createPost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -43,9 +48,14 @@ export const updatePost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -75,9 +85,14 @@ export const deletePost = /* GraphQL */ `
       title
       content
       image {
-        key
-        identityId
-        level
+        id
+        name
+        attachment {
+          key
+          identityId
+          level
+        }
+        owner
       }
       editors {
         items {
@@ -104,14 +119,22 @@ export const createPostEditor = /* GraphQL */ `
   ) {
     createPostEditor(input: $input, condition: $condition) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -120,14 +143,6 @@ export const createPostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -139,14 +154,22 @@ export const updatePostEditor = /* GraphQL */ `
   ) {
     updatePostEditor(input: $input, condition: $condition) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -155,14 +178,6 @@ export const updatePostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -174,14 +189,22 @@ export const deletePostEditor = /* GraphQL */ `
   ) {
     deletePostEditor(input: $input, condition: $condition) {
       id
+      editor {
+        id
+        username
+        posts {
+          nextToken
+        }
+        owner
+      }
       post {
         id
         title
         content
         image {
-          key
-          identityId
-          level
+          id
+          name
+          owner
         }
         editors {
           nextToken
@@ -190,14 +213,6 @@ export const deletePostEditor = /* GraphQL */ `
         comments {
           nextToken
         }
-      }
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
       }
     }
   }
@@ -289,6 +304,57 @@ export const deleteComment = /* GraphQL */ `
       id
       content
       postId
+    }
+  }
+`;
+export const createMedia = /* GraphQL */ `
+  mutation CreateMedia(
+    $input: CreateMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    createMedia(input: $input, condition: $condition) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
+    }
+  }
+`;
+export const updateMedia = /* GraphQL */ `
+  mutation UpdateMedia(
+    $input: UpdateMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    updateMedia(input: $input, condition: $condition) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
+    }
+  }
+`;
+export const deleteMedia = /* GraphQL */ `
+  mutation DeleteMedia(
+    $input: DeleteMediaInput!
+    $condition: ModelMediaConditionInput
+  ) {
+    deleteMedia(input: $input, condition: $condition) {
+      id
+      name
+      attachment {
+        key
+        identityId
+        level
+      }
+      owner
     }
   }
 `;
