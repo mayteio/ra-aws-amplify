@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Create, TextInput, FormWithRedirect, SaveButton } from 'react-admin';
+import {
+  Create,
+  TextInput,
+  FormWithRedirect,
+  SaveButton,
+  Labeled,
+} from 'react-admin';
 import { Box, Grid, Toolbar, makeStyles } from '@material-ui/core';
 
 import { MediaUploadInput } from '../common';
@@ -39,7 +45,9 @@ export const PostCreate: React.FC<any> = props => {
                 />
               </SanitizeGrid>
               <SanitizeGrid item xs>
-                <MediaUploadInput source="postImageId" {...props} />
+                <Labeled label="Featured Image">
+                  <MediaUploadInput inputField="postImageId" {...props} />
+                </Labeled>
               </SanitizeGrid>
             </SanitizeGrid>
             <Toolbar>

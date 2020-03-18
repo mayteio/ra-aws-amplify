@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Box,
   Button,
   Portal,
   Dialog,
@@ -10,14 +11,8 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/CloseRounded';
-import {
-  TextInput,
-  ReferenceField,
-  useMutation,
-  useNotify,
-  useInput,
-} from 'react-admin';
-import { UPDATE, CREATE } from 'ra-core';
+import { TextInput, ReferenceField, useMutation, useInput } from 'react-admin';
+import { CREATE } from 'ra-core';
 import { S3Input, S3ImageField } from '../../..';
 import { Form, useFormState } from 'react-final-form';
 
@@ -36,19 +31,34 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const MediaUploadInput: React.FC<any> = ({
   source,
+  inputField,
   record,
+  label,
   ...props
 }) => {
-  const { input } = useInput({ source });
-  const { values } = useFormState();
+  /** On mount, create input and set to source value if provided. */
+  const { input } = useInput({ source: inputField });
+  const mounted = React.useRef(false);
+  React.useEffect(() => {
+    if (record[source] && !mounted.current) {
+      input.onChange(record[source]);
+    }
+    mounted.current = true;
+  }, [input, source, record]);
 
+  /** Handle modal dialog state */
   const [open, setOpen] = React.useState(false);
+
+  /** Mutation action for saving a new media file */
   const [saveMedia, { data, loaded }] = useMutation({
-    type: values[source] ? UPDATE : CREATE,
+    type: CREATE,
     resource: 'Media',
   });
 
-  // listen for change of mutation and close window
+  /** Handle popup form save, use dataProvider via hooks */
+  const handleSave = data => saveMedia({ payload: { data } });
+
+  /** Listen for successful mutation, set field and close window */
   const newlyCreatedMediaId = data?.id;
   React.useEffect(() => {
     if (newlyCreatedMediaId && loaded) {
@@ -57,30 +67,32 @@ export const MediaUploadInput: React.FC<any> = ({
     }
   }, [newlyCreatedMediaId, loaded]);
 
-  /** Handle popup form save, use dataProvider via hooks */
-  const handleSave = data => saveMedia({ payload: { data } });
-
   /** Handles removal of media model connection from parent model */
   const handleRemove = () => input.onChange(undefined);
 
+  /** Get form values for conditionally rendering form */
+  const { values } = useFormState();
+
   const classes = useStyles();
-
-  console.log(source, record);
-
   return (
-    <>
+    <Box mb={2}>
       <ReferenceField
         basePath={props.basePath}
         reference="Media"
-        source={source}
-        record={record || values}
+        source={inputField}
+        record={values}
       >
         <S3ImageField source="attachment" />
       </ReferenceField>
-      <Button onClick={() => setOpen(true)}>
-        {values[source] ? 'Change media' : 'Add media'}
-      </Button>
-      <Button onClick={handleRemove}>Remove Media</Button>
+
+      <Box>
+        <Button onClick={() => setOpen(true)}>
+          {values[inputField] ? 'Change media' : 'Add media'}
+        </Button>
+        {values[inputField] && (
+          <Button onClick={handleRemove}>Remove Media</Button>
+        )}
+      </Box>
       <Portal>
         <Dialog open={open}>
           <DialogTitle className={classes.root} disableTypography>
@@ -95,17 +107,17 @@ export const MediaUploadInput: React.FC<any> = ({
           </DialogTitle>
           <Form onSubmit={handleSave} key={1}>
             {(props: any) => (
-              <form onSubmit={props.handleSubmit}>
+              <Box p={2} component="form" onSubmit={props.handleSubmit}>
                 <TextInput source="name" />
                 <S3Input source="attachment" />
                 <Button variant="contained" color="primary" type="submit">
                   Save
                 </Button>
-              </form>
+              </Box>
             )}
           </Form>
         </Dialog>
       </Portal>
-    </>
+    </Box>
   );
 };

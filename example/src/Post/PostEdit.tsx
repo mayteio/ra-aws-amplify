@@ -6,7 +6,7 @@ export const PostEdit: React.FC = props => {
   return (
     <Edit {...props}>
       <SimpleForm>
-        <MediaUploadInput source="image.id" />
+        <MediaUploadInput source="image.id" inputField="postImageId" />
         <TextInput source="title" />
         <TextInput source="content" multiline rows={5} />
         {/* <TextInput value={} disabled /> */}

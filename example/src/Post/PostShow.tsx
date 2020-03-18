@@ -30,8 +30,15 @@ export const PostShow: React.FC<{
       <TextField source="id" disabled />
       <TextField source="title" />
       <TextField source="content" />
-      <ReferenceField source="postImageId" reference="Media">
-        <S3ImageField source="attachment" />
+      <ReferenceField
+        label="Featured image"
+        source="image.id"
+        reference="Media"
+      >
+        <S3ImageField
+          source="attachment"
+          style={{ width: 100, height: 'auto' }}
+        />
       </ReferenceField>
       <ReferenceManyField reference="Comment" target="commentsByPost">
         <Datagrid>

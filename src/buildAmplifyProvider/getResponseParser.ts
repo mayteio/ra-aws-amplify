@@ -1,4 +1,4 @@
-import { GET_LIST, GET_MANY, GET_MANY_REFERENCE } from 'ra-core';
+import { GET_LIST, GET_MANY_REFERENCE } from 'ra-core';
 
 export const LARGE_TOTAL = 9999;
 
@@ -50,18 +50,11 @@ export default (_introspectionResults: any) => (
   params: any
 ) => (response: any) => {
   const data = response.data;
-
   if (aorFetchType === GET_LIST) {
     return {
       data: data[`list${resource.type.name}s`].items.map(sanitizeResource),
       nextToken: data[`list${resource.type.name}s`].nextToken,
       total: LARGE_TOTAL,
-    };
-  }
-
-  if (aorFetchType === GET_MANY) {
-    return {
-      data: Object.values(data).map(result => result),
     };
   }
 

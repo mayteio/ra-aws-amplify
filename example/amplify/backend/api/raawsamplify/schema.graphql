@@ -1,5 +1,6 @@
 type Post
   @model
+  # @searchable
   @auth(
     rules: [
       { allow: owner }
@@ -53,6 +54,7 @@ type Comment
 
 type Media
   @model
+  # @searchable
   @auth(
     rules: [{ allow: owner }, { allow: groups, groups: ["admin", "editor"] }]
   ) {

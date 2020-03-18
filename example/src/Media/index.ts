@@ -1,4 +1,3 @@
-export * from './MediaCreate';
 export * from './MediaEdit';
 export * from './MediaList';
 export * from './MediaShow';

@@ -240,7 +240,10 @@ const buildCreateUpdateVariables = (introspectionResults: any) => (
     const inputField = inputFields.find((f: any) => f.name === key);
 
     /** Skip any params passed that are not an input field */
-    if (!inputFields.find((f: any) => f.name === inputField.name)) {
+    if (
+      !inputField ||
+      !inputFields.find((f: any) => f.name === inputField.name)
+    ) {
       return acc;
     }
 

@@ -7,6 +7,7 @@ interface S3ImageFieldProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   record?: Record<string, any>;
   label?: string;
   imgProps?: any;
+  addLabel?: boolean;
 }
 
 export const S3ImageField: React.FC<S3ImageFieldProps> = ({
@@ -50,4 +51,8 @@ export const S3ImageField: React.FC<S3ImageFieldProps> = ({
 
   // otherwise do nothing
   return null;
+};
+
+S3ImageField.defaultProps = {
+  addLabel: true,
 };
