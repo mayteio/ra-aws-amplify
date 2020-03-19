@@ -72,7 +72,7 @@ export function useAuth() {
   return context;
 }
 
-export function useRaAuthProvider() {
+export function useAuthProvider() {
   return {
     /** Signs in either using username and password, or federated if a provider is passed. */
     login: ({ username, password, provider }: any) =>

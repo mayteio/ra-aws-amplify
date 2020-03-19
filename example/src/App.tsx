@@ -1,13 +1,15 @@
 import * as React from 'react';
-import {
-  Admin,
-  Resource,
-  EditGuesser,
-  ShowGuesser,
-  ListGuesser,
-} from 'react-admin';
-import { buildDataProvider, defaultDataProvider } from './dataProvider';
-import { useRaAuthProvider, useUser, nextTokenReducer } from '../../';
+import { Admin } from 'react-admin';
+import { useDataProvider, useAuthProvider, reducers } from '../../';
+
+// things for the dataProvider
+import config from './aws-exports';
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
+import * as schema from './graphql/schema.json';
+
+// Resources
+import { Resource } from 'react-admin';
 import { PostList, PostCreate, PostShow, PostEdit, PostIcon } from './Post';
 import {
   CommentList,
@@ -19,59 +21,38 @@ import {
 import { MediaList, MediaShow, MediaEdit, MediaIcon } from './Media';
 
 export const App = () => {
-  // Pass a freshly minted dataProvider when a user object becomes available (meaning we have a JWT)
-  const [dataProvider, setDataProvider] = React.useState(defaultDataProvider);
-  const user = useUser();
-  React.useEffect(() => {
-    user &&
-      buildDataProvider().then(dataProvider =>
-        setDataProvider(() => dataProvider)
-      );
-  }, [user]);
-
-  // get authProvider for <Admin /> component.
-  const authProvider = useRaAuthProvider();
+  const dataProvider = useDataProvider({ config, schema, queries, mutations });
+  const authProvider = useAuthProvider();
 
   return (
     <Admin
       authProvider={authProvider}
       dataProvider={dataProvider}
-      customReducers={{ nextToken: nextTokenReducer }}
+      customReducers={reducers}
     >
-      {permissions => [
-        <Resource
-          name="Post"
-          list={PostList}
-          show={PostShow}
-          create={PostCreate}
-          edit={PostEdit}
-          icon={PostIcon}
-        />,
-        <Resource
-          name="Comment"
-          list={CommentList}
-          show={CommentShow}
-          create={CommentCreate}
-          edit={CommentEdit}
-          icon={CommentIcon}
-        />,
-        <Resource
-          edit={MediaEdit}
-          list={MediaList}
-          show={MediaShow}
-          name="Media"
-          icon={MediaIcon}
-        />,
-        // permissions.groups.includes('admin') ? (
-        //   <Resource
-        //     name="User"
-        //     list={ListGuesser}
-        //     show={ShowGuesser}
-        //     create={UpdateGuesser}
-        //     update={UpdateGuesser}
-        //   />
-        // ) : null,
-      ]}
+      <Resource
+        name="Post"
+        list={PostList}
+        show={PostShow}
+        create={PostCreate}
+        edit={PostEdit}
+        icon={PostIcon}
+      />
+      <Resource
+        name="Comment"
+        list={CommentList}
+        show={CommentShow}
+        create={CommentCreate}
+        edit={CommentEdit}
+        icon={CommentIcon}
+      />
+      <Resource
+        edit={MediaEdit}
+        list={MediaList}
+        show={MediaShow}
+        name="Media"
+        icon={MediaIcon}
+      />
     </Admin>
   );
 };

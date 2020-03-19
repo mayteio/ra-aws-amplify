@@ -8,7 +8,7 @@ import {
 } from 'react-admin';
 import { Box, Grid, Toolbar, makeStyles } from '@material-ui/core';
 
-import { MediaUploadInput } from '../common';
+import { MediaUploadInput } from '../Media';
 
 const useStyles = makeStyles({
   container: {

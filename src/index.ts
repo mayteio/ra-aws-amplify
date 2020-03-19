@@ -1,10 +1,10 @@
 export * from './buildAmplifyProvider';
-export * from './RaAmplifyPagination';
-export * from './RaAmplifyAuthProvider';
+export * from './AmplifyPagination';
+export * from './AmplifyAuthProvider';
 export * from './S3ImageField';
 export * from './S3Input';
 
-import { nextTokenReducer } from './RaAmplifyPagination';
+import { nextTokenReducer } from './AmplifyPagination';
 export const reducers = {
   nextToken: nextTokenReducer,
 };

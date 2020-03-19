@@ -13,7 +13,7 @@ import {
 import CloseIcon from '@material-ui/icons/CloseRounded';
 import { TextInput, ReferenceField, useMutation, useInput } from 'react-admin';
 import { CREATE } from 'ra-core';
-import { S3Input, S3ImageField } from '../../..';
+import { S3Input, S3ImageField } from '../../../';
 import { Form, useFormState } from 'react-final-form';
 
 const useStyles = makeStyles((theme: Theme) => ({

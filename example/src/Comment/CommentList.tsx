@@ -1,10 +1,10 @@
 import React from 'react';
 import { List, Datagrid, TextField, ReferenceField } from 'react-admin';
-import { RaAmplifyPagination } from '../../..';
+import { AmplifyPagination } from '../../..';
 
 export const CommentList: React.FC = props => {
   return (
-    <List {...props} pagination={<RaAmplifyPagination />}>
+    <List {...props} pagination={<AmplifyPagination />}>
       <Datagrid rowClick="edit">
         <TextField source="id" />
         <TextField source="content" />

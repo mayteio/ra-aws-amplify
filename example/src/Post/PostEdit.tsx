@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Edit, SimpleForm, TextInput } from 'react-admin';
-import { MediaUploadInput } from '../common';
+import { MediaUploadInput } from '../Media';
 
 export const PostEdit: React.FC = props => {
   return (

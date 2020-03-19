@@ -4,12 +4,18 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export function UnconnectedRaAmplifyPagination(props: any) {
-  if (props.page === 1 && !props.nextToken) {
+export function AmplifyPagination(props: any) {
+  const nextToken = useSelector<any>(state => state.nextToken);
+  if (props.page === 1 && !nextToken) {
     return null;
   }
+
+  // useEffect(() => {
+  //   // setFilter((prev: any) => ({ ...prev, nextToken }));
+  // }, [nextToken]);
+
   return (
     <Toolbar>
       {props.page > 1 && (
@@ -22,7 +28,7 @@ export function UnconnectedRaAmplifyPagination(props: any) {
           Prev
         </Button>
       )}
-      {props.nextToken && (
+      {nextToken && (
         <Button
           color="primary"
           key="next"
@@ -35,9 +41,3 @@ export function UnconnectedRaAmplifyPagination(props: any) {
     </Toolbar>
   );
 }
-
-const mapStateToProps = (state: any) => ({ nextToken: state.nextToken });
-
-export const RaAmplifyPagination = connect(mapStateToProps)(
-  UnconnectedRaAmplifyPagination
-);

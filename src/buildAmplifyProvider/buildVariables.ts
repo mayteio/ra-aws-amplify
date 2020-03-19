@@ -113,10 +113,17 @@ const prepareParams = (
  */
 const buildGetListVariables = (introspectionResults: any) => (
   resource: any,
-  _: string,
+  _aorFetchType: string,
   params: any
 ) => {
+  console.log(params);
+
   return {};
+  // const { nextToken: token } = params.filter || {};
+  // const nextToken = token && params.pagination.page > 1 ? token : undefined;
+  // return {
+  //   nextToken,
+  // };
   let variables: any = { filter: {} };
   if (params.filter) {
     variables.filter = Object.keys(params.filter).reduce((acc, key) => {

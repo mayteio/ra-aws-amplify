@@ -1,4 +1,3 @@
-// import { defaultDataProvider } from './../../example/src/dataProvider';
 import merge from 'lodash/merge';
 import buildDataProvider from 'ra-data-graphql';
 import {
