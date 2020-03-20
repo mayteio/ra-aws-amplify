@@ -68,49 +68,6 @@ export type DeletePostInput = {
   id?: string | null,
 };
 
-export type CreatePostEditorInput = {
-  id?: string | null,
-  postEditorPostId: string,
-  postEditorEditorId: string,
-};
-
-export type ModelPostEditorConditionInput = {
-  and?: Array< ModelPostEditorConditionInput | null > | null,
-  or?: Array< ModelPostEditorConditionInput | null > | null,
-  not?: ModelPostEditorConditionInput | null,
-};
-
-export type UpdatePostEditorInput = {
-  id: string,
-  postEditorPostId?: string | null,
-  postEditorEditorId?: string | null,
-};
-
-export type DeletePostEditorInput = {
-  id?: string | null,
-};
-
-export type CreateUserInput = {
-  id?: string | null,
-  username: string,
-};
-
-export type ModelUserConditionInput = {
-  username?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
-  not?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserInput = {
-  id: string,
-  username?: string | null,
-};
-
-export type DeleteUserInput = {
-  id?: string | null,
-};
-
 export type CreateCommentInput = {
   id?: string | null,
   content?: string | null,
@@ -180,19 +137,51 @@ export type DeleteMediaInput = {
   id?: string | null,
 };
 
-export type ModelPostEditorFilterInput = {
-  id?: ModelIDInput | null,
-  and?: Array< ModelPostEditorFilterInput | null > | null,
-  or?: Array< ModelPostEditorFilterInput | null > | null,
-  not?: ModelPostEditorFilterInput | null,
+export type CreatePostCategoryInput = {
+  id?: string | null,
+  postId: string,
+  categoryId: string,
+  categoryPostsId?: string | null,
 };
 
-export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  username?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
+export type ModelPostCategoryConditionInput = {
+  postId?: ModelIDInput | null,
+  categoryId?: ModelIDInput | null,
+  and?: Array< ModelPostCategoryConditionInput | null > | null,
+  or?: Array< ModelPostCategoryConditionInput | null > | null,
+  not?: ModelPostCategoryConditionInput | null,
+};
+
+export type UpdatePostCategoryInput = {
+  id: string,
+  postId?: string | null,
+  categoryId?: string | null,
+  categoryPostsId?: string | null,
+};
+
+export type DeletePostCategoryInput = {
+  id?: string | null,
+};
+
+export type CreateCategoryInput = {
+  id?: string | null,
+  title?: string | null,
+};
+
+export type ModelCategoryConditionInput = {
+  title?: ModelStringInput | null,
+  and?: Array< ModelCategoryConditionInput | null > | null,
+  or?: Array< ModelCategoryConditionInput | null > | null,
+  not?: ModelCategoryConditionInput | null,
+};
+
+export type UpdateCategoryInput = {
+  id: string,
+  title?: string | null,
+};
+
+export type DeleteCategoryInput = {
+  id?: string | null,
 };
 
 export type ModelMediaFilterInput = {
@@ -201,6 +190,23 @@ export type ModelMediaFilterInput = {
   and?: Array< ModelMediaFilterInput | null > | null,
   or?: Array< ModelMediaFilterInput | null > | null,
   not?: ModelMediaFilterInput | null,
+};
+
+export type ModelPostCategoryFilterInput = {
+  id?: ModelIDInput | null,
+  postId?: ModelIDInput | null,
+  categoryId?: ModelIDInput | null,
+  and?: Array< ModelPostCategoryFilterInput | null > | null,
+  or?: Array< ModelPostCategoryFilterInput | null > | null,
+  not?: ModelPostCategoryFilterInput | null,
+};
+
+export type ModelCategoryFilterInput = {
+  id?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  and?: Array< ModelCategoryFilterInput | null > | null,
+  or?: Array< ModelCategoryFilterInput | null > | null,
+  not?: ModelCategoryFilterInput | null,
 };
 
 export type ModelPostFilterInput = {
@@ -250,11 +256,14 @@ export type CreatePostMutation = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -295,11 +304,14 @@ export type UpdatePostMutation = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -340,11 +352,14 @@ export type DeletePostMutation = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -359,201 +374,6 @@ export type DeletePostMutation = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-  } | null,
-};
-
-export type CreatePostEditorMutationVariables = {
-  input: CreatePostEditorInput,
-  condition?: ModelPostEditorConditionInput | null,
-};
-
-export type CreatePostEditorMutation = {
-  createPostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type UpdatePostEditorMutationVariables = {
-  input: UpdatePostEditorInput,
-  condition?: ModelPostEditorConditionInput | null,
-};
-
-export type UpdatePostEditorMutation = {
-  updatePostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type DeletePostEditorMutationVariables = {
-  input: DeletePostEditorInput,
-  condition?: ModelPostEditorConditionInput | null,
-};
-
-export type DeletePostEditorMutation = {
-  deletePostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type CreateUserMutationVariables = {
-  input: CreateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type CreateUserMutation = {
-  createUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
-  } | null,
-};
-
-export type UpdateUserMutationVariables = {
-  input: UpdateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserMutation = {
-  updateUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
-  } | null,
-};
-
-export type DeleteUserMutationVariables = {
-  input: DeleteUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type DeleteUserMutation = {
-  deleteUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
   } | null,
 };
 
@@ -659,20 +479,23 @@ export type DeleteMediaMutation = {
   } | null,
 };
 
-export type GetPostEditorQueryVariables = {
-  id: string,
+export type CreatePostCategoryMutationVariables = {
+  input: CreatePostCategoryInput,
+  condition?: ModelPostCategoryConditionInput | null,
 };
 
-export type GetPostEditorQuery = {
-  getPostEditor:  {
-    __typename: "PostEditor",
+export type CreatePostCategoryMutation = {
+  createPostCategory:  {
+    __typename: "PostCategory",
     id: string,
-    editor:  {
-      __typename: "User",
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
       id: string,
-      username: string,
+      title: string | null,
       posts:  {
-        __typename: "ModelPostEditorConnection",
+        __typename: "ModelPostCategoryConnection",
         nextToken: string | null,
       } | null,
       owner: string | null,
@@ -688,8 +511,8 @@ export type GetPostEditorQuery = {
         name: string | null,
         owner: string | null,
       } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
         nextToken: string | null,
       } | null,
       owner: string | null,
@@ -698,53 +521,120 @@ export type GetPostEditorQuery = {
         nextToken: string | null,
       } | null,
     },
+    owner: string | null,
   } | null,
 };
 
-export type ListPostEditorsQueryVariables = {
-  filter?: ModelPostEditorFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+export type UpdatePostCategoryMutationVariables = {
+  input: UpdatePostCategoryInput,
+  condition?: ModelPostCategoryConditionInput | null,
 };
 
-export type ListPostEditorsQuery = {
-  listPostEditors:  {
-    __typename: "ModelPostEditorConnection",
-    items:  Array< {
-      __typename: "PostEditor",
-      id: string,
-      editor:  {
-        __typename: "User",
-        id: string,
-        username: string,
-        owner: string | null,
-      },
-      post:  {
-        __typename: "Post",
-        id: string,
-        title: string,
-        content: string | null,
-        owner: string | null,
-      },
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
-};
-
-export type GetUserQueryVariables = {
-  id: string,
-};
-
-export type GetUserQuery = {
-  getUser:  {
-    __typename: "User",
+export type UpdatePostCategoryMutation = {
+  updatePostCategory:  {
+    __typename: "PostCategory",
     id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
         id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type DeletePostCategoryMutationVariables = {
+  input: DeletePostCategoryInput,
+  condition?: ModelPostCategoryConditionInput | null,
+};
+
+export type DeletePostCategoryMutation = {
+  deletePostCategory:  {
+    __typename: "PostCategory",
+    id: string,
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
+        id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type CreateCategoryMutationVariables = {
+  input: CreateCategoryInput,
+  condition?: ModelCategoryConditionInput | null,
+};
+
+export type CreateCategoryMutation = {
+  createCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -752,26 +642,53 @@ export type GetUserQuery = {
   } | null,
 };
 
-export type ListUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+export type UpdateCategoryMutationVariables = {
+  input: UpdateCategoryInput,
+  condition?: ModelCategoryConditionInput | null,
 };
 
-export type ListUsersQuery = {
-  listUsers:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    } | null > | null,
-    nextToken: string | null,
+export type UpdateCategoryMutation = {
+  updateCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+    owner: string | null,
+  } | null,
+};
+
+export type DeleteCategoryMutationVariables = {
+  input: DeleteCategoryInput,
+  condition?: ModelCategoryConditionInput | null,
+};
+
+export type DeleteCategoryMutation = {
+  deleteCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+    owner: string | null,
   } | null,
 };
 
@@ -819,6 +736,131 @@ export type ListMediasQuery = {
   } | null,
 };
 
+export type GetPostCategoryQueryVariables = {
+  id: string,
+};
+
+export type GetPostCategoryQuery = {
+  getPostCategory:  {
+    __typename: "PostCategory",
+    id: string,
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
+        id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type ListPostCategorysQueryVariables = {
+  filter?: ModelPostCategoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPostCategorysQuery = {
+  listPostCategorys:  {
+    __typename: "ModelPostCategoryConnection",
+    items:  Array< {
+      __typename: "PostCategory",
+      id: string,
+      postId: string,
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        title: string | null,
+        owner: string | null,
+      },
+      post:  {
+        __typename: "Post",
+        id: string,
+        title: string,
+        content: string | null,
+        owner: string | null,
+      },
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type GetCategoryQueryVariables = {
+  id: string,
+};
+
+export type GetCategoryQuery = {
+  getCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+    owner: string | null,
+  } | null,
+};
+
+export type ListCategorysQueryVariables = {
+  filter?: ModelCategoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListCategorysQuery = {
+  listCategorys:  {
+    __typename: "ModelCategoryConnection",
+    items:  Array< {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
 export type ListPostsQueryVariables = {
   filter?: ModelPostFilterInput | null,
   limit?: number | null,
@@ -839,8 +881,8 @@ export type ListPostsQuery = {
         name: string | null,
         owner: string | null,
       } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
         nextToken: string | null,
       } | null,
       owner: string | null,
@@ -875,11 +917,14 @@ export type GetPostQuery = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -972,11 +1017,14 @@ export type OnCreatePostSubscription = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1017,11 +1065,14 @@ export type OnUpdatePostSubscription = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1061,11 +1112,14 @@ export type OnDeletePostSubscription = {
       },
       owner: string | null,
     } | null,
-    editors:  {
-      __typename: "ModelPostEditorConnection",
+    categories:  {
+      __typename: "ModelPostCategoryConnection",
       items:  Array< {
-        __typename: "PostEditor",
+        __typename: "PostCategory",
         id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -1080,195 +1134,6 @@ export type OnDeletePostSubscription = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-  } | null,
-};
-
-export type OnCreatePostEditorSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnCreatePostEditorSubscription = {
-  onCreatePostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type OnUpdatePostEditorSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnUpdatePostEditorSubscription = {
-  onUpdatePostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type OnDeletePostEditorSubscriptionVariables = {
-  editors?: string | null,
-};
-
-export type OnDeletePostEditorSubscription = {
-  onDeletePostEditor:  {
-    __typename: "PostEditor",
-    id: string,
-    editor:  {
-      __typename: "User",
-      id: string,
-      username: string,
-      posts:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-    },
-    post:  {
-      __typename: "Post",
-      id: string,
-      title: string,
-      content: string | null,
-      image:  {
-        __typename: "Media",
-        id: string,
-        name: string | null,
-        owner: string | null,
-      } | null,
-      editors:  {
-        __typename: "ModelPostEditorConnection",
-        nextToken: string | null,
-      } | null,
-      owner: string | null,
-      comments:  {
-        __typename: "ModelCommentConnection",
-        nextToken: string | null,
-      } | null,
-    },
-  } | null,
-};
-
-export type OnCreateUserSubscriptionVariables = {
-  owner?: string | null,
-};
-
-export type OnCreateUserSubscription = {
-  onCreateUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
-  } | null,
-};
-
-export type OnUpdateUserSubscriptionVariables = {
-  owner?: string | null,
-};
-
-export type OnUpdateUserSubscription = {
-  onUpdateUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
-  } | null,
-};
-
-export type OnDeleteUserSubscriptionVariables = {
-  owner?: string | null,
-};
-
-export type OnDeleteUserSubscription = {
-  onDeleteUser:  {
-    __typename: "User",
-    id: string,
-    username: string,
-    posts:  {
-      __typename: "ModelPostEditorConnection",
-      items:  Array< {
-        __typename: "PostEditor",
-        id: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    owner: string | null,
   } | null,
 };
 
@@ -1352,6 +1217,213 @@ export type OnDeleteMediaSubscription = {
       identityId: string | null,
       level: string | null,
     },
+    owner: string | null,
+  } | null,
+};
+
+export type OnCreatePostCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnCreatePostCategorySubscription = {
+  onCreatePostCategory:  {
+    __typename: "PostCategory",
+    id: string,
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
+        id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type OnUpdatePostCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnUpdatePostCategorySubscription = {
+  onUpdatePostCategory:  {
+    __typename: "PostCategory",
+    id: string,
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
+        id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type OnDeletePostCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnDeletePostCategorySubscription = {
+  onDeletePostCategory:  {
+    __typename: "PostCategory",
+    id: string,
+    postId: string,
+    categoryId: string,
+    category:  {
+      __typename: "Category",
+      id: string,
+      title: string | null,
+      posts:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+    },
+    post:  {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string | null,
+      image:  {
+        __typename: "Media",
+        id: string,
+        name: string | null,
+        owner: string | null,
+      } | null,
+      categories:  {
+        __typename: "ModelPostCategoryConnection",
+        nextToken: string | null,
+      } | null,
+      owner: string | null,
+      comments:  {
+        __typename: "ModelCommentConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    owner: string | null,
+  } | null,
+};
+
+export type OnCreateCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnCreateCategorySubscription = {
+  onCreateCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+    owner: string | null,
+  } | null,
+};
+
+export type OnUpdateCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnUpdateCategorySubscription = {
+  onUpdateCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
+    owner: string | null,
+  } | null,
+};
+
+export type OnDeleteCategorySubscriptionVariables = {
+  owner?: string | null,
+};
+
+export type OnDeleteCategorySubscription = {
+  onDeleteCategory:  {
+    __typename: "Category",
+    id: string,
+    title: string | null,
+    posts:  {
+      __typename: "ModelPostCategoryConnection",
+      items:  Array< {
+        __typename: "PostCategory",
+        id: string,
+        postId: string,
+        categoryId: string,
+        owner: string | null,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     owner: string | null,
   } | null,
 };

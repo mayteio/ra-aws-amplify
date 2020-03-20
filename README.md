@@ -332,7 +332,7 @@ auth.signUp({username, password}).then(...);
 
 This has been included to encourage flexibility. In the future, should you switch to say, Azure, you can build a hook called `useAuth` that exposes the methods you use (i.e. signUp, signOut) and do a relatively small refactor on your front end.
 
-## `useAuthProvider()`
+### `useAuthProvider()`
 
 `react-admin` has some [login functionality built in](https://marmelab.com/react-admin/Authentication.html) that we can tap into. This hook does just that and integrates `Auth` with `react-admin` out of the box.
 
@@ -351,7 +351,7 @@ export const App = () => {
 };
 ```
 
-## `useUser()`
+### `useUser()`
 
 Listening for Amplify Hub events is a pain in the ass, so, at least for login, this package does that for you. Internally, it listens to the Hub and 'hookifies' the user object, so you don't have to worry about promises.
 
@@ -438,8 +438,8 @@ type Post @model {
 
 type S3Object {
   key: String!
-  identityId: String
   level: String
+  identityId: String
 }
 ```
 
@@ -496,18 +496,15 @@ You can pass in the `level` option as a prop to `<S3Input level={...} />` (one o
 export const authProvider = {
   ...
   getPermissions: () =>
-    Promise.all([
-      Auth.currentCredentials(),
-      Auth.currentAuthenticatedUser(),
-    ]).then(([{ identityId }, use]) => ({
-      identityId,
-      // this allows you to check which groups the user is in too! Booya, bonus.
-      groups: user.signInUserSession.accessToken.payload['cognito:groups'],
-    })),
+    Promise.all([Auth.currentSession(), Auth.currentCredentials()]).then(
+      ([session, { identityId }]) => ({
+        claims: { ...session.getIdToken().payload, identityId },
+      })
+    ),
 }
 ```
 
-If you set the level to either `private` or `protected` the `<S3Input />` component will automatically attach both level and identityId to the record under the hood, required for access later.
+If you set the level to either `private` or `protected` the `<S3Input />` component will automatically attach both `level` and `identityId` to the record under the hood, required for access later.
 
 ---
 

@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { Admin } from 'react-admin';
-import { useDataProvider, useAuthProvider, reducers } from '../../';
+import {
+  useDataProvider,
+  useAuthProvider,
+  amplifyReducers,
+  amplifySagas,
+} from '../../';
 
 // things for the dataProvider
 import config from './aws-exports';
@@ -19,6 +24,7 @@ import {
   CommentIcon,
 } from './Comment';
 import { MediaList, MediaShow, MediaEdit, MediaIcon } from './Media';
+import { CategoryList, CategoryIcon } from './Category';
 
 export const App = () => {
   const dataProvider = useDataProvider({ config, schema, queries, mutations });
@@ -28,7 +34,8 @@ export const App = () => {
     <Admin
       authProvider={authProvider}
       dataProvider={dataProvider}
-      customReducers={reducers}
+      customReducers={amplifyReducers}
+      customSagas={amplifySagas(dataProvider)}
     >
       <Resource
         name="Post"
@@ -53,6 +60,7 @@ export const App = () => {
         name="Media"
         icon={MediaIcon}
       />
+      <Resource name="Category" list={CategoryList} icon={CategoryIcon} />
     </Admin>
   );
 };

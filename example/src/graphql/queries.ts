@@ -1,97 +1,6 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const getPostEditor = /* GraphQL */ `
-  query GetPostEditor($id: ID!) {
-    getPostEditor(id: $id) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const listPostEditors = /* GraphQL */ `
-  query ListPostEditors(
-    $filter: ModelPostEditorFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPostEditors(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        editor {
-          id
-          username
-          owner
-        }
-        post {
-          id
-          title
-          content
-          owner
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      nextToken
-    }
-  }
-`;
 export const getMedia = /* GraphQL */ `
   query GetMedia($id: ID!) {
     getMedia(id: $id) {
@@ -127,6 +36,106 @@ export const listMedias = /* GraphQL */ `
     }
   }
 `;
+export const getPostCategory = /* GraphQL */ `
+  query GetPostCategory($id: ID!) {
+    getPostCategory(id: $id) {
+      id
+      postId
+      categoryId
+      category {
+        id
+        title
+        posts {
+          nextToken
+        }
+        owner
+      }
+      post {
+        id
+        title
+        content
+        image {
+          id
+          name
+          owner
+        }
+        categories {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      owner
+    }
+  }
+`;
+export const listPostCategorys = /* GraphQL */ `
+  query ListPostCategorys(
+    $filter: ModelPostCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        postId
+        categoryId
+        category {
+          id
+          title
+          owner
+        }
+        post {
+          id
+          title
+          content
+          owner
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getCategory = /* GraphQL */ `
+  query GetCategory($id: ID!) {
+    getCategory(id: $id) {
+      id
+      title
+      posts {
+        items {
+          id
+          postId
+          categoryId
+          owner
+        }
+        nextToken
+      }
+      owner
+    }
+  }
+`;
+export const listCategorys = /* GraphQL */ `
+  query ListCategorys(
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        posts {
+          nextToken
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -143,7 +152,7 @@ export const listPosts = /* GraphQL */ `
           name
           owner
         }
-        editors {
+        categories {
           nextToken
         }
         owner
@@ -171,9 +180,12 @@ export const getPost = /* GraphQL */ `
         }
         owner
       }
-      editors {
+      categories {
         items {
           id
+          postId
+          categoryId
+          owner
         }
         nextToken
       }

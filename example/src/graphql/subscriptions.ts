@@ -17,9 +17,12 @@ export const onCreatePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
+      categories {
         items {
           id
+          postId
+          categoryId
+          owner
         }
         nextToken
       }
@@ -51,9 +54,12 @@ export const onUpdatePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
+      categories {
         items {
           id
+          postId
+          categoryId
+          owner
         }
         nextToken
       }
@@ -85,9 +91,12 @@ export const onDeletePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
+      categories {
         items {
           id
+          postId
+          categoryId
+          owner
         }
         nextToken
       }
@@ -100,147 +109,6 @@ export const onDeletePost = /* GraphQL */ `
         }
         nextToken
       }
-    }
-  }
-`;
-export const onCreatePostEditor = /* GraphQL */ `
-  subscription OnCreatePostEditor($editors: String) {
-    onCreatePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onUpdatePostEditor = /* GraphQL */ `
-  subscription OnUpdatePostEditor($editors: String) {
-    onUpdatePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onDeletePostEditor = /* GraphQL */ `
-  subscription OnDeletePostEditor($editors: String) {
-    onDeletePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser($owner: String) {
-    onCreateUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser($owner: String) {
-    onUpdateUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser($owner: String) {
-    onDeleteUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
     }
   }
 `;
@@ -308,6 +176,165 @@ export const onDeleteMedia = /* GraphQL */ `
         key
         identityId
         level
+      }
+      owner
+    }
+  }
+`;
+export const onCreatePostCategory = /* GraphQL */ `
+  subscription OnCreatePostCategory($owner: String) {
+    onCreatePostCategory(owner: $owner) {
+      id
+      postId
+      categoryId
+      category {
+        id
+        title
+        posts {
+          nextToken
+        }
+        owner
+      }
+      post {
+        id
+        title
+        content
+        image {
+          id
+          name
+          owner
+        }
+        categories {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      owner
+    }
+  }
+`;
+export const onUpdatePostCategory = /* GraphQL */ `
+  subscription OnUpdatePostCategory($owner: String) {
+    onUpdatePostCategory(owner: $owner) {
+      id
+      postId
+      categoryId
+      category {
+        id
+        title
+        posts {
+          nextToken
+        }
+        owner
+      }
+      post {
+        id
+        title
+        content
+        image {
+          id
+          name
+          owner
+        }
+        categories {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      owner
+    }
+  }
+`;
+export const onDeletePostCategory = /* GraphQL */ `
+  subscription OnDeletePostCategory($owner: String) {
+    onDeletePostCategory(owner: $owner) {
+      id
+      postId
+      categoryId
+      category {
+        id
+        title
+        posts {
+          nextToken
+        }
+        owner
+      }
+      post {
+        id
+        title
+        content
+        image {
+          id
+          name
+          owner
+        }
+        categories {
+          nextToken
+        }
+        owner
+        comments {
+          nextToken
+        }
+      }
+      owner
+    }
+  }
+`;
+export const onCreateCategory = /* GraphQL */ `
+  subscription OnCreateCategory($owner: String) {
+    onCreateCategory(owner: $owner) {
+      id
+      title
+      posts {
+        items {
+          id
+          postId
+          categoryId
+          owner
+        }
+        nextToken
+      }
+      owner
+    }
+  }
+`;
+export const onUpdateCategory = /* GraphQL */ `
+  subscription OnUpdateCategory($owner: String) {
+    onUpdateCategory(owner: $owner) {
+      id
+      title
+      posts {
+        items {
+          id
+          postId
+          categoryId
+          owner
+        }
+        nextToken
+      }
+      owner
+    }
+  }
+`;
+export const onDeleteCategory = /* GraphQL */ `
+  subscription OnDeleteCategory($owner: String) {
+    onDeleteCategory(owner: $owner) {
+      id
+      title
+      posts {
+        items {
+          id
+          postId
+          categoryId
+          owner
+        }
+        nextToken
       }
       owner
     }

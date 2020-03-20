@@ -1,4 +1,5 @@
 import { GET_LIST, GET_MANY_REFERENCE } from 'ra-core';
+import getFinalType from './getFinalType';
 
 export const LARGE_TOTAL = 9999;
 
@@ -43,13 +44,12 @@ const sanitizeResource = (data: any) => {
   return result;
 };
 
-export default (_introspectionResults: any) => (
+export default (introspectionResults: any) => (
   aorFetchType: string,
   resource: any,
   queryType: any,
   params: any
-) => (response: any) => {
-  const data = response.data;
+) => ({ data }: any) => {
   if (aorFetchType === GET_LIST) {
     return {
       data: data[`list${resource.type.name}s`].items.map(sanitizeResource),
@@ -67,8 +67,22 @@ export default (_introspectionResults: any) => (
     };
   }
 
+  /** Get connections for creating linked models after CREATE and UPDATE */
+  const connectionModels = resource.type.fields.reduce((acc: any, f: any) => {
+    const type = getFinalType(f.type);
+    if (type.name.match(/connection/i)) {
+      const connectionModel = introspectionResults.types.find((t: any) =>
+        type.name.includes(t.name)
+      );
+      return [...acc, connectionModel];
+    }
+
+    return acc;
+  }, []);
+
   return {
     data: data[queryType.name] && sanitizeResource(data[queryType.name]),
+    connectionModels,
     total: LARGE_TOTAL,
   };
 };

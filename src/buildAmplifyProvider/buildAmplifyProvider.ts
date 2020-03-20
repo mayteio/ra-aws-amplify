@@ -49,6 +49,8 @@ export const buildAmplifyProvider = ({
   return buildDataProvider(
     merge({ client, buildQuery }, defaultOptions, options)
   ).then((defaultDataProvider: any) => {
+    console.log(defaultDataProvider);
+
     return (fetchType: any, resource: any, params: any) => {
       // Amplify does not support multiple deletions so instead we send multiple DELETE requests
       // This can be optimized using the apollo-link-batch-http

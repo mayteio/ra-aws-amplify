@@ -13,29 +13,10 @@ type Post
   title: String!
   content: String
   image: Media @connection
-  editors: [PostEditor] @connection(name: "PostEditors")
+  # editors: [PostEditor] @connection(name: "PostEditors")
   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
-}
-
-type PostEditor
-  @model
-  @auth(
-    rules: [
-      { allow: owner, ownerField: "editors" }
-      { allow: groups, groups: ["admin"] }
-    ]
-  ) {
-  id: ID!
-  post: Post! @connection(name: "PostEditors")
-  editor: User! @connection(name: "UserEditors")
-}
-
-type User
-  @model
-  @auth(rules: [{ allow: owner }, { allow: groups, groups: ["admin"] }]) {
-  id: ID!
-  username: String!
-  posts: [PostEditor] @connection(name: "UserEditors")
+  categories: [PostCategory]
+    @connection(keyName: "categoriesByPost", fields: ["id"])
 }
 
 type Comment
@@ -61,6 +42,30 @@ type Media
   id: ID!
   name: String
   attachment: S3Object!
+}
+
+type PostCategory
+  @model
+  @key(name: "categoriesByPost", fields: ["postId", "categoryId"])
+  @key(name: "postsByCategory", fields: ["categoryId", "postId"])
+  @auth(
+    rules: [{ allow: owner }, { allow: groups, groups: ["admin", "editor"] }]
+  ) {
+  id: ID!
+  postId: ID!
+  categoryId: ID!
+  post: Post! @connection(fields: ["postId"])
+  category: Category! @connection(fields: ["categoryId"])
+}
+
+type Category
+  @model
+  @auth(
+    rules: [{ allow: owner }, { allow: groups, groups: ["admin", "editor"] }]
+  ) {
+  id: ID!
+  title: String
+  posts: [PostCategory] @connection(keyName: "postsByCategory")
 }
 
 # S3Object minimum type

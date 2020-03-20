@@ -2,13 +2,16 @@ import * as React from 'react';
 import {
   Create,
   TextInput,
+  ReferenceArrayInput,
+  SelectArrayInput,
   FormWithRedirect,
   SaveButton,
   Labeled,
 } from 'react-admin';
-import { Box, Grid, Toolbar, makeStyles } from '@material-ui/core';
+import { Box, Toolbar, makeStyles } from '@material-ui/core';
 
 import { MediaUploadInput } from '../Media';
+import { SanitizeGrid } from '../common';
 
 const useStyles = makeStyles({
   container: {
@@ -21,14 +24,13 @@ const useStyles = makeStyles({
 
 export const PostCreate: React.FC<any> = props => {
   const classes = useStyles();
-  console.log(props);
 
   return (
     <Create {...props}>
       <FormWithRedirect
         render={formProps => (
           <Box p={2} component="form">
-            <SanitizeGrid container className={classes.container}>
+            <SanitizeGrid container spacing={2} className={classes.container}>
               <SanitizeGrid item xs>
                 <TextInput source="title" className={classes.input} />
                 <TextInput
@@ -38,11 +40,13 @@ export const PostCreate: React.FC<any> = props => {
                   fullWidth
                   className={classes.input}
                 />
-                <TextInput
-                  source="postImageId"
-                  disabled
-                  className={classes.input}
-                />
+                <ReferenceArrayInput
+                  label="Categories"
+                  source="PostCategory"
+                  reference="Category"
+                >
+                  <SelectArrayInput optionText="title" fullWidth />
+                </ReferenceArrayInput>
               </SanitizeGrid>
               <SanitizeGrid item xs>
                 <Labeled label="Featured Image">
@@ -64,7 +68,3 @@ export const PostCreate: React.FC<any> = props => {
     </Create>
   );
 };
-
-const SanitizeGrid: React.FC<any> = ({ basePath, ...props }) => (
-  <Grid {...props} />
-);

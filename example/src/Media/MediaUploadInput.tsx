@@ -37,14 +37,15 @@ export const MediaUploadInput: React.FC<any> = ({
   ...props
 }) => {
   /** On mount, create input and set to source value if provided. */
+  const { values } = useFormState();
   const { input } = useInput({ source: inputField });
   const mounted = React.useRef(false);
   React.useEffect(() => {
-    if (record[source] && !mounted.current) {
-      input.onChange(record[source]);
+    if (values[source] && !mounted.current) {
+      input.onChange(values[source]);
     }
     mounted.current = true;
-  }, [input, source, record]);
+  }, [input, source, values]);
 
   /** Handle modal dialog state */
   const [open, setOpen] = React.useState(false);
@@ -69,9 +70,6 @@ export const MediaUploadInput: React.FC<any> = ({
 
   /** Handles removal of media model connection from parent model */
   const handleRemove = () => input.onChange(undefined);
-
-  /** Get form values for conditionally rendering form */
-  const { values } = useFormState();
 
   const classes = useStyles();
   return (
