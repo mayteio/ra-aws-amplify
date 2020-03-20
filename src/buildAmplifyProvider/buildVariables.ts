@@ -116,8 +116,6 @@ const buildGetListVariables = (introspectionResults: any) => (
   _aorFetchType: string,
   params: any
 ) => {
-  console.log(params);
-
   return {};
   // const { nextToken: token } = params.filter || {};
   // const nextToken = token && params.pagination.page > 1 ? token : undefined;
