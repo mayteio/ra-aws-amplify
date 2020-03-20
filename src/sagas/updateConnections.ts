@@ -1,6 +1,5 @@
-import { CRUD_CREATE_SUCCESS } from 'ra-core';
+import { CREATE, CRUD_CREATE_SUCCESS } from 'ra-core';
 import { takeEvery } from 'redux-saga/effects';
-import { buildCreateQueries } from './buildCreateQuery';
 
 export const createConnectionsOnCreateModel = (dataProvider: any) => {
   return function* onCreateConnectModels() {
@@ -13,7 +12,7 @@ export const createConnectionsOnCreateModel = (dataProvider: any) => {
       yield Promise.all(
         /** Reduce the parameters to get only connected ones */
         Object.entries(requestPayload.data).reduce(
-          (acc, [key, ids]: any): any => {
+          (acc: any, [key, ids]: any): any => {
             /** connectionModels get passed to the response by the getResponseParser. */
             const matchedConnectionModel = payload.connectionModels.find(
               (m: any) => m.name === key
@@ -21,18 +20,14 @@ export const createConnectionsOnCreateModel = (dataProvider: any) => {
 
             /** If there's a parameter that matches a connection  */
             if (matchedConnectionModel) {
-              const requests = buildCreateQueries(dataProvider)({
-                connectionType: matchedConnectionModel,
-                resource: meta.resource,
-                data: payload.data,
-                ids,
-              });
-
-              return [...acc, ...requests];
+              const connections = ''; // get connections
+              /**
+               * 1. those that don't exist in connections but do in params - create them
+               * 2. those that exist in both params and connections - do nothing
+               * 3. those that exist in collections but don't in params - delete the connection
+               */
             }
-            return acc;
-          },
-          []
+          }
         )
       );
     });
