@@ -209,6 +209,22 @@ export type ModelCategoryFilterInput = {
   not?: ModelCategoryFilterInput | null,
 };
 
+export type ModelIDKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
   title?: ModelStringInput | null,
@@ -226,12 +242,6 @@ export type ModelCommentFilterInput = {
   or?: Array< ModelCommentFilterInput | null > | null,
   not?: ModelCommentFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type CreatePostMutationVariables = {
   input: CreatePostInput,
@@ -855,6 +865,78 @@ export type ListCategorysQuery = {
         __typename: "ModelPostCategoryConnection",
         nextToken: string | null,
       } | null,
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type PostCategorysByPostQueryVariables = {
+  postId?: string | null,
+  categoryId?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostCategoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PostCategorysByPostQuery = {
+  postCategorysByPost:  {
+    __typename: "ModelPostCategoryConnection",
+    items:  Array< {
+      __typename: "PostCategory",
+      id: string,
+      postId: string,
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        title: string | null,
+        owner: string | null,
+      },
+      post:  {
+        __typename: "Post",
+        id: string,
+        title: string,
+        content: string | null,
+        owner: string | null,
+      },
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type PostCategorysByCategoryQueryVariables = {
+  categoryId?: string | null,
+  postId?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostCategoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PostCategorysByCategoryQuery = {
+  postCategorysByCategory:  {
+    __typename: "ModelPostCategoryConnection",
+    items:  Array< {
+      __typename: "PostCategory",
+      id: string,
+      postId: string,
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        title: string | null,
+        owner: string | null,
+      },
+      post:  {
+        __typename: "Post",
+        id: string,
+        title: string,
+        content: string | null,
+        owner: string | null,
+      },
       owner: string | null,
     } | null > | null,
     nextToken: string | null,

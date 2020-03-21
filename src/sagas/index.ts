@@ -1,6 +1,6 @@
 import { DataProvider } from 'ra-core';
-import { createConnectionsOnCreateModel } from './createConnections';
+import { buildConnectionsSagas } from './checkConnections';
 
 export const amplifySagas = (dataProvider: DataProvider) => {
-  return [createConnectionsOnCreateModel(dataProvider)];
+  return [buildConnectionsSagas(dataProvider)];
 };

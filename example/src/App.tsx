@@ -30,7 +30,7 @@ export const App = () => {
   const dataProvider = useDataProvider({ config, schema, queries, mutations });
   const authProvider = useAuthProvider();
 
-  return (
+  return dataProvider ? (
     <Admin
       authProvider={authProvider}
       dataProvider={dataProvider}
@@ -62,5 +62,7 @@ export const App = () => {
       />
       <Resource name="Category" list={CategoryList} icon={CategoryIcon} />
     </Admin>
+  ) : (
+    <div>Loading...</div>
   );
 };

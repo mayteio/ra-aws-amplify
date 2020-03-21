@@ -32,19 +32,20 @@ export const buildQueryFactory = (
       );
     }
 
-    const variables = buildVariablesImpl(introspectionResults)(
-      resource,
-      aorFetchType,
-      params,
-      queryType
-    );
-
-    const query = getGqlQuery(introspectionResults)(
+    const [queryName, query] = getGqlQuery(introspectionResults)(
       aorFetchType,
       resource,
       params,
       queries,
       mutations
+    );
+
+    const variables = buildVariablesImpl(introspectionResults)(
+      resource,
+      aorFetchType,
+      params,
+      queryType,
+      queryName
     );
 
     const parseResponse = getResponseParserImpl(introspectionResults)(

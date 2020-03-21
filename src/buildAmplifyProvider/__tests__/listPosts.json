@@ -1,0 +1,59 @@
+{
+  "data": {
+    "listPosts": {
+      "items": [
+        {
+          "categories": {
+            "items": [
+              {
+                "category": {
+                  "title": "Stones",
+                  "id": "1f742d47-644f-4092-8459-000fdcccb912",
+                  "owner": "harley"
+                },
+                "categoryId": "1f742d47-644f-4092-8459-000fdcccb912",
+                "postId": "2e1749a3-7e1b-4cda-90ac-dfe45e9b4b46",
+                "owner": "harley",
+                "id": "d9276864-2eb8-4b7d-b0be-72fd50af21b0",
+                "post": {
+                  "content": null,
+                  "id": "2e1749a3-7e1b-4cda-90ac-dfe45e9b4b46",
+                  "owner": "harley",
+                  "title": "Wild shit"
+                }
+              },
+              {
+                "category": {
+                  "title": "Flowers",
+                  "id": "76ed7c23-dc7e-4df7-9ee0-d6a565074521",
+                  "owner": "harley"
+                },
+                "categoryId": "76ed7c23-dc7e-4df7-9ee0-d6a565074521",
+                "postId": "2e1749a3-7e1b-4cda-90ac-dfe45e9b4b46",
+                "owner": "harley",
+                "id": "f847910b-df8a-48a6-aa74-f3cfac873e65",
+                "post": {
+                  "content": null,
+                  "id": "2e1749a3-7e1b-4cda-90ac-dfe45e9b4b46",
+                  "owner": "harley",
+                  "title": "Wild shit"
+                }
+              }
+            ],
+            "nextToken": null
+          },
+          "comments": {
+            "items": [
+              {
+                "content": "Hello",
+                "id": "dd955dec-d9e9-4c58-92c7-45b13541154e",
+                "postId": "2e1749a3-7e1b-4cda-90ac-dfe45e9b4b46"
+              }
+            ],
+            "nextToken": null
+          }
+        }
+      ]
+    }
+  }
+}

@@ -13,7 +13,6 @@ type Post
   title: String!
   content: String
   image: Media @connection
-  # editors: [PostEditor] @connection(name: "PostEditors")
   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
   categories: [PostCategory]
     @connection(keyName: "categoriesByPost", fields: ["id"])
@@ -46,8 +45,16 @@ type Media
 
 type PostCategory
   @model
-  @key(name: "categoriesByPost", fields: ["postId", "categoryId"])
-  @key(name: "postsByCategory", fields: ["categoryId", "postId"])
+  @key(
+    name: "categoriesByPost"
+    fields: ["postId", "categoryId"]
+    queryField: "postCategorysByPost"
+  )
+  @key(
+    name: "postsByCategory"
+    fields: ["categoryId", "postId"]
+    queryField: "postCategorysByCategory"
+  )
   @auth(
     rules: [{ allow: owner }, { allow: groups, groups: ["admin", "editor"] }]
   ) {

@@ -7,14 +7,14 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { useSelector } from 'react-redux';
 
 export function AmplifyPagination(props: any) {
-  const nextToken = useSelector<any>(state => state.nextToken);
+  const nextToken: any = useSelector<any>(
+    state => state.nextTokens[`list${props.resource}s`]
+  );
+  // need to somehow know
+
   if (props.page === 1 && !nextToken) {
     return null;
   }
-
-  // useEffect(() => {
-  //   // setFilter((prev: any) => ({ ...prev, nextToken }));
-  // }, [nextToken]);
 
   return (
     <Toolbar>

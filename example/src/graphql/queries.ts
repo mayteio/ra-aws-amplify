@@ -136,6 +136,82 @@ export const listCategorys = /* GraphQL */ `
     }
   }
 `;
+export const postCategorysByPost = /* GraphQL */ `
+  query PostCategorysByPost(
+    $postId: ID
+    $categoryId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postCategorysByPost(
+      postId: $postId
+      categoryId: $categoryId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postId
+        categoryId
+        category {
+          id
+          title
+          owner
+        }
+        post {
+          id
+          title
+          content
+          owner
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const postCategorysByCategory = /* GraphQL */ `
+  query PostCategorysByCategory(
+    $categoryId: ID
+    $postId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postCategorysByCategory(
+      categoryId: $categoryId
+      postId: $postId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postId
+        categoryId
+        category {
+          id
+          title
+          owner
+        }
+        post {
+          id
+          title
+          content
+          owner
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -153,6 +229,12 @@ export const listPosts = /* GraphQL */ `
           owner
         }
         categories {
+          items {
+            category {
+              id
+              title
+            }
+          }
           nextToken
         }
         owner

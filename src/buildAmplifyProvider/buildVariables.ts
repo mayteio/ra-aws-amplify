@@ -10,19 +10,19 @@ import {
 } from 'ra-core';
 
 import getFinalType from './getFinalType';
-import isList from './isList';
+// import isList from './isList';
 
-const sanitizeValue = (type: any, value: any) => {
-  if (type.name === 'Int') {
-    return parseInt(value, 10);
-  }
+// const sanitizeValue = (type: any, value: any) => {
+//   if (type.name === 'Int') {
+//     return parseInt(value, 10);
+//   }
 
-  if (type.name === 'Float') {
-    return parseFloat(value);
-  }
+//   if (type.name === 'Float') {
+//     return parseFloat(value);
+//   }
 
-  return value;
-};
+//   return value;
+// };
 
 const castType = (value: any, type: any) => {
   switch (`${type.kind}:${type.name}`) {
@@ -111,115 +111,124 @@ const prepareParams = (
 /**
  * This handles filtering and sorting.
  */
-const buildGetListVariables = (introspectionResults: any) => (
-  resource: any,
+const buildGetListVariables = (_introspectionResults: any) => (
+  _resource: any,
   _aorFetchType: string,
-  params: any
+  params: any,
+  _queryType: any,
+  _queryName: string
 ) => {
+  let variables: any = {};
+  if (params.filter) {
+    const { nextTokens } = params.filter;
+    if (nextTokens)
+      variables.nextToken = nextTokens[`list${_resource.type.name}s`];
+  }
+
   return {};
   // const { nextToken: token } = params.filter || {};
   // const nextToken = token && params.pagination.page > 1 ? token : undefined;
   // return {
   //   nextToken,
   // };
-  let variables: any = { filter: {} };
-  if (params.filter) {
-    variables.filter = Object.keys(params.filter).reduce((acc, key) => {
-      if (key === 'ids') {
-        return { ...acc, ids: params.filter[key] };
-      }
+  // let variables: any = { filter: {} };
+  // if (params.filter) {
+  //   variables.filter = Object.keys(params.filter).reduce((acc, key) => {
+  //     if (key === 'ids') {
+  //       return { ...acc, ids: params.filter[key] };
+  //     }
 
-      if (typeof params.filter[key] === 'object') {
-        const type = introspectionResults.types.find(
-          (t: any) => t.name === `${resource.type.name}Filter`
-        );
-        const filterSome = type.inputFields.find(
-          (t: any) => t.name === `${key}_some`
-        );
+  //     if (typeof params.filter[key] === 'object') {
+  //       const type = introspectionResults.types.find(
+  //         (t: any) => t.name === `${resource.type.name}Filter`
+  //       );
+  //       const filterSome = type.inputFields.find(
+  //         (t: any) => t.name === `${key}_some`
+  //       );
 
-        if (filterSome) {
-          const filter = Object.keys(params.filter[key]).reduce(
-            (acc, k) => ({
-              ...acc,
-              [`${k}_in`]: params.filter[key][k],
-            }),
-            {}
-          );
-          return { ...acc, [`${key}_some`]: filter };
-        }
-      }
+  //       if (filterSome) {
+  //         const filter = Object.keys(params.filter[key]).reduce(
+  //           (acc, k) => ({
+  //             ...acc,
+  //             [`${k}_in`]: params.filter[key][k],
+  //           }),
+  //           {}
+  //         );
+  //         return { ...acc, [`${key}_some`]: filter };
+  //       }
+  //     }
 
-      const parts = key.split('.');
+  //     const parts = key.split('.');
 
-      if (parts.length > 1) {
-        if (parts[1] === 'id') {
-          const type = introspectionResults.types.find(
-            (t: any) => t.name === `${resource.type.name}Filter`
-          );
-          const filterSome = type.inputFields.find(
-            (t: any) => t.name === `${parts[0]}_some`
-          );
+  //     if (parts.length > 1) {
+  //       if (parts[1] === 'id') {
+  //         const type = introspectionResults.types.find(
+  //           (t: any) => t.name === `${resource.type.name}Filter`
+  //         );
+  //         const filterSome = type.inputFields.find(
+  //           (t: any) => t.name === `${parts[0]}_some`
+  //         );
 
-          if (filterSome) {
-            return {
-              ...acc,
-              [`${parts[0]}_some`]: { id: params.filter[key] },
-            };
-          }
+  //         if (filterSome) {
+  //           return {
+  //             ...acc,
+  //             [`${parts[0]}_some`]: { id: params.filter[key] },
+  //           };
+  //         }
 
-          return { ...acc, [parts[0]]: { id: params.filter[key] } };
-        }
+  //         return { ...acc, [parts[0]]: { id: params.filter[key] } };
+  //       }
 
-        const resourceField = resource.type.fields.find(
-          (f: any) => f.name === parts[0]
-        );
-        const type = getFinalType(resourceField.type);
-        return {
-          ...acc,
-          [key]: sanitizeValue(type, params.filter[key]),
-        };
-      }
+  //       const resourceField = resource.type.fields.find(
+  //         (f: any) => f.name === parts[0]
+  //       );
+  //       const type = getFinalType(resourceField.type);
+  //       return {
+  //         ...acc,
+  //         [key]: sanitizeValue(type, params.filter[key]),
+  //       };
+  //     }
 
-      const resourceField = resource.type.fields.find(
-        (f: any) => f.name === key
-      );
+  //     const resourceField = resource.type.fields.find(
+  //       (f: any) => f.name === key
+  //     );
 
-      if (resourceField) {
-        const type = getFinalType(resourceField.type);
-        const isAList = isList(resourceField.type);
+  //     if (resourceField) {
+  //       const type = getFinalType(resourceField.type);
+  //       const isAList = isList(resourceField.type);
 
-        if (isAList) {
-          return {
-            ...acc,
-            [key]: Array.isArray(params.filter[key])
-              ? params.filter[key].map((value: any) =>
-                  sanitizeValue(type, value)
-                )
-              : sanitizeValue(type, [params.filter[key]]),
-          };
-        }
+  //       if (isAList) {
+  //         return {
+  //           ...acc,
+  //           [key]: Array.isArray(params.filter[key])
+  //             ? params.filter[key].map((value: any) =>
+  //                 sanitizeValue(type, value)
+  //               )
+  //             : sanitizeValue(type, [params.filter[key]]),
+  //         };
+  //       }
 
-        return {
-          ...acc,
-          [key]: sanitizeValue(type, params.filter[key]),
-        };
-      }
+  //       return {
+  //         ...acc,
+  //         [key]: sanitizeValue(type, params.filter[key]),
+  //       };
+  //     }
 
-      return { ...acc, [key]: params.filter[key] };
-    }, {});
-  }
+  //     return { ...acc, [key]: params.filter[key] };
+  //   }, {});
+  // }
 
-  if (params.pagination) {
-    variables.page = parseInt(params.pagination.page, 10) - 1;
-    variables.perPage = parseInt(params.pagination.perPage, 10);
-  }
+  // if (params.pagination) {
+  //   variables.page = parseInt(params.pagination.page, 10) - 1;
+  //   variables.perPage = parseInt(params.pagination.perPage, 10);
+  // }
 
-  if (params.sort) {
-    variables.sortField = params.sort.field;
-    variables.sortOrder = params.sort.order;
-  }
+  // if (params.sort) {
+  //   variables.sortField = params.sort.field;
+  //   variables.sortOrder = params.sort.order;
+  // }
 
-  return variables;
+  // return variables;
 };
 
 /**
@@ -284,18 +293,21 @@ export default (introspectionResults: any) => (
   resource: any,
   aorFetchType: string,
   params: any,
-  queryType: any
+  queryType: any,
+  queryName: any
 ) => {
   const preparedParams = prepareParams(params, queryType, introspectionResults);
 
   switch (aorFetchType) {
-    case GET_LIST: {
+    case GET_LIST:
       return buildGetListVariables(introspectionResults)(
         resource,
         aorFetchType,
-        preparedParams
+        preparedParams,
+        queryType,
+        queryName
       );
-    }
+
     case GET_MANY:
       return (preparedParams.ids as []).reduce(
         (acc: Record<string, string>, id: string, i: number) => {
@@ -304,12 +316,6 @@ export default (introspectionResults: any) => (
         },
         {}
       );
-    // return {
-    //   limit: params.ids.length,
-    //   filter: {
-    //     or: params.ids.map((id: string | number) => ({ id: { eq: id } })),
-    //   },
-    // };
     case GET_MANY_REFERENCE:
       // grab the arg the secondary GSI key is searching for an use that
       // as the param in our query.
@@ -330,13 +336,15 @@ export default (introspectionResults: any) => (
         input: { id: preparedParams.id },
       };
     case CREATE:
-    case UPDATE: {
+    case UPDATE:
       return buildCreateUpdateVariables(introspectionResults)(
         resource,
         aorFetchType,
         preparedParams,
         queryType
       );
-    }
+
+    default:
+      return {};
   }
 };

@@ -1,4 +1,4 @@
 import { nextTokenReducer } from './nextTokenReducer';
 export const amplifyReducers = {
-  nextToken: nextTokenReducer,
+  nextTokens: nextTokenReducer,
 };

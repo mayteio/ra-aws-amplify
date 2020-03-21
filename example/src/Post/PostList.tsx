@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { List, Datagrid, TextField, ReferenceField } from 'react-admin';
+import {
+  List,
+  Datagrid,
+  TextField,
+  ReferenceField,
+  ArrayField,
+  SingleFieldList,
+  ChipField,
+} from 'react-admin';
 import { AmplifyPagination, S3ImageField } from '../../../';
 
 export const PostList: React.FC = props => {
@@ -17,6 +25,11 @@ export const PostList: React.FC = props => {
           />
         </ReferenceField>
         <TextField source="title" />
+        <ArrayField source="categories">
+          <SingleFieldList>
+            <ChipField source="category.title" />
+          </SingleFieldList>
+        </ArrayField>
       </Datagrid>
     </List>
   );

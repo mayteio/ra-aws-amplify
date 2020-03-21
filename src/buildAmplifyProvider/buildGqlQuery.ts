@@ -16,18 +16,33 @@ export const getGqlQuery = (_introspectionResults: any) => (
 ) => {
   switch (raFetchType) {
     case GET_LIST:
-      return gql(queries[`list${resource.type.name}s`]);
+      return [
+        `list${resource.type.name}s`,
+        gql(queries[`list${resource.type.name}s`]),
+      ];
     case GET_ONE:
-      return gql(queries[`get${resource.type.name}`]);
+      return [
+        `get${resource.type.name}`,
+        gql(queries[`get${resource.type.name}`]),
+      ];
     case GET_MANY_REFERENCE:
       const targetQuery = params.target;
-      return gql(queries[targetQuery]);
+      return [targetQuery, gql(queries[targetQuery])];
     case CREATE:
-      return gql(mutations[`create${resource.type.name}`]);
+      return [
+        `create${resource.type.name}`,
+        gql(mutations[`create${resource.type.name}`]),
+      ];
     case UPDATE:
-      return gql(mutations[`update${resource.type.name}`]);
+      return [
+        `update${resource.type.name}`,
+        gql(mutations[`update${resource.type.name}`]),
+      ];
     case DELETE:
-      return gql(mutations[`delete${resource.type.name}`]);
+      return [
+        `delete${resource.type.name}`,
+        gql(mutations[`delete${resource.type.name}`]),
+      ];
     default:
       return undefined;
   }

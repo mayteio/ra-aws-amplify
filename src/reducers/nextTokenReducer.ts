@@ -1,17 +1,16 @@
 import { CRUD_GET_LIST_SUCCESS } from 'react-admin';
 
 export const nextTokenReducer = (
-  previousState = null,
+  previousState = {},
   { type, payload }: any
 ) => {
   // store the crud token when it comes back
   if (type === CRUD_GET_LIST_SUCCESS) {
-    return payload.nextToken || null;
+    return {
+      ...previousState,
+      [payload.query]: payload.nextToken,
+    };
   }
 
-  // remove the nextToken before trying to get a new list
-  // if (type === CRUD_GET_LIST) {
-  //   return null;
-  // }
   return previousState;
 };

@@ -154,7 +154,7 @@ Here are a few scenarios.
 
 - [A product with an image](#a-product-with-an-image)
 - [A post with comments](#a-post-with-comments-using-the-referencemanyfield)
-- [Post editors](#post-editors)
+- [Post editors (many to many connections)](#post-editors-many-to-many-connections)
 - [Filter and sort media by name](#filter-and-sort-media-by-name)
 
 ### A product with an image
@@ -277,9 +277,135 @@ export const PostShow = prop => {
 
 The package will pick up on this and wire everything up as expected.
 
-### Post categories (many to many)
+### Post categories (many to many connections)
 
-Coming soon...
+One feature of DynamoDB is event-driven architecture. That is, create one record and use that to create another record. You can't create records that rely on each other transactionally (with the tools given) so `ra-aws-amplify` attempts to listen for `CRUD_CREATE_SUCCESS` and `CRUD_UPDATE_SUCCESS` actions and create links where possible.
+
+#### Many to many schema
+
+Consider the example from the docs, with an added `queryField` parameter in the `PostEditor` `@keys`:
+
+```graphql
+type Post @model {
+  id: ID!
+  title: String!
+  editors: [PostEditor] @connection(keyName: "byPost", fields: ["id"])
+}
+
+type PostEditor
+  @model(queries: null)
+  @key(
+    name: "byPost"
+    fields: ["postID", "editorID"]
+    queryField: "postEditorsByPost"
+  )
+  @key(
+    name: "byEditor"
+    fields: ["editorID", "postID"]
+    queryField: "postEditorsByEditor"
+  ) {
+  id: ID!
+  postID: ID!
+  editorID: ID!
+  post: Post! @connection(fields: ["postID"])
+  editor: User! @connection(fields: ["editorID"])
+}
+
+type User @model {
+  id: ID!
+  username: String!
+  posts: [PostEditor] @connection(keyName: "byEditor", fields: ["id"])
+}
+```
+
+For everything to work out of the box, your query field must follow the convention of:
+
+```js
+connectionModelName + 'sBy' + keyNameModel;
+```
+
+in camel case. If you wish to name it otherwise, be sure to pass in your custom query as this key to `useDataProvider`:
+
+```js
+// Example of custom query mapping
+import { Admin } from 'react-admin';
+import { useDataProvider } from 'ra-aws-amplify';
+import * as generatedQueries from './graphql/queries';
+import { getPostEditorsConnectionByPostId } from './customQueries';
+
+const queries = {
+  ...generatedQueries,
+  postEditorsByPost: getPostEditorsConnectionByPostId
+}
+
+const App = () => {
+  const dataProvider = useDataProvider({queries, ...});
+  return <Admin dataProvider={dataProvider} />
+}
+```
+
+Under the hood, the `dataProvider` attaches any possible `@connection` field models to the query response, for use in further mutations.
+
+#### Custom Sagas
+
+Next pass in `amplifySagas` into your `<Admin />` component. These listen for the redux actions related to creating models and create/update/delete subsequent connections.
+
+```js
+import { Admin } from 'react-admin';
+import { amplifySagas, useDataProvider } from 'ra-aws-amplify';
+...
+
+const App = () => {
+  const dataProvider = useDataProvider({...});
+  return <Admin ... customSagas={amplifySagas(dataProvider)} />
+}
+```
+
+#### Build your form
+
+In your create form, pass the **joining model name** as your source:
+
+```js
+<ReferenceArrayInput reference="User" source="PostEditor">
+  <SelectArrayInput optionText="name" />
+</ReferenceArrayInput>
+```
+
+On create, the following happens:
+
+1. Trigger `CREATE` to API
+2. On `CRUD_CREATE_SUCCESS` action, fire `createConnections` saga
+3. Check original data payload for fields that match a connection
+4. Generate and execute `CREATE` promises by calling `dataProvider` directly
+
+In your update form, you'll have to pass a `defaultValue` so the input pre-fills with the record's selections:
+
+```js
+<ReferenceArrayInput
+  reference="User"
+  source="PostEditor"
+  defaultValue={record.editors.map(user => user.id)}
+>
+  <SelectArrayInput optionText="name" />
+</ReferenceArrayInput>
+```
+
+On update, the following happens:
+
+1. Trigger `UPDATE` to API
+2. On `CRUD_UPDATE_SUCCESS` action, fire `updateConnections` saga
+3. Check original data payload for fields that match a connection
+4. Get all related connections (via the `queryField` specified in [many to many schema](#many-to-many-schema))
+5. Diff connections between connections and the request payload
+6. Generate and execute `CREATE` or `DELETE` promises by calling `dataProvider` directly
+
+On delete the following happens:
+
+1. Trigger `DELETE` to API
+2. On `CRUD_DELETE_SUCCESS` action, fire deleteConnections saga
+3. Get the deleted model ID
+4. Get all the related connections (via the `queryField` specified in [many to many schema](#many-to-many-schema))
+5. Generate and execute DELETE promises for all connections by calling `dataProvider` directly
 
 ### Filter and sort Media by name
 

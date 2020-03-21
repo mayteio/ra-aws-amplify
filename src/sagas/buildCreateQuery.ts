@@ -12,13 +12,12 @@ export const buildCreateQueries = (dataProvider: any) => ({
   );
 
   /** Get the field of the model creating the connection */
-  const thisModelField = idFields.find((f: any) =>
-    f.name.match(new RegExp(resource, 'i'))
-  );
+  const resourceRegex = new RegExp(resource, 'i');
+  const thisModelField = idFields.find((f: any) => f.name.match(resourceRegex));
 
   /** Get the field of the connected model */
   const connectionModelField = idFields.find(
-    (f: any) => !f.name.match(new RegExp(resource, 'i'))
+    (f: any) => !f.name.match(resourceRegex)
   );
 
   const createConnectionRecord = (data: Record<string, string>) =>
