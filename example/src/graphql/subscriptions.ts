@@ -17,12 +17,6 @@ export const onCreatePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
-        items {
-          id
-        }
-        nextToken
-      }
       owner
       comments {
         items {
@@ -50,12 +44,6 @@ export const onUpdatePost = /* GraphQL */ `
           level
         }
         owner
-      }
-      editors {
-        items {
-          id
-        }
-        nextToken
       }
       owner
       comments {
@@ -85,12 +73,6 @@ export const onDeletePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
-        items {
-          id
-        }
-        nextToken
-      }
       owner
       comments {
         items {
@@ -100,147 +82,6 @@ export const onDeletePost = /* GraphQL */ `
         }
         nextToken
       }
-    }
-  }
-`;
-export const onCreatePostEditor = /* GraphQL */ `
-  subscription OnCreatePostEditor($editors: String) {
-    onCreatePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onUpdatePostEditor = /* GraphQL */ `
-  subscription OnUpdatePostEditor($editors: String) {
-    onUpdatePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onDeletePostEditor = /* GraphQL */ `
-  subscription OnDeletePostEditor($editors: String) {
-    onDeletePostEditor(editors: $editors) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser($owner: String) {
-    onCreateUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser($owner: String) {
-    onUpdateUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser($owner: String) {
-    onDeleteUser(owner: $owner) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
     }
   }
 `;

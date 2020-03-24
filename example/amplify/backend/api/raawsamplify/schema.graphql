@@ -13,29 +13,7 @@ type Post
   title: String!
   content: String
   image: Media @connection
-  editors: [PostEditor] @connection(name: "PostEditors")
   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
-}
-
-type PostEditor
-  @model
-  @auth(
-    rules: [
-      { allow: owner, ownerField: "editors" }
-      { allow: groups, groups: ["admin"] }
-    ]
-  ) {
-  id: ID!
-  post: Post! @connection(name: "PostEditors")
-  editor: User! @connection(name: "UserEditors")
-}
-
-type User
-  @model
-  @auth(rules: [{ allow: owner }, { allow: groups, groups: ["admin"] }]) {
-  id: ID!
-  username: String!
-  posts: [PostEditor] @connection(name: "UserEditors")
 }
 
 type Comment

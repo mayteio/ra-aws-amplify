@@ -6,7 +6,7 @@ export const nextTokenReducer = (
 ) => {
   // store the crud token when it comes back
   if (type === CRUD_GET_LIST_SUCCESS) {
-    console.log(payload);
+    // console.log(payload);
 
     return payload.nextToken || null;
   }

@@ -20,12 +20,6 @@ export const createPost = /* GraphQL */ `
         }
         owner
       }
-      editors {
-        items {
-          id
-        }
-        nextToken
-      }
       owner
       comments {
         items {
@@ -56,12 +50,6 @@ export const updatePost = /* GraphQL */ `
           level
         }
         owner
-      }
-      editors {
-        items {
-          id
-        }
-        nextToken
       }
       owner
       comments {
@@ -94,12 +82,6 @@ export const deletePost = /* GraphQL */ `
         }
         owner
       }
-      editors {
-        items {
-          id
-        }
-        nextToken
-      }
       owner
       comments {
         items {
@@ -109,165 +91,6 @@ export const deletePost = /* GraphQL */ `
         }
         nextToken
       }
-    }
-  }
-`;
-export const createPostEditor = /* GraphQL */ `
-  mutation CreatePostEditor(
-    $input: CreatePostEditorInput!
-    $condition: ModelPostEditorConditionInput
-  ) {
-    createPostEditor(input: $input, condition: $condition) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const updatePostEditor = /* GraphQL */ `
-  mutation UpdatePostEditor(
-    $input: UpdatePostEditorInput!
-    $condition: ModelPostEditorConditionInput
-  ) {
-    updatePostEditor(input: $input, condition: $condition) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const deletePostEditor = /* GraphQL */ `
-  mutation DeletePostEditor(
-    $input: DeletePostEditorInput!
-    $condition: ModelPostEditorConditionInput
-  ) {
-    deletePostEditor(input: $input, condition: $condition) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    deleteUser(input: $input, condition: $condition) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
     }
   }
 `;

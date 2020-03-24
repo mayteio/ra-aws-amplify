@@ -24,7 +24,7 @@ export const App = () => {
   const dataProvider = useDataProvider({ config, schema, queries, mutations });
   const authProvider = useAuthProvider();
 
-  return (
+  return dataProvider ? (
     <Admin
       authProvider={authProvider}
       dataProvider={dataProvider}
@@ -54,5 +54,7 @@ export const App = () => {
         icon={MediaIcon}
       />
     </Admin>
+  ) : (
+    <>Loading...</>
   );
 };

@@ -1,97 +1,6 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const getPostEditor = /* GraphQL */ `
-  query GetPostEditor($id: ID!) {
-    getPostEditor(id: $id) {
-      id
-      editor {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      post {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const listPostEditors = /* GraphQL */ `
-  query ListPostEditors(
-    $filter: ModelPostEditorFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPostEditors(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        editor {
-          id
-          username
-          owner
-        }
-        post {
-          id
-          title
-          content
-          owner
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      id
-      username
-      posts {
-        items {
-          id
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        username
-        posts {
-          nextToken
-        }
-        owner
-      }
-      nextToken
-    }
-  }
-`;
 export const getMedia = /* GraphQL */ `
   query GetMedia($id: ID!) {
     getMedia(id: $id) {
@@ -127,34 +36,6 @@ export const listMedias = /* GraphQL */ `
     }
   }
 `;
-export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        content
-        image {
-          id
-          name
-          owner
-        }
-        editors {
-          nextToken
-        }
-        owner
-        comments {
-          nextToken
-        }
-      }
-      nextToken
-    }
-  }
-`;
 export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
@@ -171,12 +52,6 @@ export const getPost = /* GraphQL */ `
         }
         owner
       }
-      editors {
-        items {
-          id
-        }
-        nextToken
-      }
       owner
       comments {
         items {
@@ -186,6 +61,41 @@ export const getPost = /* GraphQL */ `
         }
         nextToken
       }
+    }
+  }
+`;
+export const listPosts = /* GraphQL */ `
+  query ListPosts(
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        content
+        image {
+          id
+          name
+          attachment {
+            key
+            identityId
+            level
+          }
+          owner
+        }
+        owner
+        comments {
+          items {
+            id
+            content
+            postId
+          }
+          nextToken
+        }
+      }
+      nextToken
     }
   }
 `;

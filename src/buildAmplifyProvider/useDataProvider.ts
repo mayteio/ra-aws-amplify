@@ -1,5 +1,5 @@
 import { DataProvider } from 'ra-core';
-import { IntrospectionResultData } from 'apollo-cache-inmemory';
+// import { IntrospectionResultData } from 'apollo-cache-inmemory';
 import { Auth } from 'aws-amplify';
 import { AUTH_TYPE, AuthOptions } from 'aws-appsync-auth-link';
 import { useState, useEffect } from 'react';
@@ -9,12 +9,13 @@ import { buildAmplifyProvider } from './buildAmplifyProvider';
 
 interface useDataProviderArgs {
   config: Record<string, any>;
-  authType: AUTH_TYPE | undefined;
+  authType?: AUTH_TYPE | undefined;
   queries: any;
   mutations: any;
-  schema: {
-    data: IntrospectionResultData;
-  };
+  schema: any;
+  // schema: {
+  //   data: IntrospectionResultData | any;
+  // };
 }
 
 const getAuthType = (
@@ -54,9 +55,7 @@ export function useDataProvider({
   mutations,
   authType = undefined,
 }: useDataProviderArgs): any {
-  const [dataProvider, setDataProvider] = useState<DataProvider | any>(
-    defaultDataProvider
-  );
+  const [dataProvider, setDataProvider] = useState<DataProvider | any>();
 
   // try to guess the auth type based on config, otherwise specified
   const auth = getAuthType(config, authType);
@@ -89,15 +88,3 @@ export function useDataProvider({
 
   return dataProvider;
 }
-
-export const defaultDataProvider = {
-  create: () => Promise.resolve({ data: null }), // avoids adding a context in tests
-  delete: () => Promise.resolve({ data: null }), // avoids adding a context in tests
-  deleteMany: () => Promise.resolve({ data: [] }), // avoids adding a context in tests
-  getList: () => Promise.resolve({ data: [], total: 0 }), // avoids adding a context in tests
-  getMany: () => Promise.resolve({ data: [] }), // avoids adding a context in tests
-  getManyReference: () => Promise.resolve({ data: [], total: 0 }), // avoids adding a context in tests
-  getOne: () => Promise.resolve({ data: null }), // avoids adding a context in tests
-  update: () => Promise.resolve({ data: null }), // avoids adding a context in tests
-  updateMany: () => Promise.resolve({ data: [] }), // avoids adding a context in tests
-};
