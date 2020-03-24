@@ -24,17 +24,11 @@ const useStyles = makeStyles({
 
 export const PostEdit: React.FC = props => {
   const classes = useStyles();
+
   return (
     <Edit {...props}>
       <FormWithRedirect
         render={formProps => {
-          console.log(formProps);
-
-          const initialCategories = formProps.record.categories.map(
-            category => category['category.id']
-          );
-          console.log(initialCategories);
-
           return (
             <Box p={2} component="form">
               <SanitizeGrid container spacing={2} className={classes.container}>
@@ -49,9 +43,11 @@ export const PostEdit: React.FC = props => {
                   />
                   <ReferenceArrayInput
                     label="Categories"
-                    reference="Category"
                     source="PostCategory"
-                    initialValue={initialCategories}
+                    reference="Category"
+                    initialValue={formProps.record.categories.map(
+                      category => category['category.id']
+                    )}
                   >
                     <AutocompleteArrayInput optionText="title" fullWidth />
                   </ReferenceArrayInput>

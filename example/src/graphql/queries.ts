@@ -46,6 +46,23 @@ export const getPostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -57,13 +74,40 @@ export const getPostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -85,13 +129,49 @@ export const listPostCategorys = /* GraphQL */ `
         category {
           id
           title
+          posts {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
         }
         post {
           id
           title
           content
+          image {
+            id
+            name
+            attachment {
+              key
+              identityId
+              level
+            }
+            owner
+          }
+          categories {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
+          comments {
+            items {
+              id
+              content
+              postId
+            }
+            nextToken
+          }
         }
         owner
       }
@@ -109,6 +189,31 @@ export const getCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -128,6 +233,23 @@ export const listCategorys = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -160,13 +282,49 @@ export const postCategorysByPost = /* GraphQL */ `
         category {
           id
           title
+          posts {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
         }
         post {
           id
           title
           content
+          image {
+            id
+            name
+            attachment {
+              key
+              identityId
+              level
+            }
+            owner
+          }
+          categories {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
+          comments {
+            items {
+              id
+              content
+              postId
+            }
+            nextToken
+          }
         }
         owner
       }
@@ -198,13 +356,49 @@ export const postCategorysByCategory = /* GraphQL */ `
         category {
           id
           title
+          posts {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
         }
         post {
           id
           title
           content
+          image {
+            id
+            name
+            attachment {
+              key
+              identityId
+              level
+            }
+            owner
+          }
+          categories {
+            items {
+              id
+              postId
+              categoryId
+              owner
+            }
+            nextToken
+          }
           owner
+          comments {
+            items {
+              id
+              content
+              postId
+            }
+            nextToken
+          }
         }
         owner
       }
@@ -226,19 +420,40 @@ export const listPosts = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
           items {
+            id
+            postId
+            categoryId
             category {
               id
               title
+              owner
             }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
           }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -267,6 +482,31 @@ export const getPost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken

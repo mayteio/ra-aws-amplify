@@ -1,4 +1,11 @@
-import { GET_LIST, GET_MANY_REFERENCE } from 'ra-core';
+import {
+  GET_LIST,
+  GET_MANY,
+  GET_MANY_REFERENCE,
+  CREATE,
+  UPDATE,
+  DELETE,
+} from 'ra-core';
 import getFinalType from './getFinalType';
 
 export const LARGE_TOTAL = 9999;
@@ -69,30 +76,34 @@ export const getResponseParser = (introspectionResults: any) => (
 
   const sanitize = sanitizeResource(introspectionResults);
 
-  if (aorFetchType === GET_LIST) {
-    return {
-      data: data[`list${resource.type.name}s`].items.map(sanitize),
-      nextToken: data[`list${resource.type.name}s`].nextToken,
-      query: queryType.name,
-      total: LARGE_TOTAL,
-    };
+  switch (aorFetchType) {
+    case GET_LIST:
+    case GET_MANY:
+      return {
+        data: data[`list${resource.type.name}s`].items.map(sanitize),
+        nextToken: data[`list${resource.type.name}s`].nextToken,
+        query: queryType.name,
+        total: LARGE_TOTAL,
+      };
+    case GET_MANY_REFERENCE:
+      return {
+        data: data[params.target] && data[params.target].items.map(sanitize),
+        nextToken: data[params.target].nextToken,
+        query: queryType.name,
+        total: LARGE_TOTAL,
+      };
+    case UPDATE:
+    case CREATE:
+    case DELETE:
+      return {
+        data: data[queryType.name] && sanitize(data[queryType.name]),
+        connectionModels,
+      };
+    default:
+      return {
+        data: data[queryType.name] && sanitize(data[queryType.name]),
+      };
   }
-
-  if (aorFetchType === GET_MANY_REFERENCE) {
-    return {
-      data:
-        data[params.target] && data[params.target].items.map(sanitizeResource),
-      nextToken: data[params.target].nextToken,
-      query: queryType.name,
-      total: LARGE_TOTAL,
-    };
-  }
-
-  return {
-    data: data[queryType.name] && sanitizeResource(data[queryType.name]),
-    connectionModels,
-    total: LARGE_TOTAL,
-  };
 };
 
 export default getResponseParser;

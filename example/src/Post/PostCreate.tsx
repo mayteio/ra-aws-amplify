@@ -3,7 +3,7 @@ import {
   Create,
   TextInput,
   ReferenceArrayInput,
-  SelectArrayInput,
+  AutocompleteArrayInput,
   FormWithRedirect,
   SaveButton,
   Labeled,
@@ -45,7 +45,7 @@ export const PostCreate: React.FC<any> = props => {
                   source="PostCategory"
                   reference="Category"
                 >
-                  <SelectArrayInput optionText="title" fullWidth />
+                  <AutocompleteArrayInput optionText="title" fullWidth />
                 </ReferenceArrayInput>
               </SanitizeGrid>
               <SanitizeGrid item xs>

@@ -61,6 +61,7 @@ export const App = () => {
         icon={MediaIcon}
       />
       <Resource name="Category" list={CategoryList} icon={CategoryIcon} />
+      <Resource name="PostCategory" />
     </Admin>
   ) : (
     <div>Loading...</div>

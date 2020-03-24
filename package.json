@@ -7,7 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsdx watch",
+    "start": "NODE_OPTIONS=--max_old_space_size=4096 tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",

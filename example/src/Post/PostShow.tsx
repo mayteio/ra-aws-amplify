@@ -8,6 +8,8 @@ import {
   ReferenceManyField,
   Show,
   SimpleShowLayout,
+  SingleFieldList,
+  ChipField,
   TextField,
 } from 'react-admin';
 import { Link } from 'react-router-dom';
@@ -40,7 +42,20 @@ export const PostShow: React.FC<{
           style={{ width: 100, height: 'auto' }}
         />
       </ReferenceField>
-      <ReferenceManyField reference="Comment" target="commentsByPost">
+      <ReferenceManyField
+        reference="Category"
+        target="postCategorysByPost"
+        label="Categories"
+      >
+        <SingleFieldList>
+          <ChipField source="category.title" />
+        </SingleFieldList>
+      </ReferenceManyField>
+      <ReferenceManyField
+        reference="Comment"
+        target="commentsByPost"
+        label="Comments"
+      >
         <Datagrid>
           <TextField source="content" />
           <EditButton />

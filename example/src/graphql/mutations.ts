@@ -25,6 +25,31 @@ export const createPost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -65,6 +90,31 @@ export const updatePost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -105,6 +155,31 @@ export const deletePost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -221,6 +296,23 @@ export const createPostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -232,13 +324,40 @@ export const createPostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -259,6 +378,23 @@ export const updatePostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -270,13 +406,40 @@ export const updatePostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -297,6 +460,23 @@ export const deletePostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -308,13 +488,40 @@ export const deletePostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -335,6 +542,31 @@ export const createCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -356,6 +588,31 @@ export const updateCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -377,6 +634,31 @@ export const deleteCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken

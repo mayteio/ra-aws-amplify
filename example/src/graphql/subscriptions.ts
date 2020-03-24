@@ -22,6 +22,31 @@ export const onCreatePost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -59,6 +84,31 @@ export const onUpdatePost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -96,6 +146,31 @@ export const onDeletePost = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -191,6 +266,23 @@ export const onCreatePostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -202,13 +294,40 @@ export const onCreatePostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -226,6 +345,23 @@ export const onUpdatePostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -237,13 +373,40 @@ export const onUpdatePostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -261,6 +424,23 @@ export const onDeletePostCategory = /* GraphQL */ `
         id
         title
         posts {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
@@ -272,13 +452,40 @@ export const onDeletePostCategory = /* GraphQL */ `
         image {
           id
           name
+          attachment {
+            key
+            identityId
+            level
+          }
           owner
         }
         categories {
+          items {
+            id
+            postId
+            categoryId
+            category {
+              id
+              title
+              owner
+            }
+            post {
+              id
+              title
+              content
+              owner
+            }
+            owner
+          }
           nextToken
         }
         owner
         comments {
+          items {
+            id
+            content
+            postId
+          }
           nextToken
         }
       }
@@ -296,6 +503,31 @@ export const onCreateCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -314,6 +546,31 @@ export const onUpdateCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken
@@ -332,6 +589,31 @@ export const onDeleteCategory = /* GraphQL */ `
           id
           postId
           categoryId
+          category {
+            id
+            title
+            posts {
+              nextToken
+            }
+            owner
+          }
+          post {
+            id
+            title
+            content
+            image {
+              id
+              name
+              owner
+            }
+            categories {
+              nextToken
+            }
+            owner
+            comments {
+              nextToken
+            }
+          }
           owner
         }
         nextToken

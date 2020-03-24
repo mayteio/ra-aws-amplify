@@ -7,6 +7,7 @@ import {
   ArrayField,
   SingleFieldList,
   ChipField,
+  DeleteButton,
 } from 'react-admin';
 import { AmplifyPagination, S3ImageField } from '../../../';
 
@@ -30,6 +31,7 @@ export const PostList: React.FC = props => {
             <ChipField source="category.title" />
           </SingleFieldList>
         </ArrayField>
+        <DeleteButton />
       </Datagrid>
     </List>
   );
