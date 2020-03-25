@@ -480,23 +480,11 @@ export type ListPostsQuery = {
         __typename: "Media",
         id: string,
         name: string | null,
-        attachment:  {
-          __typename: "S3Object",
-          key: string,
-          identityId: string | null,
-          level: string | null,
-        },
         owner: string | null,
       } | null,
       owner: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
-        items:  Array< {
-          __typename: "Comment",
-          id: string,
-          content: string | null,
-          postId: string,
-        } | null > | null,
         nextToken: string | null,
       } | null,
     } | null > | null,

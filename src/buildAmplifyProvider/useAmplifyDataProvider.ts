@@ -48,7 +48,7 @@ const getAuthType = (
   }
 };
 
-export function useDataProvider({
+export function useAmplifyDataProvider({
   config,
   schema,
   queries,
@@ -58,9 +58,9 @@ export function useDataProvider({
   const [dataProvider, setDataProvider] = useState<DataProvider | any>();
 
   // try to guess the auth type based on config, otherwise specified
-  const auth = getAuthType(config, authType);
-  const buildDataProvider = async () =>
-    await buildAmplifyProvider({
+  const buildDataProvider = async (authType: AUTH_TYPE) => {
+    const auth = getAuthType(config, authType);
+    return await buildAmplifyProvider({
       endpoint: config.aws_appsync_graphqlEndpoint,
       auth: {
         url: config.aws_appsync_graphqlEndpoint,
@@ -71,17 +71,18 @@ export function useDataProvider({
       queries,
       mutations,
     });
+  };
 
   /** Rebuild dataProvider */
   const user = useUser();
-  const specifiedAuthType = authType || config.aws_appsync_authenticationType;
+  let specifiedAuthType = authType || config.aws_appsync_authenticationType;
 
   useEffect(() => {
     if (specifiedAuthType === AUTH_TYPE.AMAZON_COGNITO_USER_POOLS && !user) {
-      return;
+      specifiedAuthType = AUTH_TYPE.NONE;
     }
 
-    buildDataProvider().then(dataProvider =>
+    buildDataProvider(specifiedAuthType).then(dataProvider =>
       setDataProvider(() => dataProvider)
     );
   }, [user, specifiedAuthType]);

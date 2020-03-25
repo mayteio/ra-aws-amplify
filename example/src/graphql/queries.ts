@@ -78,20 +78,10 @@ export const listPosts = /* GraphQL */ `
         image {
           id
           name
-          attachment {
-            key
-            identityId
-            level
-          }
           owner
         }
         owner
         comments {
-          items {
-            id
-            content
-            postId
-          }
           nextToken
         }
       }

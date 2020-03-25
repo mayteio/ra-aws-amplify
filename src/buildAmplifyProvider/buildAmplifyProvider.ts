@@ -43,7 +43,10 @@ export const buildAmplifyProvider = ({
   schema,
   ...options
 }: any) => {
-  const client = createClient({ ...options, schema: schema.data });
+  const client = createClient({
+    ...options,
+    introspection: { schema: schema.data },
+  });
   const buildQuery = defaultBuildQuery({ queries, mutations, schema });
 
   return buildDataProvider(

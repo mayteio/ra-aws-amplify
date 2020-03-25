@@ -318,6 +318,11 @@ export default (introspectionResults: any) => (
       const query = introspectionResults.queries.find(
         (q: any) => q.name === params.target
       );
+      if (!query) {
+        throw Error(
+          `Couldn't find a query for ${params.target}. Did you forget to add a param queryField to your @key directive for ${params.target}? See https://github.com/mayteio/ra-aws-amplify#a-post-with-comments-using-the-referencemanyfield-`
+        );
+      }
       const key = query.args[0].name;
 
       return {

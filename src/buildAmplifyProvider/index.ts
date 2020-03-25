@@ -1,2 +1,2 @@
 export * from './buildAmplifyProvider';
-export * from './useDataProvider';
+export * from './useAmplifyDataProvider';
