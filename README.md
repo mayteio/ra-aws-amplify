@@ -1,6 +1,6 @@
 # `ra-aws-amplify`
 
-🚨 Work in progress. Use in production at your own risk!
+🚨 Work in progress. Use in production at your own risk! We are 🤓
 Feel free to [contribute](https://github.com/mayteio/ra-aws-amplify/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) though to get it there though. I love contributors.
 
 > Easily bootstrap an admin interface for your [AWS Amplify](https://aws-amplify.github.io/docs/js/start?platform=purejs) Apps that use a GraphQL `API`, `Storage` and `Auth`.
@@ -21,11 +21,11 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
 - [`useDataProvider`](#usedataprovider)
 - [DynamoDB Access Patterns with `react-admin`](#dynamodb-access-patterns-with-react-admin)
   - [A product with an image](#a-product-with-an-image)
-  - [A post with comments](#a-post-with-comments-using-the-referencemanyfield)
+  - [A post with comments](#a-post-with-comments-using-the-referencemanyfield-)
   - [Post editors](#post-editors)
   - [Filter and sort media by name](#filter-and-sort-media-by-name)
 - [Authentication and Sign in with `Auth`](#signin-with-auth)
-  - [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+  - [`<AmplifyAuthProvider />`](#amplifyauthprovider-)
   - [`useAuth`](#useauth)
   - [`useAuthProvider`](#useauthprovider)
   - [`useUser`](#useuser)
@@ -33,8 +33,8 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
   - [Permissions](#permissions)
 - [Image Upload with `Storage`](#image-upload)
   - [Required schema](#required-schema)
-  - [`<S3Input />`](#s3input)
-  - [`<S3ImageField />`](#s3imagefield)
+  - [`<S3Input />`](#s3input-)
+  - [`<S3ImageField />`](#s3imagefield-)
   - [`protected`, `private` files](#protected-private-files)
 - [Pagination using `nextToken`](#pagination-using-nexttoken)
 
@@ -51,16 +51,7 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
 ## Installation
 
 ```bash
-# pending npm release
-# $ yarn create react-app amplify-backend-app
-# $ cd amplify-backend-app
-# $ yarn add react-admin ra-aws-amplify aws-amplify
-
-# in the meantime, in your app
-git clone https://github.com/mayteio/ra-aws-amplify.git
-$ amplify add api # run through the setup
-$ amplify push # will generate aws-exports.js
-$ yarn start
+$ yarn add ra-aws-amplify@alpha react-admin aws-amplify
 ```
 
 ## Usage
@@ -291,27 +282,27 @@ Coming soon...
 
 This package exposes a few tools for handling authentication out of the box with `@aws-amplify/Auth`:
 
-- [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+- [`<AmplifyAuthProvider />`](#amplifyauthprovider-)
 - [`useAuth`](#useauth)
 - [`useAuthProvider`](#useauthprovider)
 - [`useUser`](#useuser)
 - [Federated sign in](#federated-sign-in)
 - [Permissions](#permissions)
 
-### `<RaAmplifyAuthProvider />`
+### `<AmplifyAuthProvider />`
 
 Wrap your app in this provider so `Auth` is available at all contexts, with an abstracted API so it's easier to refactor to another provider if DynamoDB drives you nuts 😉.
 
 ```js
 // index.tsx
 import ReactDOM from 'react-dom';
-import { RaAmplifyAuthProvider } from 'ra-aws-amplify';
+import { AmplifyAuthProvider } from 'ra-aws-amplify';
 import { App } from './App';
 
 ReactDOM.render(
-  <RaAmplifyAuthProvider>
+  <AmplifyAuthProvider>
     <App />
-  </RaAmplifyAuthProvider>,
+  </AmplifyAuthProvider>,
   document.getElementById('root')
 );
 ```
@@ -420,8 +411,8 @@ Use this in conjunction with the [Pre Token Generation Lambda Trigger](https://d
 This package exposes `<S3Input />` and `<S3ImageField />` components to help you deal with image & file upload.
 
 - [Required schema](#required-schema)
-- [`<S3Input />`](#s3input)
-- [`<S3ImageField />`](#s3imagefield)
+- [`<S3Input />`](#s3input-)
+- [`<S3ImageField />`](#s3imagefield-)
 - [`protected`, `private` files](#protected-private-files)
 
 ### Required Schema
