@@ -7,7 +7,7 @@ Feel free to [contribute](https://github.com/mayteio/ra-aws-amplify/issues?q=is%
 
 ## Why?
 
-AWS Amplify is a great tool for generating cross-platform apps that string together AWS resources like AppSync for GraphQL, Cognito for user management and Storage, among other things.
+AWS Amplify is a great tool for generating cross-platform apps that string together AWS resources like AppSync for GraphQL, Cognito for user management and S3 for file storage, among other things.
 
 One of the promises of AWS Amplify is _Focus on the features, not the back-end_. This stops short of providing an easy-to-use back-end for managing content - unless you're fine digging around DynamoDB, S3 and so on. Enter [`react-admin`](https://github.com/marmelab/react-admin) with `ra-aws-amplify`.
 
