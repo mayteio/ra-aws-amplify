@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Admin } from 'react-admin';
-import { useDataProvider, useAuthProvider, reducers } from '../../';
+import { useAmplifyDataProvider, useAuthProvider, reducers } from '../../';
 
 // things for the dataProvider
 import config from './aws-exports';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
-import * as schema from './graphql/schema.json';
+import schema from './graphql/schema.json';
 
 // Resources
 import { Resource } from 'react-admin';
@@ -21,7 +21,12 @@ import {
 import { MediaList, MediaShow, MediaEdit, MediaIcon } from './Media';
 
 export const App = () => {
-  const dataProvider = useDataProvider({ config, schema, queries, mutations });
+  const dataProvider = useAmplifyDataProvider({
+    config,
+    schema,
+    queries,
+    mutations,
+  });
   const authProvider = useAuthProvider();
 
   return dataProvider ? (
