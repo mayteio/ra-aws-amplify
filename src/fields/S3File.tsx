@@ -38,10 +38,14 @@ export const S3File: React.FC<{
   const classes = useStyles();
   return (
     <>
-      <Icon className={classes.icon} />
+      <Icon
+        titleAccess={`Icon for file type ${s3Object.type || 'unknown'}`}
+        className={classes.icon}
+      />
       <a href={s3Object.key} title={`Open ${s3Object.key}`} target="_blank">
-        {s3Object.key}
-        {s3Object.level && ` - ${s3Object.level}`}
+        {`
+          ${s3Object.key}${s3Object.level ? ` - ${s3Object.level}` : ''}
+        `}
       </a>
     </>
   );

@@ -11,7 +11,7 @@ interface S3ImageFieldProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export const S3Field: React.FC<S3ImageFieldProps> = ({
-  source = 'S3Object',
+  source,
   record = {},
   children,
   ...props
@@ -19,7 +19,7 @@ export const S3Field: React.FC<S3ImageFieldProps> = ({
   // store the S3 signed URL in state for use in return
   const [src, set] = React.useState<string | undefined>();
   const { key, identityId, level } =
-    typeof record[source] === 'object' ? record[source] : record;
+    source && typeof record[source] === 'object' ? record[source] : record;
 
   // Listen for changes on
   React.useEffect(() => {
@@ -31,17 +31,13 @@ export const S3Field: React.FC<S3ImageFieldProps> = ({
           : {};
 
       // get the URL and set it in state
-      Storage.get(key, options).then(result => {
-        if (typeof result === 'string') {
-          set(result);
-        }
-      });
+      Storage.get(key, options).then(result => set(result as string));
     }
   }, [key, level, identityId]);
 
   // if there's no source and there is a key, show a loading spinner
   if (!src && key) {
-    return <CircularProgress data-testid="file-loading" />;
+    return <CircularProgress data-testid="s3-object-loading" />;
   }
 
   // if there's a src, show the field!
