@@ -13,7 +13,7 @@ import {
 import CloseIcon from '@material-ui/icons/CloseRounded';
 import { TextInput, ReferenceField, useMutation, useInput } from 'react-admin';
 import { CREATE } from 'ra-core';
-import { S3Input, S3ImageField } from '../../../';
+import { S3ImageInput, S3ImageField } from '../../../';
 import { Form, useFormState } from 'react-final-form';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -40,7 +40,7 @@ export const MediaUploadInput: React.FC<any> = ({
   const { input } = useInput({ source: inputField });
   const mounted = React.useRef(false);
   React.useEffect(() => {
-    if (record[source] && !mounted.current) {
+    if (record && source && record[source] && !mounted.current) {
       input.onChange(record[source]);
     }
     mounted.current = true;
@@ -109,7 +109,7 @@ export const MediaUploadInput: React.FC<any> = ({
             {(props: any) => (
               <Box p={2} component="form" onSubmit={props.handleSubmit}>
                 <TextInput source="name" />
-                <S3Input source="attachment" />
+                <S3ImageInput source="attachment" />
                 <Button variant="contained" color="primary" type="submit">
                   Save
                 </Button>

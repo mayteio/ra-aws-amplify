@@ -25,7 +25,7 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
   - [Post editors](#post-editors)
   - [Filter and sort media by name](#filter-and-sort-media-by-name)
 - [Authentication and Sign in with `Auth`](#signin-with-auth)
-  - [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+  - [`<AmplifyAuthProvider />`](#amplifyauthprovider-)
   - [`useAuth`](#useauth)
   - [`useAuthProvider`](#useauthprovider)
   - [`useUser`](#useuser)
@@ -33,18 +33,21 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
   - [Permissions](#permissions)
 - [Image Upload with `Storage`](#image-upload)
   - [Required schema](#required-schema)
-  - [`<S3Input />`](#s3input)
-  - [`<S3ImageField />`](#s3imagefield)
+  - [`<S3ImageInput />` and `<S3FileInput />`](#s3imageinput--and-s3fileinput-)
+  - [`<S3ImageField />` and `<S3FileField />`](#s3imagefield--and-s3filefield-)
+  - [`<S3Input />` and `<S3Field />`](#s3input--and-s3field-)
   - [`protected`, `private` files](#protected-private-files)
 - [Pagination using `nextToken`](#pagination-using-nexttoken)
 
 ## Whats missing and needs help?
 
-- REST API support
-- Filtering, sorting of get & list
-- Multiple image/file upload
-- Recursively updating connections
 - Your knowledge and ideas
+- Proper typescript typing
+- Jest tests
+- handling many to many connections
+- Filtering, sorting of get & list
+- Search with `@searchable` directive
+- REST API support
 
 [Check out some `good first issues`](https://github.com/mayteio/ra-aws-amplify/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to start!
 
@@ -79,7 +82,7 @@ type Post @model {
 // App.js
 import React, { useEffect, useState } from 'react';
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { useDataProvider } from 'ra-aws-amplify';
+import { useAmplifyDataProvider } from 'ra-aws-amplify';
 
 // grab your amplify generated code
 import config from './aws-exports';
@@ -88,7 +91,7 @@ import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
 
 function App() {
-  const dataProvider = useDataProvider({ config, schema, queries, mutations });
+  const dataProvider = useAmplifyDataProvider({ config, schema, queries, mutations });
 
   return
     <Admin dataProvider={dataProvider}>
@@ -100,18 +103,20 @@ function App() {
 export default App;
 ```
 
-## `useDataProvider`
+## `useAmplifyDataProvider`
 
-`useDataProvider` is a hook that generates a dataProvider to pass into the `<Admin />` component from `react-admin`. It's smart enough to pick up what kind of authentication you're using for your API (based on the config you pass) as well as hook up the generated queries and mutations from running `amplify push`.
+`useAmplifyDataProvider` is a hook that generates a dataProvider to pass into the `<Admin />` component from `react-admin`. It's smart enough to pick up what kind of authentication you're using for your API (based on the config you pass) as well as hook up the generated queries and mutations from running `amplify push`.
 
 ```js
+import { AUTH_TYPE } from 'aws-appsync';
+import { useAmplifyDataProvider } from 'react-admin';
+
 import config from './aws-exports';
 import schema from './graphql/schema.json';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
-import { AUTH_TYPE } from 'aws-appsync';
 
-const dataProvider = useDataProvider({
+const dataProvider = useAmplifyDataProvider({
   // required
   config, // generated aws-exports.js
   schema, // generated json schema.json
@@ -129,7 +134,7 @@ No problem. When you `import * as queries from './graphql/queries';` it just ret
 ```js
 // customQueries.js
 export const customQueries = {
-  'listPosts': `
+  listPosts: `
     query CustomListPostQuery {
       listPosts {
         items {
@@ -138,12 +143,19 @@ export const customQueries = {
         }
       }
     }
-  `
-}
+  `,
+};
 
 // App.js
-import { customQueries } from './customQuieres';
-const dataProvider = useDataProvider({ queries: customQueries, ... })
+import * as queries from './graphql/queries';
+import { customQueries } from './customQueries';
+
+const dataProvider = useAmplifyDataProvider({
+  queries: {
+    ...queries,
+    ...customQueries,
+  },
+});
 ```
 
 ## DynamoDB Access Patterns with `react-admin`
@@ -291,27 +303,27 @@ Coming soon...
 
 This package exposes a few tools for handling authentication out of the box with `@aws-amplify/Auth`:
 
-- [`<RaAmplifyAuthProvider />`](#raamplifyauthprovider)
+- [`<AmplifyAuthProvider />`](#amplifyauthprovider-)
 - [`useAuth`](#useauth)
 - [`useAuthProvider`](#useauthprovider)
 - [`useUser`](#useuser)
 - [Federated sign in](#federated-sign-in)
 - [Permissions](#permissions)
 
-### `<RaAmplifyAuthProvider />`
+### `<AmplifyAuthProvider />`
 
 Wrap your app in this provider so `Auth` is available at all contexts, with an abstracted API so it's easier to refactor to another provider if DynamoDB drives you nuts 😉.
 
 ```js
 // index.tsx
 import ReactDOM from 'react-dom';
-import { RaAmplifyAuthProvider } from 'ra-aws-amplify';
+import { AmplifyAuthProvider } from 'ra-aws-amplify';
 import { App } from './App';
 
 ReactDOM.render(
-  <RaAmplifyAuthProvider>
+  <AmplifyAuthProvider>
     <App />
-  </RaAmplifyAuthProvider>,
+  </AmplifyAuthProvider>,
   document.getElementById('root')
 );
 ```
@@ -417,11 +429,12 @@ Use this in conjunction with the [Pre Token Generation Lambda Trigger](https://d
 
 ## Image Upload with `Storage`
 
-This package exposes `<S3Input />` and `<S3ImageField />` components to help you deal with image & file upload.
+This package exposes a handful of input and field components to help you deal with image & file upload via aws-amplify's `Storage` package.
 
 - [Required schema](#required-schema)
-- [`<S3Input />`](#s3input)
-- [`<S3ImageField />`](#s3imagefield)
+- [`<S3ImageInput />` and `<S3FileInput />`](#s3imageinput--and-s3fileinput-)
+- [`<S3ImageField />` and `<S3FileField />`](#s3imagefield--and-s3filefield-)
+- [`<S3Input />` and `<S3Field />`](#s3input--and-s3field-)
 - [`protected`, `private` files](#protected-private-files)
 
 ### Required Schema
@@ -434,24 +447,26 @@ type Post @model {
   title: String!
   content: String
   featureImage: S3Object
+  files: [S3Object!]
 }
 
 type S3Object {
   key: String!
   identityId: String
   level: String
+  type: String!
 }
 ```
 
-### `<S3Input />`
+### `<S3ImageInput />` and `<S3FileInput />`
 
-You can then use `<S3Input />`, for example your `<CreatePost />` might look something like the following:
+You can then use `<S3ImageInput />` and `<S3FileInput />` to upload files. Your `<CreatePost />` might look something like the following:
 
 ```js
 // CreatePost.js
 import React from 'react';
 import { Create, SimpleForm, TextInput } from 'react-admin';
-import { S3Input } from 'ra-aws-amplify';
+import { S3ImageInput, S3FileInput } from 'ra-aws-amplify';
 
 export const CreateApp: React.FC = props => {
   return (
@@ -459,27 +474,33 @@ export const CreateApp: React.FC = props => {
       <SimpleForm>
         <TextInput source="title" />
         <TextInput source="content" multiline />
-        <S3Input source="featureImage" accept="image/*" multiple={false} />
+        <S3ImageInput source="featureImage" accept="image/*" multiple={false} />
+        <S3FileInput source="files" multiple={true} />
       </SimpleForm>
     </Create>
   );
 };
 ```
 
-### `<S3ImageField />`
+### `<S3ImageField />` and `<S3FileField />`
 
-If you want to use the Image in your `<List />` component, you can use `<S3ImageField />` passing, in this example, the `featureImage` field as the source:
+If you want to use the image and files in your `<List />` component, you can use the `<S3ImageField />` and `<S3FileField />` to display them:
 
 ```js
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
-import { S3ImageField } from 'ra-aws-amplify';
+import { List, Datagrid, TextField, SingleFieldList } from 'react-admin';
+import { S3ImageField, S3FileField } from 'ra-aws-amplify';
 
 export const ListPosts = props => {
   return (
     <List {...props}>
       <Datagrid rowClick="edit">
         <S3ImageField source="featureImage" />
+        <ArrayField source="files">
+          <SingleFieldList>
+            <S3FileField />
+          </SingleFieldList>
+        </ArrayField>
         <TextField source="title" />
         <TextField source="content" />
       </Datagrid>
@@ -487,6 +508,10 @@ export const ListPosts = props => {
   );
 };
 ```
+
+### `<S3Input />` and `<S3Field />`
+
+The logic for handling `Storage` upload & retrieval is actually abstracted into these two components. They both use `React.cloneElement` to pass the props down to either `S3ImageField` or `S3FileField`. The responsibility of, for example, S3ImageField is just to display whatever URL is passed down to it.
 
 ### `protected`, `private` files
 

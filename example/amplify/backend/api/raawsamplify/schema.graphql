@@ -14,6 +14,7 @@ type Post
   content: String
   image: Media @connection
   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+  files: [S3Object!]
 }
 
 type Comment
@@ -46,4 +47,5 @@ type S3Object {
   key: String!
   identityId: String
   level: String
+  type: String
 }

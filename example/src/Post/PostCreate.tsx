@@ -9,6 +9,7 @@ import {
 import { Box, Grid, Toolbar, makeStyles } from '@material-ui/core';
 
 import { MediaUploadInput } from '../Media';
+import { S3FileInput } from '../../../dist';
 
 const useStyles = makeStyles({
   container: {
@@ -21,14 +22,13 @@ const useStyles = makeStyles({
 
 export const PostCreate: React.FC<any> = props => {
   const classes = useStyles();
-  console.log(props);
 
   return (
     <Create {...props}>
       <FormWithRedirect
         render={formProps => (
           <Box p={2} component="form">
-            <SanitizeGrid container className={classes.container}>
+            <SanitizeGrid container spacing={4} className={classes.container}>
               <SanitizeGrid item xs>
                 <TextInput source="title" className={classes.input} />
                 <TextInput
@@ -38,16 +38,16 @@ export const PostCreate: React.FC<any> = props => {
                   fullWidth
                   className={classes.input}
                 />
-                <TextInput
-                  source="postImageId"
-                  disabled
-                  className={classes.input}
-                />
               </SanitizeGrid>
               <SanitizeGrid item xs>
                 <Labeled label="Featured Image">
                   <MediaUploadInput inputField="postImageId" {...props} />
                 </Labeled>
+                <S3FileInput
+                  source="files"
+                  label="Post files"
+                  multiple={true}
+                />
               </SanitizeGrid>
             </SanitizeGrid>
             <Toolbar>

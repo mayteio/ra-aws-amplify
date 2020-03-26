@@ -1,11 +1,10 @@
 import { DataProvider } from 'ra-core';
-// import { IntrospectionResultData } from 'apollo-cache-inmemory';
-import { Auth } from 'aws-amplify';
-import { AUTH_TYPE, AuthOptions } from 'aws-appsync-auth-link';
+import { AUTH_TYPE } from 'aws-appsync-auth-link';
 import { useState, useEffect } from 'react';
 
 import { useUser } from '../AmplifyAuthProvider';
 import { buildAmplifyProvider } from './buildAmplifyProvider';
+import { getAuthType } from './getAuthType';
 
 interface useDataProviderArgs {
   config: Record<string, any>;
@@ -17,36 +16,6 @@ interface useDataProviderArgs {
   //   data: IntrospectionResultData | any;
   // };
 }
-
-const getAuthType = (
-  config: Record<string, any>,
-  specifiedAuthType?: AUTH_TYPE | undefined
-): AuthOptions => {
-  const authType =
-    specifiedAuthType ||
-    config.aws_appsync_authenticationType ||
-    AUTH_TYPE.NONE;
-  switch (authType) {
-    case AUTH_TYPE.AMAZON_COGNITO_USER_POOLS:
-      return {
-        // @ts-ignore
-        type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
-        jwtToken: async () =>
-          (await Auth.currentSession()).getAccessToken().getJwtToken(),
-      };
-
-    case AUTH_TYPE.API_KEY:
-      return {
-        type: AUTH_TYPE.API_KEY,
-        apiKey: config.aws_appsync_apiKey,
-      };
-    case AUTH_TYPE.NONE:
-    default:
-      return {
-        type: AUTH_TYPE.NONE,
-      };
-  }
-};
 
 export function useAmplifyDataProvider({
   config,
@@ -78,9 +47,9 @@ export function useAmplifyDataProvider({
   let specifiedAuthType = authType || config.aws_appsync_authenticationType;
 
   useEffect(() => {
-    if (specifiedAuthType === AUTH_TYPE.AMAZON_COGNITO_USER_POOLS && !user) {
-      specifiedAuthType = AUTH_TYPE.NONE;
-    }
+    // if (specifiedAuthType === AUTH_TYPE.AMAZON_COGNITO_USER_POOLS && !user) {
+    //   return;
+    // }
 
     buildDataProvider(specifiedAuthType).then(dataProvider =>
       setDataProvider(() => dataProvider)

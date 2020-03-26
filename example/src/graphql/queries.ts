@@ -10,6 +10,7 @@ export const getMedia = /* GraphQL */ `
         key
         identityId
         level
+        type
       }
       owner
     }
@@ -29,6 +30,7 @@ export const listMedias = /* GraphQL */ `
           key
           identityId
           level
+          type
         }
         owner
       }
@@ -49,8 +51,15 @@ export const getPost = /* GraphQL */ `
           key
           identityId
           level
+          type
         }
         owner
+      }
+      files {
+        key
+        identityId
+        level
+        type
       }
       owner
       comments {
@@ -79,6 +88,12 @@ export const listPosts = /* GraphQL */ `
           id
           name
           owner
+        }
+        files {
+          key
+          identityId
+          level
+          type
         }
         owner
         comments {

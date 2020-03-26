@@ -17,3 +17,10 @@ export interface createClientOpts {
     complexObjectsCredentials: any;
   };
 }
+
+export interface S3Object {
+  key: string;
+  type: string;
+  level?: 'public' | 'protected' | 'private' | null | undefined;
+  identityId?: string | null | undefined;
+}

@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open",
+    "schema": "aws appsync get-introspection-schema --api-id=eshgyezy4rahzabv6hx4exkbhq --format=JSON src/graphql/schema.json --profile=personal"
   },
   "dependencies": {
     "react-app-polyfill": "^1.0.0"

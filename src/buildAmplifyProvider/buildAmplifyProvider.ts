@@ -43,15 +43,13 @@ export const buildAmplifyProvider = ({
   schema,
   ...options
 }: any) => {
-  const client = createClient({
-    ...options,
-    introspection: { schema: schema.data },
-  });
+  const client = createClient({ ...options });
   const buildQuery = defaultBuildQuery({ queries, mutations, schema });
+  const args = merge({ client, buildQuery }, defaultOptions, options, {
+    introspection: { schema: schema.data.__schema },
+  });
 
-  return buildDataProvider(
-    merge({ client, buildQuery }, defaultOptions, options)
-  ).then((defaultDataProvider: any) => {
+  return buildDataProvider(args).then((defaultDataProvider: any) => {
     return (fetchType: any, resource: any, params: any) => {
       // Amplify does not support multiple deletions so instead we send multiple DELETE requests
       // This can be optimized using the apollo-link-batch-http
