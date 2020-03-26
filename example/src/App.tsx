@@ -4,9 +4,9 @@ import { useAmplifyDataProvider, useAuthProvider, reducers } from '../../';
 
 // things for the dataProvider
 import config from './aws-exports';
+import schema from './graphql/schema.json';
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
-import schema from './graphql/schema.json';
 
 // Resources
 import { Resource } from 'react-admin';

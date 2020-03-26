@@ -6,7 +6,15 @@ export type CreatePostInput = {
   id?: string | null,
   title: string,
   content?: string | null,
+  files?: Array< S3ObjectInput > | null,
   postImageId?: string | null,
+};
+
+export type S3ObjectInput = {
+  key: string,
+  identityId?: string | null,
+  level?: string | null,
+  type?: string | null,
 };
 
 export type ModelPostConditionInput = {
@@ -61,6 +69,7 @@ export type UpdatePostInput = {
   id: string,
   title?: string | null,
   content?: string | null,
+  files?: Array< S3ObjectInput > | null,
   postImageId?: string | null,
 };
 
@@ -112,12 +121,6 @@ export type CreateMediaInput = {
   id?: string | null,
   name?: string | null,
   attachment: S3ObjectInput,
-};
-
-export type S3ObjectInput = {
-  key: string,
-  identityId?: string | null,
-  level?: string | null,
 };
 
 export type ModelMediaConditionInput = {
@@ -189,9 +192,17 @@ export type CreatePostMutation = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -226,9 +237,17 @@ export type UpdatePostMutation = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -263,9 +282,17 @@ export type DeletePostMutation = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -337,6 +364,7 @@ export type CreateMediaMutation = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -357,6 +385,7 @@ export type UpdateMediaMutation = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -377,6 +406,7 @@ export type DeleteMediaMutation = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -396,6 +426,7 @@ export type GetMediaQuery = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -419,6 +450,7 @@ export type ListMediasQuery = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null > | null,
@@ -445,9 +477,17 @@ export type GetPostQuery = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -482,6 +522,13 @@ export type ListPostsQuery = {
         name: string | null,
         owner: string | null,
       } | null,
+      files:  Array< {
+        __typename: "S3Object",
+        key: string,
+        identityId: string | null,
+        level: string | null,
+        type: string | null,
+      } > | null,
       owner: string | null,
       comments:  {
         __typename: "ModelCommentConnection",
@@ -564,9 +611,17 @@ export type OnCreatePostSubscription = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -601,9 +656,17 @@ export type OnUpdatePostSubscription = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -637,9 +700,17 @@ export type OnDeletePostSubscription = {
         key: string,
         identityId: string | null,
         level: string | null,
+        type: string | null,
       },
       owner: string | null,
     } | null,
+    files:  Array< {
+      __typename: "S3Object",
+      key: string,
+      identityId: string | null,
+      level: string | null,
+      type: string | null,
+    } > | null,
     owner: string | null,
     comments:  {
       __typename: "ModelCommentConnection",
@@ -695,6 +766,7 @@ export type OnCreateMediaSubscription = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -714,6 +786,7 @@ export type OnUpdateMediaSubscription = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,
@@ -733,6 +806,7 @@ export type OnDeleteMediaSubscription = {
       key: string,
       identityId: string | null,
       level: string | null,
+      type: string | null,
     },
     owner: string | null,
   } | null,

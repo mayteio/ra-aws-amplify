@@ -17,8 +17,15 @@ export const createPost = /* GraphQL */ `
           key
           identityId
           level
+          type
         }
         owner
+      }
+      files {
+        key
+        identityId
+        level
+        type
       }
       owner
       comments {
@@ -48,8 +55,15 @@ export const updatePost = /* GraphQL */ `
           key
           identityId
           level
+          type
         }
         owner
+      }
+      files {
+        key
+        identityId
+        level
+        type
       }
       owner
       comments {
@@ -79,8 +93,15 @@ export const deletePost = /* GraphQL */ `
           key
           identityId
           level
+          type
         }
         owner
+      }
+      files {
+        key
+        identityId
+        level
+        type
       }
       owner
       comments {
@@ -142,6 +163,7 @@ export const createMedia = /* GraphQL */ `
         key
         identityId
         level
+        type
       }
       owner
     }
@@ -159,6 +181,7 @@ export const updateMedia = /* GraphQL */ `
         key
         identityId
         level
+        type
       }
       owner
     }
@@ -176,6 +199,7 @@ export const deleteMedia = /* GraphQL */ `
         key
         identityId
         level
+        type
       }
       owner
     }

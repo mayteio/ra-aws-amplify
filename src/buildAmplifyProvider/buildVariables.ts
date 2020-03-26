@@ -1,3 +1,4 @@
+import { S3Object } from '../types';
 /* eslint-disable default-case */
 import {
   GET_LIST,
@@ -38,6 +39,19 @@ const castType = (value: any, type: any) => {
     default:
       return value;
   }
+};
+
+const cleanS3Object = (input: S3Object) => {
+  const fields = ['key', 'level', 'identityId', 'region', 'bucket'];
+  return Object.entries(input).reduce(
+    (acc: any, [k, v]: [string, unknown]): Record<string, string> => {
+      if (fields.includes(k)) {
+        acc[k] = v;
+      }
+      return acc;
+    },
+    {}
+  );
 };
 
 const prepareParams = (
@@ -235,6 +249,7 @@ const buildCreateUpdateVariables = (introspectionResults: any) => (
   params: any,
   queryType: any
 ) => {
+  /** Get the accepted arguments from the schema introspection */
   const inputArgument = queryType.args.find((a: any) => a.name === 'input');
   const inputTypeName = getFinalType(inputArgument.type);
   const { inputFields } = introspectionResults.types.find(
@@ -256,20 +271,14 @@ const buildCreateUpdateVariables = (introspectionResults: any) => (
 
     /** Strip any S3Objects of unnecessary fields, pulling only what we need. */
     if (getFinalType(inputField.type).name?.match(/S3Object/i)) {
-      const fields = ['key', 'level', 'identityId', 'region', 'bucket'];
-      const cleanS3Object = Object.entries(params.data[key]).reduce(
-        (acc: any, [k, v]: [string, unknown]): Record<string, string> => {
-          if (fields.includes(k)) {
-            acc[k] = v;
-          }
-          return acc;
-        },
-        {}
-      );
+      /** S3Object fields could be an array. */
+      const cleanS3Param = Array.isArray(params.data[key])
+        ? params.data[key].map(cleanS3Object)
+        : cleanS3Object(params.data[key]);
 
       return {
         ...acc,
-        [key]: cleanS3Object,
+        [key]: cleanS3Param,
       };
     }
 
