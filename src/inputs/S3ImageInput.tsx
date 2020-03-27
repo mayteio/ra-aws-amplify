@@ -6,6 +6,7 @@ import { S3ImageField } from '../fields';
 interface S3InputProps {
   source: string;
   dropzoneOptions?: any;
+  label?: string;
   level?: 'public' | 'protected' | 'private' | undefined;
 }
 

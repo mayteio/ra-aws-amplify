@@ -54,7 +54,6 @@ export const S3Input: React.FC<S3InputProps> = ({
         })
       );
 
-      console.log(results);
       if (props.multiple) {
         input.onChange(results);
       } else {
@@ -63,7 +62,6 @@ export const S3Input: React.FC<S3InputProps> = ({
     } catch (error) {
       input.onChange(undefined);
       notify('There was an error uploading your files.');
-      console.log(error);
     }
   };
 
