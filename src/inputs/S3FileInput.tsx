@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core';
 interface S3InputProps {
   source: string;
   dropzoneOptions?: any;
+  label?: string;
   level?: 'public' | 'protected' | 'private' | undefined;
 }
 
