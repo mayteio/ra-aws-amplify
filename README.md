@@ -1,13 +1,13 @@
 # `ra-aws-amplify`
 
-🚨 Work in progress. Use in production at your own risk!
+🚨 Work in progress. Use in production at your own risk! We are 🤓
 Feel free to [contribute](https://github.com/mayteio/ra-aws-amplify/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) though to get it there though. I love contributors.
 
 > Easily bootstrap an admin interface for your [AWS Amplify](https://aws-amplify.github.io/docs/js/start?platform=purejs) Apps that use a GraphQL `API`, `Storage` and `Auth`.
 
 ## Why?
 
-AWS Amplify is a great tool for generating cross-platform apps that string together AWS resources like AppSync for GraphQL, Cognito for user management and Storage, among other things.
+AWS Amplify is a great tool for generating cross-platform apps that string together AWS resources like AppSync for GraphQL, Cognito for user management and S3 for file storage, among other things.
 
 One of the promises of AWS Amplify is _Focus on the features, not the back-end_. This stops short of providing an easy-to-use back-end for managing content - unless you're fine digging around DynamoDB, S3 and so on. Enter [`react-admin`](https://github.com/marmelab/react-admin) with `ra-aws-amplify`.
 
@@ -21,7 +21,7 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
 - [`useDataProvider`](#usedataprovider)
 - [DynamoDB Access Patterns with `react-admin`](#dynamodb-access-patterns-with-react-admin)
   - [A product with an image](#a-product-with-an-image)
-  - [A post with comments](#a-post-with-comments-using-the-referencemanyfield)
+  - [A post with comments](#a-post-with-comments-using-the-referencemanyfield-)
   - [Post editors](#post-editors)
   - [Filter and sort media by name](#filter-and-sort-media-by-name)
 - [Authentication and Sign in with `Auth`](#signin-with-auth)
@@ -54,16 +54,7 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
 ## Installation
 
 ```bash
-# pending npm release
-# $ yarn create react-app amplify-backend-app
-# $ cd amplify-backend-app
-# $ yarn add react-admin ra-aws-amplify aws-amplify
-
-# in the meantime, in your app
-git clone https://github.com/mayteio/ra-aws-amplify.git
-$ amplify add api # run through the setup
-$ amplify push # will generate aws-exports.js
-$ yarn start
+$ yarn add ra-aws-amplify@alpha react-admin aws-amplify
 ```
 
 ## Usage
