@@ -4,7 +4,7 @@ import { S3Object } from '../types';
 import ImageIcon from '@material-ui/icons/ImageRounded';
 import MovieIcon from '@material-ui/icons/MovieRounded';
 import DescriptionIcon from '@material-ui/icons/DescriptionRounded';
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme, Link } from '@material-ui/core';
 
 const getIcon = (type: string) => {
   switch (type) {
@@ -42,11 +42,11 @@ export const S3File: React.FC<{
         titleAccess={`Icon for file type ${s3Object.type || 'unknown'}`}
         className={classes.icon}
       />
-      <a href={s3Object.key} title={`Open ${s3Object.key}`} target="_blank">
-        {`
-          ${s3Object.key}${s3Object.level ? ` - ${s3Object.level}` : ''}
-        `}
-      </a>
+      <Link
+        href={s3Object.key}
+        title={`Open ${s3Object.key}`}
+        target="_blank"
+      >{`${s3Object.key}${s3Object.level ? ` - ${s3Object.level}` : ''}`}</Link>
     </>
   );
 };
