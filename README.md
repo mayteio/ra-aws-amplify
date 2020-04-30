@@ -18,7 +18,7 @@ _Screenshot of the example app in this package, using `Auth`, GraphQL `API` and 
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [`useDataProvider`](#usedataprovider)
+- [`useAmplifyDataProvider`](#useamplifydataprovider)
 - [DynamoDB Access Patterns with `react-admin`](#dynamodb-access-patterns-with-react-admin)
   - [A product with an image](#a-product-with-an-image)
   - [A post with comments](#a-post-with-comments-using-the-referencemanyfield-)
@@ -531,7 +531,7 @@ If you set the level to either `private` or `protected` the `<S3Input />` compon
 
 ### 🚨 INCOMPLETE!
 
-Pagination doesn't work just yet.
+Pagination doesn't work just yet. [See this issue, please help out!](https://github.com/mayteio/ra-aws-amplify/issues/11)
 
 This package also exports some reducers and components for handling pagination specific to dynamodb - which has no concept of totals or pages. This library utilises custom reducers to catch the `nextToken` and use it in subsequent `GET_LIST` calls.
 
