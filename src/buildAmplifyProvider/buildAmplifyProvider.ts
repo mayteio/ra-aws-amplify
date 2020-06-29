@@ -65,7 +65,7 @@ export const buildAmplifyProvider = ({
             )
           ).then((results) => {
             const data = results.reduce(
-              (acc: any, { data }: any, idx: any): any => [...acc, params.ids[idx]],
+              (acc: any, _: any, idx: any): any => [...acc, params.ids[idx]],
               []
             );
 
