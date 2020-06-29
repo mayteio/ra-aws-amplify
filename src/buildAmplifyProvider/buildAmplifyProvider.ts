@@ -53,11 +53,9 @@ export const buildAmplifyProvider = ({
     return (fetchType: any, resource: any, params: any) => {
       // Amplify does not support multiple deletions so instead we send multiple DELETE requests
       // This can be optimized using the apollo-link-batch-http
+      const { ids, ...otherParams } = params;
       switch (fetchType) {
         case DELETE_MANY:
-        case UPDATE_MANY:
-        case GET_MANY:
-          const { ids, ...otherParams } = params;
           return Promise.all(
             params.ids.map((id: string) =>
               defaultDataProvider(SINGLE_OPERATION_MAP[fetchType], resource, {
@@ -65,7 +63,24 @@ export const buildAmplifyProvider = ({
                 ...otherParams,
               })
             )
-          ).then(results => {
+          ).then((results) => {
+            const data = results.reduce(
+              (acc: any, { data }: any, idx: any): any => [...acc, params.ids[idx]],
+              []
+            );
+
+            return { data };
+          });
+        case UPDATE_MANY:
+        case GET_MANY:
+          return Promise.all(
+            params.ids.map((id: string) =>
+              defaultDataProvider(SINGLE_OPERATION_MAP[fetchType], resource, {
+                id,
+                ...otherParams,
+              })
+            )
+          ).then((results) => {
             const data =
               fetchType === GET_MANY
                 ? results.map((result: any) => result.data)
