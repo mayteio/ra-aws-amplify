@@ -1,5 +1,5 @@
 import merge from 'lodash/merge';
-import buildDataProvider from 'ra-data-graphql';
+import buildGraphQLProvider from 'ra-data-graphql';
 import {
   DELETE,
   DELETE_MANY,
@@ -49,7 +49,7 @@ export const buildAmplifyProvider = ({
     introspection: { schema: schema.data.__schema },
   });
 
-  return buildDataProvider(args).then((defaultDataProvider: any) => {
+  return buildGraphQLProvider(args).then((defaultDataProvider: any) => {
     return (fetchType: any, resource: any, params: any) => {
       // Amplify does not support multiple deletions so instead we send multiple DELETE requests
       // This can be optimized using the apollo-link-batch-http

@@ -58,7 +58,7 @@
     "aws-appsync": "^3.0.2",
     "graphql": "^14.6.0",
     "lodash.merge": "^4.6.2",
-    "ra-data-graphql": "^3.2.2",
+    "ra-data-graphql": "^3.6.1",
     "uuidv4": "^6.0.6"
   }
 }
