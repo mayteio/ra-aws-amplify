@@ -54,6 +54,7 @@ export const buildAmplifyProvider = ({
       // Amplify does not support multiple deletions so instead we send multiple DELETE requests
       // This can be optimized using the apollo-link-batch-http
       const { ids, ...otherParams } = params;
+      console.log(`FETCH TYPE: ${fetchType}`);
       switch (fetchType) {
         case DELETE_MANY:
           return Promise.all(
