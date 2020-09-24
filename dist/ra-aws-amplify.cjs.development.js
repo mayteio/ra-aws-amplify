@@ -174,8 +174,7 @@ var prepareParams = function prepareParams(params, queryType, introspectionResul
 
 var buildGetListVariables = function buildGetListVariables(introspectionResults) {
   return function (resource, _aorFetchType, params) {
-    console.log('params: ', params); // console.log(params);
-
+    // console.log('params: ', params);
     var _ref2 = params.filter || {},
         token = _ref2.nextToken;
 
@@ -183,9 +182,7 @@ var buildGetListVariables = function buildGetListVariables(introspectionResults)
         page = _ref3.page,
         limit = _ref3.perPage;
 
-    var nextToken = token && page > 1 ? token : undefined; // const nextToken = token ? token : undefined;
-
-    console.log('nextToken: ', nextToken); // return {};
+    var nextToken = token && page > 1 ? token : undefined; // console.log('nextToken: ', nextToken);
 
     return {
       limit: limit,
@@ -382,8 +379,6 @@ var getResponseParser = (function (_introspectionResults) {
   return function (aorFetchType, resource, queryType, params) {
     return function (response) {
       var data = response.data;
-      console.log('aorFetchType: ', aorFetchType);
-      console.log('data: ', data);
 
       if (aorFetchType === raCore.GET_LIST) {
         return {
