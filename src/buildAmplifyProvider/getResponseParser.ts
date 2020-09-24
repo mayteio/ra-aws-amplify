@@ -53,7 +53,7 @@ export default (_introspectionResults: any) => (
   if (aorFetchType === GET_LIST) {
     return {
       data: data[`list${resource.type.name}s`].items.map(sanitizeResource),
-      nextToken: data[`list${resource.type.name}s`].nextToken,
+      // nextToken: data[`list${resource.type.name}s`].nextToken,
       total: LARGE_TOTAL,
     };
   }
@@ -62,7 +62,7 @@ export default (_introspectionResults: any) => (
     return {
       data:
         data[params.target] && data[params.target].items.map(sanitizeResource),
-      nextToken: data[params.target].nextToken,
+      // nextToken: data[params.target].nextToken,
       total: LARGE_TOTAL,
     };
   }
