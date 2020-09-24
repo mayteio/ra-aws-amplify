@@ -50,6 +50,8 @@ export default (_introspectionResults: any) => (
   params: any
 ) => (response: any) => {
   const data = response.data;
+  console.log('aorFetchType: ', aorFetchType);
+  console.log('data: ', data);
   if (aorFetchType === GET_LIST) {
     return {
       data: data[`list${resource.type.name}s`].items.map(sanitizeResource),

@@ -181,11 +181,8 @@ var buildGetListVariables = function buildGetListVariables(introspectionResults)
 
 
     var nextToken = token ? token : undefined;
-    console.log('nextToken: ', nextToken); // return {};
-
-    return {
-      nextToken: nextToken
-    };
+    console.log('nextToken: ', nextToken);
+    return {}; // return {
   };
 };
 /**
@@ -377,6 +374,8 @@ var getResponseParser = (function (_introspectionResults) {
   return function (aorFetchType, resource, queryType, params) {
     return function (response) {
       var data = response.data;
+      console.log('aorFetchType: ', aorFetchType);
+      console.log('data: ', data);
 
       if (aorFetchType === raCore.GET_LIST) {
         return {
