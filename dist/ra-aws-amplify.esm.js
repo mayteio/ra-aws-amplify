@@ -167,7 +167,8 @@ var prepareParams = function prepareParams(params, queryType, introspectionResul
 
 var buildGetListVariables = function buildGetListVariables(introspectionResults) {
   return function (resource, _aorFetchType, params) {
-    // console.log(params);
+    console.log('params: ', params); // console.log(params);
+
     var _ref2 = params.filter || {},
         token = _ref2.nextToken;
 
