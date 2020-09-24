@@ -129,7 +129,8 @@ const buildGetListVariables = (introspectionResults: any) => (
   resource: any,
   _aorFetchType: string,
   params: any
-) => {
+  ) => {
+  console.log('params: ', params);
   // console.log(params);
 
   const { nextToken: token } = params.filter || {};
