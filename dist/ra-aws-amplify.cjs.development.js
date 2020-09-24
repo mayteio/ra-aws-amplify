@@ -177,12 +177,20 @@ var buildGetListVariables = function buildGetListVariables(introspectionResults)
     console.log('params: ', params); // console.log(params);
 
     var _ref2 = params.filter || {},
-        token = _ref2.nextToken; // const nextToken = token && params.pagination.page > 1 ? token : undefined;
+        token = _ref2.nextToken;
 
+    var _ref3 = params.pagination || {},
+        page = _ref3.page,
+        limit = _ref3.perPage;
 
-    var nextToken = token ? token : undefined;
-    console.log('nextToken: ', nextToken);
-    return {}; // return {
+    var nextToken = token && page > 1 ? token : undefined; // const nextToken = token ? token : undefined;
+
+    console.log('nextToken: ', nextToken); // return {};
+
+    return {
+      limit: limit,
+      nextToken: nextToken
+    };
   };
 };
 /**
@@ -242,7 +250,7 @@ var buildCreateUpdateVariables = function buildCreateUpdateVariables(introspecti
 
 var buildVariables = (function (introspectionResults) {
   return function (resource, aorFetchType, params, queryType) {
-    var _ref3;
+    var _ref4;
 
     var preparedParams = prepareParams(params, queryType, introspectionResults);
 
@@ -276,9 +284,9 @@ var buildVariables = (function (introspectionResults) {
         }
 
         var key = query.args[0].name;
-        return _ref3 = {
+        return _ref4 = {
           limit: preparedParams.pagination.perPage
-        }, _ref3[key] = preparedParams.id, _ref3;
+        }, _ref4[key] = preparedParams.id, _ref4;
 
       case raCore.GET_ONE:
         return {
@@ -807,7 +815,8 @@ function AmplifyPagination(props) {
     key: "next",
     endIcon: React__default.createElement(ChevronRight, null),
     onClick: function onClick() {
-      return props.setPage(props.page + 1);
+      props.setPage(props.page + 1);
+      props.setNextToken(nextToken);
     }
   }, "Next"));
 }

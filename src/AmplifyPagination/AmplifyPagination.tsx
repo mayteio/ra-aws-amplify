@@ -33,7 +33,7 @@ export function AmplifyPagination(props: any) {
           color="primary"
           key="next"
           endIcon={<ChevronRight />}
-          onClick={() => props.setPage(props.page + 1)}
+          onClick={() => { props.setPage(props.page + 1); props.setNextToken(nextToken); }}
         >
           Next
         </Button>

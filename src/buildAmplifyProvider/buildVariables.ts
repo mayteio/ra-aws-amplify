@@ -134,13 +134,15 @@ const buildGetListVariables = (introspectionResults: any) => (
   // console.log(params);
 
   const { nextToken: token } = params.filter || {};
-  // const nextToken = token && params.pagination.page > 1 ? token : undefined;
-  const nextToken = token ? token : undefined;
+  const { page, perPage: limit } = params.pagination || {};
+  const nextToken = token && page > 1 ? token : undefined;
+  // const nextToken = token ? token : undefined;
   console.log('nextToken: ', nextToken);
-  return {};
-  // return {
-  //   nextToken,
-  // };
+  // return {};
+  return {
+    limit,
+    nextToken,
+  };
   let variables: any = { filter: {} };
   if (params.filter) {
     variables.filter = Object.keys(params.filter).reduce((acc, key) => {
