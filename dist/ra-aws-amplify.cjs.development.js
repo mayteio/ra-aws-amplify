@@ -180,8 +180,11 @@ var buildGetListVariables = function buildGetListVariables(introspectionResults)
         token = _ref2.nextToken;
 
     var nextToken = token && params.pagination.page > 1 ? token : undefined;
-    console.log('nextToken: ', nextToken);
-    return {}; // return {
+    console.log('nextToken: ', nextToken); // return {};
+
+    return {
+      nextToken: nextToken
+    };
   };
 };
 /**
